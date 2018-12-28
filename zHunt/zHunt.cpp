@@ -15,6 +15,8 @@ zHunt::zHunt() :
 
 bool zHunt::OnUserCreate() 
 {
+	actor.load_spr_sheet("Survivor.png");
+
 	return true;
 }
 
@@ -22,7 +24,10 @@ bool zHunt::OnUserCreate()
 bool zHunt::OnUserUpdate(float fElapsedTime) 
 {
 	Clear(olc::BLACK);
+	SetPixelMode(olc::Pixel::ALPHA);
+
 	actor.draw();
+
 	return true;
 }
 

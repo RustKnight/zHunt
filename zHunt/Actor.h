@@ -13,10 +13,13 @@ public:
 		pge {in_pge}
 	{}
 
+public:
 	void draw() const;
+	void load_spr_sheet(std::string adrs);
 
 
 private:
 	Vec2 location;
+	olc::Sprite* spr = nullptr;
 	olc::PixelGameEngine* pge;
 };
