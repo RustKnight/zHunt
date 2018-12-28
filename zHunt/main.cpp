@@ -1,42 +1,15 @@
 #define OLC_PGE_APPLICATION
 #include "olcPixelGameEngine.h"
-#include "RectF.h"
-#include "Vec2.h"
+#include "zHunt.h"
 
 
-int winWidth = 800;
-int winHeight = 600;
-
-
-class Demo : public olc::PixelGameEngine
-{
-public:
-	Demo()
-	{
-		sAppName = "RustKnight";
-	}
-
-
-
-public:
-
-	bool OnUserCreate() override
-	{
-		return true;
-	}
-
-	bool OnUserUpdate(float fElapsedTime) override
-	{
-
-		return true;
-	}
-};
 
 
 int main()
 {
-	Demo demo;
-	if (demo.Construct(winWidth, winHeight, 1, 1))
-		demo.Start();
+	zHunt game;
+	if (game.Construct(int (game.getWinWidth()), int (game.getWinHeight()), 1, 1))
+		game.Start();
+
 	return 0;
 }

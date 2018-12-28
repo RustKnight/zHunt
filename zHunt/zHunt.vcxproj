@@ -143,15 +143,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Actor.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RectF.cpp" />
     <ClCompile Include="Vec2.cpp" />
+    <ClCompile Include="zHunt.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Actor.h" />
     <ClInclude Include="olcPGEX_Sound.h" />
     <ClInclude Include="olcPixelGameEngine.h" />
     <ClInclude Include="RectF.h" />
     <ClInclude Include="Vec2.h" />
+    <ClInclude Include="zHunt.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
