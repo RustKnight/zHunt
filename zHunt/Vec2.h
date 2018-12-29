@@ -10,6 +10,7 @@ public:
 	Vec2 operator*( float rhs ) const;
 	Vec2& operator*=( float rhs );
 
+	bool operator!= (const Vec2& rhs) const;
 
 	Vec2 operator-( const Vec2& rhs ) const;
 	Vec2& operator-=( const Vec2& rhs );

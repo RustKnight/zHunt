@@ -26,6 +26,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	Clear(olc::BLACK);
 	SetPixelMode(olc::Pixel::ALPHA);
 
+	actor.update(fElapsedTime);
 	actor.draw();
 
 	return true;

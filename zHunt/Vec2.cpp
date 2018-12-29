@@ -28,6 +28,14 @@ Vec2& Vec2::operator*=( float rhs )
 	return *this = *this * rhs;
 }
 
+bool Vec2::operator!=(const Vec2 & rhs) const
+{
+	if (int(this->x) < int(rhs.x) || int(this->x) > int(rhs.x) || int(this->y) < int(rhs.y) || int(this->y) > int(rhs.y))
+		return true;
+	else
+		return false;
+}
+
 
 
 Vec2 Vec2::operator-( const Vec2& rhs ) const
