@@ -7,6 +7,9 @@
 
 int main()
 {
+
+	//ShowCursor(false);
+
 	zHunt game;
 	if (game.Construct(int (game.getWinWidth()), int (game.getWinHeight()), 1, 1))
 		game.Start();

@@ -6,11 +6,14 @@
 
 
 
+
+
 class Actor {
 
 	//tools
 
-	enum actions { WALKING, STANDING, ACTIONS_SIZE };
+	enum actions {	WALK, RUN, RELOAD, AIM, RECOIL, DIE, HURT, DIE2, GRAVE,
+					CLIMB, PICK_UP, TIED, SIT, TIED_DIE, CARRIED, IDLE, SMOKE, ACTIONS_SIZE};
 	enum facings {N, NE, E, SE, S, SW, W, NW, FACINGS_SIZE};
 
 	struct spr_sqn {
@@ -22,8 +25,6 @@ class Actor {
 		spr_sqn(int16_t x_in, int16_t y_in, int16_t w_in, int16_t h_in) :
 			x{ x_in }, y{ y_in }, w{ w_in }, h{ h_in }
 		{}
-
-
 
 		int16_t x;
 		int16_t y;
@@ -39,8 +40,8 @@ public:
 		location {loc},
 		pge {in_pge},
 		speed {80.0f},
-		action{ STANDING },
-		facing{S}
+		action{ WALK },
+		facing{N}
 	{
 		load_mapping_info();
 	}
@@ -71,10 +72,12 @@ private:
 	olc::PixelGameEngine* pge;
 
 	//std::vector<spr_sqn> mapping_data;
-	spr_sqn a3d_mapping_data[FACINGS_SIZE][ACTIONS_SIZE][25];
+	spr_sqn a3d_mapping_data[ACTIONS_SIZE][FACINGS_SIZE][25];
 	actions action;
 	facings facing;
 	float play_seq = 0;
 	float anim_speed = 6;  // might need an animation speed according to the size of the anim_seq
 	float eTime = 0;
 };
+
+
