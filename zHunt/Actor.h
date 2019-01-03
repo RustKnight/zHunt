@@ -76,7 +76,7 @@ private:
 	actions action;
 	facings facing;
 	float play_seq = 0;
-	float anim_speed = 6;  // might need an animation speed according to the size of the anim_seq
+	float anim_speed = 2;  // might need an animation speed according to the size of the anim_seq
 	float eTime = 0;
 };
 

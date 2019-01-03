@@ -431,6 +431,8 @@ namespace olc // All OneLoneCoder stuff will now exist in the "olc" namespace
 		// selected area is (ox,oy) to (ox+w,oy+h)
 		void DrawPartialSprite(int32_t x, int32_t y, Sprite *sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale = 1);
 		// Draws a single line of text
+		void DrawPartialSprite_BottomUp(int32_t x, int32_t y, Sprite *sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale = 1);
+		// Draws a single line of text
 		void DrawString(int32_t x, int32_t y, std::string sText, Pixel col = olc::WHITE, uint32_t scale = 1);
 		// Clears entire draw target to Pixel
 		void Clear(Pixel p);
@@ -579,13 +581,13 @@ namespace olc
 		delete[] buffer;
 		return w;
 #endif
-//#ifdef __MINGW32__
-//		wchar_t *buffer = new wchar_t[sImageFile.length() + 1];
-//		mbstowcs(buffer, sImageFile.c_str(), sImageFile.length());
-//		buffer[sImageFile.length()] = L'\0';
-//		wsImageFile = buffer;
-//		delete[] buffer;
-//#else
+		//#ifdef __MINGW32__
+		//		wchar_t *buffer = new wchar_t[sImageFile.length() + 1];
+		//		mbstowcs(buffer, sImageFile.c_str(), sImageFile.length());
+		//		buffer[sImageFile.length()] = L'\0';
+		//		wsImageFile = buffer;
+		//		delete[] buffer;
+		//#else
 	}
 
 	Sprite::Sprite()
@@ -607,7 +609,7 @@ namespace olc
 
 	Sprite::Sprite(int32_t w, int32_t h)
 	{
-		if(pColData) delete[] pColData;
+		if (pColData) delete[] pColData;
 		width = w;		height = h;
 		pColData = new Pixel[width * height];
 		for (int32_t i = 0; i < width*height; i++)
@@ -653,7 +655,7 @@ namespace olc
 
 
 		return olc::FAIL;
-		}
+	}
 
 	olc::rcode Sprite::SaveToPGESprFile(std::string sImageFile)
 	{
@@ -665,7 +667,7 @@ namespace olc
 		{
 			ofs.write((char*)&width, sizeof(int32_t));
 			ofs.write((char*)&height, sizeof(int32_t));
-			ofs.write((char*)pColData, width*height*sizeof(uint32_t));
+			ofs.write((char*)pColData, width*height * sizeof(uint32_t));
 			ofs.close();
 			return olc::OK;
 		}
@@ -679,15 +681,15 @@ namespace olc
 		// Use GDI+
 		std::wstring wsImageFile;
 #ifdef __MINGW32__
-        wchar_t *buffer = new wchar_t[sImageFile.length() + 1];
-        mbstowcs(buffer, sImageFile.c_str(), sImageFile.length());
-        buffer[sImageFile.length()] = L'\0';
-        wsImageFile = buffer;
-        delete [] buffer;
+		wchar_t *buffer = new wchar_t[sImageFile.length() + 1];
+		mbstowcs(buffer, sImageFile.c_str(), sImageFile.length());
+		buffer[sImageFile.length()] = L'\0';
+		wsImageFile = buffer;
+		delete[] buffer;
 #else
 		wsImageFile = ConvertS2W(sImageFile);
 #endif
-        Gdiplus::Bitmap *bmp = Gdiplus::Bitmap::FromFile(wsImageFile.c_str());
+		Gdiplus::Bitmap *bmp = Gdiplus::Bitmap::FromFile(wsImageFile.c_str());
 		if (bmp == nullptr)
 			return olc::NO_FILE;
 
@@ -695,7 +697,7 @@ namespace olc
 		height = bmp->GetHeight();
 		pColData = new Pixel[width * height];
 
-		for(int x=0; x<width; x++)
+		for (int x = 0; x < width; x++)
 			for (int y = 0; y < height; y++)
 			{
 				Gdiplus::Color c;
@@ -800,7 +802,7 @@ namespace olc
 				return Pixel(0, 0, 0, 0);
 		}
 		else
-		{			
+		{
 			return pColData[abs(y%height)*width + abs(x%width)];
 		}
 	}
@@ -985,7 +987,7 @@ namespace olc
 
 		if (nPixelWidth == 0 || nPixelHeight == 0 || nScreenWidth == 0 || nScreenHeight == 0)
 			return olc::FAIL;
-		
+
 #ifdef _WIN32
 #ifdef UNICODE
 #ifndef __MINGW32__
@@ -995,7 +997,7 @@ namespace olc
 #endif
 		// Load the default font sheet
 		olc_ConstructFontSheet();
-		
+
 		// Create a sprite that represents the primary drawing target
 		pDefaultDrawTarget = new Sprite(nScreenWidth, nScreenHeight);
 		SetDrawTarget(nullptr);
@@ -1114,7 +1116,7 @@ namespace olc
 
 		if (nPixelMode == Pixel::MASK)
 		{
-			if(p.a == 255)
+			if (p.a == 255)
 				pDrawTarget->SetPixel(x, y, p);
 			return;
 		}
@@ -1182,14 +1184,14 @@ namespace olc
 
 			Draw(x, y, p);
 
-			for (i = 0; x<xe; i++)
+			for (i = 0; x < xe; i++)
 			{
 				x = x + 1;
-				if (px<0)
+				if (px < 0)
 					px = px + 2 * dy1;
 				else
 				{
-					if ((dx<0 && dy<0) || (dx>0 && dy>0)) y = y + 1; else y = y - 1;
+					if ((dx < 0 && dy < 0) || (dx > 0 && dy > 0)) y = y + 1; else y = y - 1;
 					px = px + 2 * (dy1 - dx1);
 				}
 				Draw(x, y, p);
@@ -1208,14 +1210,14 @@ namespace olc
 
 			Draw(x, y, p);
 
-			for (i = 0; y<ye; i++)
+			for (i = 0; y < ye; i++)
 			{
 				y = y + 1;
 				if (py <= 0)
 					py = py + 2 * dx1;
 				else
 				{
-					if ((dx<0 && dy<0) || (dx>0 && dy>0)) x = x + 1; else x = x - 1;
+					if ((dx < 0 && dy < 0) || (dx > 0 && dy > 0)) x = x + 1; else x = x - 1;
 					py = py + 2 * (dx1 - dy1);
 				}
 				Draw(x, y, p);
@@ -1273,10 +1275,10 @@ namespace olc
 
 	void PixelGameEngine::DrawRect(int32_t x, int32_t y, int32_t w, int32_t h, Pixel p)
 	{
-		DrawLine(x, y, x+w, y, p);
-		DrawLine(x+w, y, x+w, y+h, p);
-		DrawLine(x+w, y+h, x, y+h, p);
-		DrawLine(x, y+h, x, y, p);
+		DrawLine(x, y, x + w, y, p);
+		DrawLine(x + w, y, x + w, y + h, p);
+		DrawLine(x + w, y + h, x, y + h, p);
+		DrawLine(x, y + h, x, y, p);
 	}
 
 	void PixelGameEngine::Clear(Pixel p)
@@ -1291,7 +1293,7 @@ namespace olc
 	}
 
 	void PixelGameEngine::FillRect(int32_t x, int32_t y, int32_t w, int32_t h, Pixel p)
-	{			
+	{
 		int32_t x2 = x + w;
 		int32_t y2 = y + h;
 
@@ -1329,16 +1331,16 @@ namespace olc
 		int signx1, signx2, dx1, dy1, dx2, dy2;
 		int e1, e2;
 		// Sort vertices
-		if (y1>y2) { SWAP(y1, y2); SWAP(x1, x2); }
-		if (y1>y3) { SWAP(y1, y3); SWAP(x1, x3); }
-		if (y2>y3) { SWAP(y2, y3); SWAP(x2, x3); }
+		if (y1 > y2) { SWAP(y1, y2); SWAP(x1, x2); }
+		if (y1 > y3) { SWAP(y1, y3); SWAP(x1, x3); }
+		if (y2 > y3) { SWAP(y2, y3); SWAP(x2, x3); }
 
 		t1x = t2x = x1; y = y1;   // Starting points
-		dx1 = (int)(x2 - x1); if (dx1<0) { dx1 = -dx1; signx1 = -1; }
+		dx1 = (int)(x2 - x1); if (dx1 < 0) { dx1 = -dx1; signx1 = -1; }
 		else signx1 = 1;
 		dy1 = (int)(y2 - y1);
 
-		dx2 = (int)(x3 - x1); if (dx2<0) { dx2 = -dx2; signx2 = -1; }
+		dx2 = (int)(x3 - x1); if (dx2 < 0) { dx2 = -dx2; signx2 = -1; }
 		else signx2 = 1;
 		dy2 = (int)(y3 - y1);
 
@@ -1358,10 +1360,10 @@ namespace olc
 
 		for (int i = 0; i < dx1;) {
 			t1xp = 0; t2xp = 0;
-			if (t1x<t2x) { minx = t1x; maxx = t2x; }
+			if (t1x < t2x) { minx = t1x; maxx = t2x; }
 			else { minx = t2x; maxx = t1x; }
 			// process first line until y value is about to change
-			while (i<dx1) {
+			while (i < dx1) {
 				i++;
 				e1 += dy1;
 				while (e1 >= dx1) {
@@ -1386,8 +1388,8 @@ namespace olc
 				else              t2x += signx2;
 			}
 		next2:
-			if (minx>t1x) minx = t1x; if (minx>t2x) minx = t2x;
-			if (maxx<t1x) maxx = t1x; if (maxx<t2x) maxx = t2x;
+			if (minx > t1x) minx = t1x; if (minx > t2x) minx = t2x;
+			if (maxx < t1x) maxx = t1x; if (maxx < t2x) maxx = t2x;
 			drawline(minx, maxx, y);    // Draw line from min to max points found on the y
 										// Now increase y
 			if (!changed1) t1x += signx1;
@@ -1400,7 +1402,7 @@ namespace olc
 		}
 	next:
 		// Second half
-		dx1 = (int)(x3 - x2); if (dx1<0) { dx1 = -dx1; signx1 = -1; }
+		dx1 = (int)(x3 - x2); if (dx1 < 0) { dx1 = -dx1; signx1 = -1; }
 		else signx1 = 1;
 		dy1 = (int)(y3 - y2);
 		t1x = x2;
@@ -1415,10 +1417,10 @@ namespace olc
 
 		for (int i = 0; i <= dx1; i++) {
 			t1xp = 0; t2xp = 0;
-			if (t1x<t2x) { minx = t1x; maxx = t2x; }
+			if (t1x < t2x) { minx = t1x; maxx = t2x; }
 			else { minx = t2x; maxx = t1x; }
 			// process first line until y value is about to change
-			while (i<dx1) {
+			while (i < dx1) {
 				e1 += dy1;
 				while (e1 >= dx1) {
 					e1 -= dx1;
@@ -1427,7 +1429,7 @@ namespace olc
 				}
 				if (changed1) break;
 				else   	   	  t1x += signx1;
-				if (i<dx1) i++;
+				if (i < dx1) i++;
 			}
 		next3:
 			// process second line until y value is about to change
@@ -1443,15 +1445,15 @@ namespace olc
 			}
 		next4:
 
-			if (minx>t1x) minx = t1x; if (minx>t2x) minx = t2x;
-			if (maxx<t1x) maxx = t1x; if (maxx<t2x) maxx = t2x;
+			if (minx > t1x) minx = t1x; if (minx > t2x) minx = t2x;
+			if (maxx < t1x) maxx = t1x; if (maxx < t2x) maxx = t2x;
 			drawline(minx, maxx, y);
 			if (!changed1) t1x += signx1;
 			t1x += t1xp;
 			if (!changed2) t2x += signx2;
 			t2x += t2xp;
 			y += 1;
-			if (y>y3) return;
+			if (y > y3) return;
 		}
 	}
 
@@ -1494,6 +1496,39 @@ namespace olc
 			for (int32_t i = 0; i < w; i++)
 				for (int32_t j = 0; j < h; j++)
 					Draw(x + i, y + j, sprite->GetPixel(i + ox, j + oy));
+		}
+	}
+
+	void PixelGameEngine::DrawPartialSprite_BottomUp(int32_t x, int32_t y, Sprite *sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale)
+	{
+		if (sprite == nullptr)
+			return;
+
+		if (scale > 1)
+		{
+			for (int32_t i = 0; i < w; i++) {
+				int32_t start0_j = 0;
+				for (int32_t j = h; j > 0; j--) {
+					for (uint32_t is = 0; is < scale; is++)
+						for (uint32_t js = 0; js < scale; js++)
+							Draw(x + (i*scale) + is, y - (start0_j*scale) + js, sprite->GetPixel(i + ox, j + oy));
+					start0_j++;
+				}
+			}
+		}
+
+		else
+		{
+
+
+			for (int32_t i = 0; i < w; i++) {
+				int32_t start0_j = 0;
+
+				for (int32_t j = h; j > 0; j--) {
+					Draw(x + i, y - start0_j, sprite->GetPixel(i + ox, j + oy));
+					start0_j++;
+				}
+			}
 		}
 	}
 
