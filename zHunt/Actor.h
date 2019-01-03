@@ -58,8 +58,8 @@ public:
 private:
 	void load_mapping_info();
 	void draw_curr_anim(facings facing, actions act);
-	int array_size(facings facing, actions act) const;// build a function that checks values from start to end |||for (x : arr)||| and when it 
-								// meets x = 32167 it stops counting and returns the size
+	int array_size(facings facing, actions act) const;	// build a function that checks values from start to end |||for (x : arr)||| and when it 
+														// meets x = 32167 it stops counting and returns the size
 
 	// Private Data Members
 private:
@@ -71,12 +71,12 @@ private:
 	olc::Sprite* spr = nullptr;
 	olc::PixelGameEngine* pge;
 
-	//std::vector<spr_sqn> mapping_data;
-	spr_sqn a3d_mapping_data[ACTIONS_SIZE][FACINGS_SIZE][25];
+	static constexpr int sqn_size = 8; // this is the greatest number of sequences of any given animation
+	spr_sqn a3d_mapping_data[ACTIONS_SIZE][FACINGS_SIZE][sqn_size];
 	actions action;
 	facings facing;
 	float play_seq = 0;
-	float anim_speed = 2;  // might need an animation speed according to the size of the anim_seq
+	float anim_speed = 6;  // might need an animation speed according to the size of the anim_seq
 	float eTime = 0;
 };
 

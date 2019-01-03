@@ -19,11 +19,14 @@ void Actor::draw_curr_anim(facings facing, actions act)
 	draw_centered(location.x, location.y, spr, a3d_mapping_data[act][facing][int(play_seq)].x, a3d_mapping_data[act][facing][int(play_seq)].y, a3d_mapping_data[act][facing][int(play_seq)].w, a3d_mapping_data[act][facing][int(play_seq)].h, 2);
 }
 
+
 int Actor::array_size(facings facing, actions act) const
 {
-	for (int i = 0; i < 25; ++i)
+	for (int i = 0; i < sqn_size; ++i)
 		if (a3d_mapping_data[act][facing][i].x == 32167)
 			return i;
+
+	return sqn_size;
 }
 
 
