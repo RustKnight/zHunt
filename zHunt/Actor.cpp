@@ -2,25 +2,44 @@
 
 void Actor::draw()
 {
-	draw_curr_anim(facing, action);
+	anim_loop(action, facing);
 }
 
 
 
-void Actor::draw_curr_anim(facings facing, actions act)
+void Actor::anim_loop(actions act, facings facing)
 {
-	int num_sequences = array_size(facing, act);
+	int num_sequences = array_size(act, facing);
 	play_seq += eTime * anim_speed;
 
 	if (int(play_seq) >= num_sequences)
 		play_seq = 0;
 	
-
 	draw_centered(location.x, location.y, spr, a3d_mapping_data[act][facing][int(play_seq)].x, a3d_mapping_data[act][facing][int(play_seq)].y, a3d_mapping_data[act][facing][int(play_seq)].w, a3d_mapping_data[act][facing][int(play_seq)].h, 2);
 }
 
+bool Actor::anim_once(actions act, facings facing)
+{
+	
+	if (play_seq != 0 && done_playing)
+		play_seq = 0;
 
-int Actor::array_size(facings facing, actions act) const
+	done_playing = false;
+	
+	int num_sequences = array_size(act, facing);
+	play_seq += eTime * anim_speed;
+
+	if (int(play_seq) >= num_sequences) {
+		play_seq = 0;
+		done_playing = true;
+	}
+
+	draw_centered(location.x, location.y, spr, a3d_mapping_data[act][facing][int(play_seq)].x, a3d_mapping_data[act][facing][int(play_seq)].y, a3d_mapping_data[act][facing][int(play_seq)].w, a3d_mapping_data[act][facing][int(play_seq)].h, 2);
+	return done_playing;
+}
+
+
+int Actor::array_size(actions act, facings facing) const
 {
 	for (int i = 0; i < sqn_size; ++i)
 		if (a3d_mapping_data[act][facing][i].x == 32167)
@@ -28,6 +47,7 @@ int Actor::array_size(facings facing, actions act) const
 
 	return sqn_size;
 }
+
 
 
 void Actor::load_spr_sheet(std::string adrs)
@@ -46,13 +66,40 @@ void Actor::draw_centered(float x, float y, olc::Sprite * spr, int32_t ox, int32
 	
 	pge->FillCircle(400, 300, 2, olc::RED);
 	pge->DrawRect(int32_t(center_x), int32_t(center_y) - h * scale, (w*scale), (h*scale));
-
 }
+
+
+void Actor::anim_que(actions act, bool loop_in)
+{	
+	qued_anim = act;
+	loop = loop_in;
+}
+
+
+void Actor::anim_update()
+{
+
+	if (done_playing)
+		current_anim = qued_anim;
+	else
+		loop = 0;
+	
+
+	// these 2 conditions control which anim function is called
+	if (loop)
+		anim_loop(current_anim, facing);
+	else
+		anim_once(current_anim, facing);
+}
+
+
 
 void Actor::update(float fElapTm)
 {
 	eTime = fElapTm;
 	old_location = location;
+
+	anim_update();
 
 	if (pge->GetKey(olc::UP).bHeld)
 		location.y -= fElapTm * speed;
@@ -74,13 +121,25 @@ void Actor::update(float fElapTm)
 		ac--;
 		action = actions(ac);
 	}
-		
 
-	//if (old_location != location)
-	//	action = WALK;
-	//else
-	//	action = WALK;
-}
+	if (pge->GetKey(olc::P).bPressed) {
+		anim_que(PICK_UP, 0);
+	}
+
+	else if (pge->GetKey(olc::K).bPressed) {
+		anim_que(SMOKE, 0);
+		//done_playing = true;  dirty way of stoping a play_once animation
+	}
+
+	else if (old_location != location) {
+		anim_que(WALK, 1);
+		//done_playing = true;  dirty way of stoping a play_once animation
+	}
+
+	else
+		anim_que(IDLE, 1);
+
+}	
 
 
 
@@ -173,9 +232,6 @@ void Actor::load_mapping_info()
 			a3d_mapping_data[anim][face][index] = spr_sqn{ x, y, w, h };
 		}
 	}
-
-
-	//	a3d_mapping_data[N][WALKING][0] = spr_sqn	{ 4,195,21,39	};
 		
 }
 

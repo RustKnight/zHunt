@@ -57,9 +57,12 @@ public:
 
 private:
 	void load_mapping_info();
-	void draw_curr_anim(facings facing, actions act);
-	int array_size(facings facing, actions act) const;	// build a function that checks values from start to end |||for (x : arr)||| and when it 
-														// meets x = 32167 it stops counting and returns the size
+	void anim_loop(actions act, facings facing);
+	bool anim_once(actions act, facings facing);
+	int array_size(actions act, facings facing) const;	// build a function that checks values from start to end |||for (x : arr)||| and when it // meets x = 32167 it stops counting and returns the size
+	
+	void anim_que(actions act, bool loop);
+	void anim_update();
 
 	// Private Data Members
 private:
@@ -75,9 +78,16 @@ private:
 	spr_sqn a3d_mapping_data[ACTIONS_SIZE][FACINGS_SIZE][sqn_size];
 	actions action;
 	facings facing;
-	float play_seq = 0;
+	float play_seq = 0.0f;
 	float anim_speed = 6;  // might need an animation speed according to the size of the anim_seq
-	float eTime = 0;
+	
+	bool busy = false;
+	actions qued_anim = IDLE;
+	actions current_anim = IDLE;
+	bool loop = true;
+	bool done_playing = true;
+
+	float eTime = 0.0f;
 };
 
 
