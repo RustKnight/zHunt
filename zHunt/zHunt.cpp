@@ -23,8 +23,16 @@ bool zHunt::OnUserCreate()
 
 bool zHunt::OnUserUpdate(float fElapsedTime) 
 {
-	Clear(olc::VERY_DARK_CYAN);
+	Clear(olc::BLACK);
 	SetPixelMode(olc::Pixel::ALPHA);
+
+	//DrawLine(400, 0, 400, 600, olc::RED);
+	//DrawLine(0, 300, 800, 300, olc::RED);
+	//DrawLine(100, 0, 700, 600, olc::RED);
+	//DrawLine(100, 600, 700, 0, olc::RED);
+
+	//std::string pos = std::to_string (actor.lookAtMouse());
+	//DrawString(40, 40, pos, olc::YELLOW);
 
 	actor.update(fElapsedTime);
 	//actor.draw();

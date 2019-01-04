@@ -2,10 +2,12 @@
 #include "RectF.h"
 #include "Vec2.h"
 #include "olcPixelGameEngine.h"
+#include <math.h>
 
 
 
-
+// next part - research into 360 mouse follow - but reread what you wrote yesterday so you don't lose traction with future-animation class
+// all parts responsible in playing an animation will be moved into a class of its own, contained within an actor class
 
 
 class Actor {
@@ -14,10 +16,10 @@ class Actor {
 
 	enum actions {	WALK, RUN, RELOAD, AIM, RECOIL, DIE, HURT, DIE2, GRAVE,
 					CLIMB, PICK_UP, TIED, SIT, TIED_DIE, CARRIED, IDLE, SMOKE, ACTIONS_SIZE};
-	enum facings {N, NE, E, SE, S, SW, W, NW, FACINGS_SIZE};
+	enum facings {N = 2, NE = 3, E = 4, SE = 5, S = 6, SW = 7, W = 0, NW = 1, FACINGS_SIZE = 8};
+
 
 	struct spr_sqn {
-
 		spr_sqn() :
 		x{ 32167 }, y{ 0 }, w{ 0 }, h{ 0 }
 		{}
@@ -54,6 +56,7 @@ public:
 	
 	//temp
 	void update (float fElapTm);
+	int lookAtMouse();
 
 private:
 	void load_mapping_info();
@@ -63,6 +66,7 @@ private:
 	
 	void anim_que(actions act, bool loop);
 	void anim_update();
+	
 
 	// Private Data Members
 private:
@@ -79,7 +83,7 @@ private:
 	actions action;
 	facings facing;
 	float play_seq = 0.0f;
-	float anim_speed = 6;  // might need an animation speed according to the size of the anim_seq
+	float anim_speed = 3;  // might need an animation speed according to the size of the anim_seq
 	
 	bool busy = false;
 	actions qued_anim = IDLE;

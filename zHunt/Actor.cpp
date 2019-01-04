@@ -64,8 +64,8 @@ void Actor::draw_centered(float x, float y, olc::Sprite * spr, int32_t ox, int32
 
 	pge->DrawPartialSprite_BottomUp(int32_t(center_x), int32_t(center_y), spr, ox, oy, w, h, scale);
 	
-	pge->FillCircle(400, 300, 2, olc::RED);
-	pge->DrawRect(int32_t(center_x), int32_t(center_y) - h * scale, (w*scale), (h*scale));
+	//pge->FillCircle(400, 300, 2, olc::RED);
+	//pge->DrawRect(int32_t(center_x), int32_t(center_y) - h * scale, (w*scale), (h*scale));
 }
 
 
@@ -93,11 +93,57 @@ void Actor::anim_update()
 }
 
 
+int Actor::lookAtMouse()
+{
+#define PI 3.14159265
+
+	// we determine the vector between the mouse position and the location of the character
+	float dx = pge->GetMouseX() - location.x;
+	float dy = pge->GetMouseY() - location.y;
+	
+	float angle = atan2(dy,dx);
+	angle = roundf (angle / ((2 * PI) / 8) + 4);
+	if (angle == 8)
+		angle = 0;
+
+	switch (int (angle) ) {
+		//N = 2, NE = 3, E = 4, SE = 5, S = 6, SW = 7, W = 0, NW = 1,
+	case 0 :
+		angle = 6;
+		break;
+	case 1:
+		angle = 7;
+		break;
+	case 2:
+		angle = 0;
+		break;
+	case 3:
+		angle = 1;
+		break;
+	case 4:
+		angle = 2;
+		break;
+	case 5:
+		angle = 3;
+		break;
+	case 6:
+		angle = 4;
+		break;
+	case 7:
+		angle = 5;
+		break;
+	}
+
+	return angle;
+}
+
+
 
 void Actor::update(float fElapTm)
 {
 	eTime = fElapTm;
 	old_location = location;
+	facing = facings(lookAtMouse());
 
 	anim_update();
 
@@ -128,7 +174,6 @@ void Actor::update(float fElapTm)
 
 	else if (pge->GetKey(olc::K).bPressed) {
 		anim_que(SMOKE, 0);
-		//done_playing = true;  dirty way of stoping a play_once animation
 	}
 
 	else if (old_location != location) {
