@@ -54,16 +54,14 @@ private:
 	Vec2 old_location;
 	Vec2 velocity;
 	float speed;
+	float eTime = 0.0f;
 
 	Value_checker vc;
-
 	olc::Sprite* spr = nullptr;
 	olc::PixelGameEngine* pge;
 
 	actions action;
 	facings facing;
-
-	float eTime = 0.0f;
 
 	AnimationRenderer renderer;
 };

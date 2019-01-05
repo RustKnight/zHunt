@@ -1,14 +1,13 @@
 #include "AnimationRenderer.h"
 
 
-void AnimationRenderer::draw()
-{
-	anim_loop(action, facing);
 
-}
 
 void AnimationRenderer::update(float& elapT, const Vec2& loc, int face)
 {
+
+	anim_update();
+
 	eTime = elapT;
 	location = loc;
 	facing = face;
@@ -83,8 +82,9 @@ void AnimationRenderer::draw_centered(float x, float y, olc::Sprite * spr, int32
 }
 
 
-void AnimationRenderer::anim_que(int act, bool loop_in)
+void AnimationRenderer::anim_que(int act, bool loop_in, float speed)
 {
+	anim_speed = speed;
 	qued_anim = act;
 	loop = loop_in;
 }

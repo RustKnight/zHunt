@@ -35,7 +35,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	//DrawString(40, 40, pos, olc::YELLOW);
 
 	actor.update(fElapsedTime);
-	//actor.draw();
+
 
 	return true;
 }

@@ -10,7 +10,6 @@ void Actor::load_spr_sheet(std::string adrs)
 
 
 
-
 int Actor::lookAtMouse()
 {
 #define PI 3.14159265
@@ -63,7 +62,7 @@ void Actor::update(float fElapTm)
 	old_location = location;
 	facing = facings(lookAtMouse());
 
-	renderer.anim_update();
+	
 	renderer.update(eTime, location, facing);
 
 	if (pge->GetKey(olc::UP).bHeld)
@@ -75,33 +74,22 @@ void Actor::update(float fElapTm)
 	if (pge->GetKey(olc::RIGHT).bHeld)
 		location.x += fElapTm * speed;
 
-	if (pge->GetKey(olc::W).bPressed) {
-		int ac = int(action);
-		ac++;
-		action = actions(ac);
-	}
-
-	if (pge->GetKey(olc::S).bPressed) {
-		int ac = int(action);
-		ac--;
-		action = actions(ac);
-	}
 
 	if (pge->GetKey(olc::P).bPressed) {
-		renderer.anim_que(PICK_UP, 0);
+		renderer.anim_que(PICK_UP, 0, 1.0f);
 	}
 
 	else if (pge->GetKey(olc::K).bPressed) {
-		renderer.anim_que(SMOKE, 0);
+		renderer.anim_que(SMOKE, 0, 2.0f);
 	}
 
 	else if (old_location != location) {
-		renderer.anim_que(WALK, 1);
+		renderer.anim_que(WALK, 1, 3.0f);
 		//done_playing = true;  dirty way of stoping a play_once animation
 	}
 
 	else
-		renderer.anim_que(IDLE, 1);
+		renderer.anim_que(IDLE, 1, 1.5f);
 
 }	
 
