@@ -18,14 +18,14 @@ public:
 
 	AnimationRenderer (olc::PixelGameEngine* pge_in, int tot_anim)
 		:	pge {pge_in}, 
-			action {0}, 
-			facing {0}, 
-			anm_hdl{ tot_anim }		
+			anm_hdl{ tot_anim },
+			action{ 0 }, facing{ 0 }, current_anim{ 0 }, qued_anim{ 0 }, play_seq {0}, eTime{0},
+			busy {false}, loop {true}, done_playing {true}
 	{}
 
 	void anim_que(int act, bool loop, float speed);
-	void anim_update();
 	void update(float& elapT, const Vec2& loc, int face);
+
 	void get_spr_ptr(olc::Sprite* spr_in);
 
 
@@ -34,25 +34,24 @@ private:
 	void anim_loop(int act, int facing);
 	bool anim_once(int act, int facing);
 	int array_size(int act, int facing) const;	// build a function that checks values from start to end |||for (x : arr)||| and when it // meets x = 32167 it stops counting and returns the size
-
+	void anim_update();
 	
-
 
 private:
 	static constexpr int sqn_size = 8; // this is the greatest number of sequences of any given animation
 
 	int action;
 	int facing;
-	int current_anim = 0;
-	int qued_anim = 0;
+	int current_anim;
+	int qued_anim;
 
-	float play_seq = 0.0f;
+	float play_seq;
 	float anim_speed;				// might need an animation speed according to the size of the anim_seq
-	float eTime = 0.0f;
+	float eTime;
 
-	bool busy = false;
-	bool loop = true;
-	bool done_playing = true;
+	bool busy;
+	bool loop;
+	bool done_playing;
 
 	olc::PixelGameEngine* pge;
 	olc::Sprite* spr;

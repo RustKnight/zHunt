@@ -30,7 +30,7 @@ Vec2& Vec2::operator*=( float rhs )
 
 bool Vec2::operator!=(const Vec2 & rhs) const
 {
-	if (int(this->x) < int(rhs.x) || int(this->x) > int(rhs.x) || int(this->y) < int(rhs.y) || int(this->y) > int(rhs.y))
+	if ( x > rhs.x || x < rhs.x || y > rhs.y || y < rhs.y )
 		return true;
 	else
 		return false;

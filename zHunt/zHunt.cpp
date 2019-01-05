@@ -31,7 +31,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	//DrawLine(100, 0, 700, 600, olc::RED);
 	//DrawLine(100, 600, 700, 0, olc::RED);
 
-	//std::string pos = std::to_string (actor.lookAtMouse());
+	//std::string pos = std::to_string (actor.location.y);
 	//DrawString(40, 40, pos, olc::YELLOW);
 
 	actor.update(fElapsedTime);

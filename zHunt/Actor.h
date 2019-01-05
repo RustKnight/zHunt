@@ -29,28 +29,28 @@ public:
 	Actor (Vec2 loc, olc::PixelGameEngine* in_pge):
 		location{loc},
 		pge		{in_pge},
-		speed	{80.0f},
+		speed	{20.0f},
 		action	{ WALK },
 		facing	{N},
 		renderer{ in_pge,  ACTIONS_SIZE }
-	{}
+	{
+	}
 
 
 public:
 	void load_spr_sheet(std::string adrs);
 	
-	
-	//temp
 	void update (float fElapTm);
 	int lookAtMouse();
 
-private:
-	
-	
-
-	// Private Data Members
-private:
 	Vec2 location;
+private:
+	
+	
+private:
+	string dest{ "C://Users//Carmen//Desktop//output.txt" };
+	ofstream out{ dest };
+	
 	Vec2 old_location;
 	Vec2 velocity;
 	float speed;
