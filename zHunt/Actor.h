@@ -4,6 +4,7 @@
 #include "olcPixelGameEngine.h"
 #include <math.h>
 
+#include "AnimationRenderer.h"
 #include "AnimationHandler.h"
 #include "spr_sqn.h"
 #include "Value_checker.h"
@@ -31,26 +32,20 @@ public:
 		speed	{80.0f},
 		action	{ WALK },
 		facing	{N},
-		anm_hdl { ACTIONS_SIZE }
+		renderer{ in_pge,  ACTIONS_SIZE }
 	{}
 
 
 public:
-	void draw();
 	void load_spr_sheet(std::string adrs);
-	void draw_centered(float x, float y, olc::Sprite* spr, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale) const;
+	
 	
 	//temp
 	void update (float fElapTm);
 	int lookAtMouse();
 
 private:
-	void anim_loop(actions act, facings facing);
-	bool anim_once(actions act, facings facing);
-	int array_size(actions act, facings facing) const;	// build a function that checks values from start to end |||for (x : arr)||| and when it // meets x = 32167 it stops counting and returns the size
 	
-	void anim_que(actions act, bool loop);
-	void anim_update();
 	
 
 	// Private Data Members
@@ -60,25 +55,17 @@ private:
 	Vec2 velocity;
 	float speed;
 
-	AnimationHandler anm_hdl;
 	Value_checker vc;
 
 	olc::Sprite* spr = nullptr;
 	olc::PixelGameEngine* pge;
 
-	static constexpr int sqn_size = 8; // this is the greatest number of sequences of any given animation
 	actions action;
 	facings facing;
-	float play_seq = 0.0f;
-	float anim_speed = 3;				// might need an animation speed according to the size of the anim_seq
-
-	bool busy = false;
-	actions qued_anim = IDLE;
-	actions current_anim = IDLE;
-	bool loop = true;
-	bool done_playing = true;
 
 	float eTime = 0.0f;
+
+	AnimationRenderer renderer;
 };
 
 

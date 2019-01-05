@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="AnimationHandler.cpp" />
+    <ClCompile Include="AnimationRenderer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RectF.cpp" />
     <ClCompile Include="Vec2.cpp" />
@@ -153,6 +154,7 @@
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="AnimationHandler.h" />
+    <ClInclude Include="AnimationRenderer.h" />
     <ClInclude Include="olcPGEX_Sound.h" />
     <ClInclude Include="olcPixelGameEngine.h" />
     <ClInclude Include="RectF.h" />

@@ -12,8 +12,7 @@ using namespace std;
 class AnimationHandler {
 public:
 	AnimationHandler() = default;
-	AnimationHandler(int total_animations) :
-		
+	AnimationHandler(int total_animations) :	
 		a3d_mapping_data (total_animations, vector<vector <spr_sqn>> (8, vector<spr_sqn>(8)))
 	{
 		load_mapping_info();
