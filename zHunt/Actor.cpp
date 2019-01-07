@@ -74,7 +74,7 @@ void Actor::update(float fElapTm)
 
 	
 	if (pge->GetKey(olc::P).bPressed) {
-		renderer.request_animation(DIE, 0, 0, 0, 4.5f);
+		renderer.request_animation(PICK_UP, 0, 0, 0, 4.5f);
 	}
 	
 	else if (pge->GetKey(olc::K).bPressed) {
@@ -90,7 +90,7 @@ void Actor::update(float fElapTm)
 	
 
 
-	renderer.play_animation(eTime, location, facing);
+	renderer.update_and_play(eTime, location, facing);
 }	
 
 

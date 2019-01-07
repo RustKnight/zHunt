@@ -17,7 +17,7 @@ void AnimationRenderer::request_animation(int act, bool interruptable, bool loop
 }
 
 
-void AnimationRenderer::play_animation(float& elapT, const Vec2& loc, int face)
+void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 {
 	eTime = elapT;
 	location = loc;
