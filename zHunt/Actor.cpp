@@ -85,16 +85,11 @@ void Actor::update(float fElapTm)
 
 	if (old_location != location) {
 		renderer.anim_que(WALK, 1, 6.0f);
-		cout << "YES" << endl;
 		//done_playing = true;  dirty way of stoping a play_once animation
 	}
 
 	else {
 		renderer.anim_que(IDLE, 1, 1.5f);
-		cout << "NO";
-		//out << "NO" << endl << endl;
-		//out << "OLD_X : " << (int)old_location.x << "---" << "CUR_X : " << (int) location.x << endl;
-		//out << "OLD_Y : " << (int)old_location.y << "---" << "CUR_Y : " << (int) location.y << endl;
 	}
 
 
