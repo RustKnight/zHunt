@@ -61,7 +61,6 @@ void Actor::update(float fElapTm)
 	eTime = fElapTm;
 	old_location = location;
 	facing = facings(lookAtMouse());
-	renderer.update(eTime, location, facing);
 
 
 	if (pge->GetKey(olc::UP).bHeld)
@@ -74,25 +73,24 @@ void Actor::update(float fElapTm)
 		location.x += fElapTm * speed;
 
 	
-
-	//if (pge->GetKey(olc::P).bPressed) {
-	//	renderer.anim_que(PICK_UP, 0, 1.0f);
-	//}
-	//
-	//else if (pge->GetKey(olc::K).bPressed) {
-	//	renderer.anim_que(SMOKE, 0, 2.0f);
-	//}
+	if (pge->GetKey(olc::P).bPressed) {
+		renderer.request_animation(DIE, 0, 0, 0, 4.5f);
+	}
+	
+	else if (pge->GetKey(olc::K).bPressed) {
+		renderer.request_animation(SMOKE, 0, 1, 0, 0.5f);
+	}
 
 	if (old_location != location) {
-		renderer.anim_que(WALK, 1, 6.0f);
+		renderer.request_animation(WALK, 1, 1, 1, 6.5f);
 		//done_playing = true;  dirty way of stoping a play_once animation
 	}
+	else 
+		renderer.request_animation(IDLE, 1, 1, 1, 1.5f);
+	
 
-	else {
-		renderer.anim_que(IDLE, 1, 1.5f);
-	}
 
-
+	renderer.play_animation(eTime, location, facing);
 }	
 
 

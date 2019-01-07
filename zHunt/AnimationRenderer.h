@@ -20,21 +20,19 @@ public:
 		:	pge {pge_in}, 
 			anm_hdl{ tot_anim },
 			action{ 0 }, facing{ 0 }, current_anim{ 0 }, qued_anim{ 0 }, play_seq {0}, eTime{0},
-			busy {false}, loop {true}, done_playing {true}
+			task_done{false}, loop {true}, done_playing {true}, allow_interrupt {true}
 	{}
 
-	void anim_que(int act, bool loop, float speed);
-	void update(float& elapT, const Vec2& loc, int face);
+	void request_animation(int act, bool interruptable, bool loop_in, bool back_and_forth, float speed);
+	void play_animation(float& elapT, const Vec2& loc, int face);
 
 	void get_spr_ptr(olc::Sprite* spr_in);
 
 
 private:
 	void draw_centered(float x, float y, olc::Sprite* spr, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale) const;
-	void anim_loop(int act, int facing);
-	bool anim_once(int act, int facing);
 	int array_size(int act, int facing) const;	// build a function that checks values from start to end |||for (x : arr)||| and when it // meets x = 32167 it stops counting and returns the size
-	void anim_update();
+	
 	
 
 private:
@@ -49,9 +47,12 @@ private:
 	float anim_speed;				// might need an animation speed according to the size of the anim_seq
 	float eTime;
 
-	bool busy;
+	bool allow_interrupt;
+	bool back_forth;
+	bool task_done;
 	bool loop;
 	bool done_playing;
+	bool increasing;
 
 	olc::PixelGameEngine* pge;
 	olc::Sprite* spr;

@@ -30,7 +30,7 @@ public:
 		location{loc},
 		pge		{in_pge},
 		speed	{20.0f},
-		action	{ WALK },
+		action	{ IDLE },
 		facing	{N},
 		renderer{ in_pge,  ACTIONS_SIZE }
 	{

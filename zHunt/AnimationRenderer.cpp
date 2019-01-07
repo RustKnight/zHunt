@@ -1,61 +1,53 @@
 #include "AnimationRenderer.h"
 
 
-
-
-void AnimationRenderer::update(float& elapT, const Vec2& loc, int face)
+void AnimationRenderer::request_animation(int act, bool interruptable, bool loop_in, bool back_and_forth, float speed)
 {
+	// 0 = Walk, 1 = Run; moving always cancels whatever anim you're playing
 
-	anim_update();
+	if (act != action && (allow_interrupt || task_done || act == 0 || act == 1)) {	// check if we should allow incoming animation
+		play_seq = 0;
 
+		action = act;
+		allow_interrupt = interruptable;
+		loop = loop_in;
+		back_forth = back_and_forth;
+		anim_speed = speed;
+	}
+}
+
+
+void AnimationRenderer::play_animation(float& elapT, const Vec2& loc, int face)
+{
 	eTime = elapT;
 	location = loc;
 	facing = face;
+	task_done = false;
+
+	int num_sequences = array_size(action, facing);
+	play_seq += eTime * anim_speed;
+
+
+		if (int(play_seq) >= num_sequences) {
+			play_seq = 0;
+
+			if (!loop)
+				task_done = true; // could have used allow_interrupt as switch, but chose another bool for clarity
+		}
+
+
+	const spr_sqn& requested_sqn = anm_hdl.get_coords(action, facing, int(play_seq));
+
+	draw_centered(location.x, location.y, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 1);
 }
+
+
 
 void AnimationRenderer::get_spr_ptr(olc::Sprite* spr_in)
 {
 	spr = spr_in;
 }
 
-
-
-void AnimationRenderer::anim_loop(int act, int facing)
-{
-	int num_sequences = array_size(act, facing);
-	play_seq += eTime * anim_speed;
-
-	if (int(play_seq) >= num_sequences)
-		play_seq = 0;
-
-
-	const spr_sqn& requested_sqn = anm_hdl.get_coords(act, facing, int(play_seq));
-
-	draw_centered(location.x, location.y, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 1);
-}
-
-
-bool AnimationRenderer::anim_once(int act, int facing)
-{
-
-	if (play_seq != 0 && done_playing)
-		play_seq = 0;
-
-	done_playing = false;
-
-	int num_sequences = array_size(act, facing);
-	play_seq += eTime * anim_speed;
-
-	if (int(play_seq) >= num_sequences) {
-		play_seq = 0;
-		done_playing = true;
-	}
-
-	const spr_sqn& requested_sqn = anm_hdl.get_coords(act, facing, int(play_seq));
-
-	draw_centered(location.x, location.y, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 1);
-	return done_playing;
-}
 
 
 int AnimationRenderer::array_size(int act, int facing) const
@@ -66,7 +58,6 @@ int AnimationRenderer::array_size(int act, int facing) const
 
 	return sqn_size;
 }
-
 
 
 
@@ -82,26 +73,5 @@ void AnimationRenderer::draw_centered(float x, float y, olc::Sprite * spr, int32
 }
 
 
-void AnimationRenderer::anim_que(int act, bool loop_in, float speed)
-{
-	anim_speed = speed;
-	qued_anim = act;
-	loop = loop_in;
-}
 
 
-void AnimationRenderer::anim_update()
-{
-
-	if (done_playing)
-		current_anim = qued_anim;
-	else
-		loop = 0;
-
-
-	// these 2 conditions control which anim function is called
-	if (loop)
-		anim_loop(current_anim, facing);
-	else
-		anim_once(current_anim, facing);
-}
