@@ -17,8 +17,8 @@ public:
 	AnimationRenderer (olc::PixelGameEngine* pge_in, int tot_anim)
 		:	pge {pge_in}, 
 			anm_hdl{ tot_anim },
-			action{ 0 }, facing{ 0 }, current_anim{ 0 }, qued_anim{ 0 }, play_seq {0}, eTime{0},
-			task_done{false}, loop {true}, done_playing {true}, allow_interrupt {true}
+			action{ 0 }, facing{ 0 }, play_seq {0}, eTime{0},
+			task_done{false}, loop {true}, allow_interrupt {true}
 	{}
 
 	void request_animation(int act, bool interruptable, bool reversed, bool loop_in, bool back_and_forth, float speed);
@@ -39,8 +39,6 @@ private:
 
 	int action;
 	int facing;
-	int current_anim;
-	int qued_anim;
 
 	float play_seq;
 	float anim_speed;				// might need an animation speed according to the size of the anim_seq
@@ -50,7 +48,6 @@ private:
 	bool back_forth;
 	bool task_done;
 	bool loop;
-	bool done_playing;
 	bool increasing;
 	bool reversed;
 
