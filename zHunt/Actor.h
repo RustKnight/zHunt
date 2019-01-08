@@ -42,6 +42,7 @@ public:
 	
 	void update (float fElapTm);
 	int lookAtMouse();
+	bool walking_backwards();
 
 	
 private:
