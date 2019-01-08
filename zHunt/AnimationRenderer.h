@@ -24,6 +24,7 @@ public:
 	void request_animation(int act, bool interruptable, bool reversed, bool loop_in, bool back_and_forth, float speed);
 	void update_and_play(float& elapT, const Vec2& loc, int face);
 
+
 	void get_spr_ptr(olc::Sprite* spr_in);
 
 

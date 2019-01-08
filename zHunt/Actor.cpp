@@ -60,6 +60,7 @@ void Actor::update(float fElapTm)
 {
 	eTime = fElapTm;
 	old_location = location;
+	old_distance = mouse_to_player_distance;
 	facing = facings(lookAtMouse());
 
 
@@ -85,11 +86,23 @@ void Actor::update(float fElapTm)
 		renderer.request_animation(CLIMB, 0, 0, 1, 1, 2.5f);
 	}
 
-	//enum animation_states { INTERRUPTABLE, REVERSED, LOOP, BACK_FORTH }; junk
+	//{ INTERRUPTABLE, REVERSED, LOOP, BACK_FORTH }
 
 	if (old_location != location) {
-		renderer.request_animation(WALK, 1, 1, 0, 0, 2.5f);
-		//done_playing = true;  dirty way of stoping a play_once animation
+		mouse_to_player_distance.x = pge->GetMouseX() - location.x;
+		mouse_to_player_distance.y = pge->GetMouseY() - location.y;
+
+		Vec2 direction = location - old_location;
+		
+		
+		if ( (direction.GetNormalized().x > 0 && mouse_to_player_distance.GetNormalized().x > 0) || (direction.GetNormalized().y > 0 && mouse_to_player_distance.GetNormalized().y > 0)  || (direction.GetNormalized().x < 0 && mouse_to_player_distance.GetNormalized().x < 0) || (direction.GetNormalized().y < 0 && mouse_to_player_distance.GetNormalized().y < 0)) {
+			speed = 70.0f; cout << speed << endl;
+			renderer.request_animation(WALK, 1, 0, 0, 0, 6.5f);
+		}
+		else {
+			speed = 45.0f; cout << speed << endl;
+			renderer.request_animation(WALK, 1, 1, 0, 0, 4.0f);
+		}
 	}
 	else 
 		renderer.request_animation(IDLE, 1, 0, 1, 1, 1.5f);

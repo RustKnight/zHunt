@@ -29,7 +29,7 @@ public:
 	Actor (Vec2 loc, olc::PixelGameEngine* in_pge):
 		location{loc},
 		pge		{in_pge},
-		speed	{20.0f},
+		speed	{50.0f},
 		action	{ IDLE },
 		facing	{N},
 		renderer{ in_pge,  ACTIONS_SIZE }
@@ -43,15 +43,18 @@ public:
 	void update (float fElapTm);
 	int lookAtMouse();
 
+	
+private:
+	
+	
+private:
+	//string dest{ "C://Users//Carmen//Desktop//output.txt" };
+	//ofstream out{ dest };
+	
 	Vec2 location;
-private:
-	
-	
-private:
-	string dest{ "C://Users//Carmen//Desktop//output.txt" };
-	ofstream out{ dest };
-	
 	Vec2 old_location;
+	Vec2 mouse_to_player_distance;
+	Vec2 old_distance;
 	Vec2 velocity;
 	float speed;
 	float eTime = 0.0f;
@@ -62,6 +65,9 @@ private:
 
 	actions action;
 	facings facing;
+
+	float dx;
+	float dy;
 
 	AnimationRenderer renderer;
 };

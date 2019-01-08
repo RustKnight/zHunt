@@ -5,23 +5,37 @@ void AnimationRenderer::request_animation(int act, bool interruptable, bool reve
 {
 	// 0 = Walk, 1 = Run; moving always cancels whatever anim you're playing
 
-	if (act != action && (allow_interrupt || task_done || act == 0 || act == 1)) {	// check if we should allow incoming animation
+	if (allow_interrupt || task_done || act == 0 || act == 1) {	// check if we should allow incoming animation
 	
-		action = act;
-		allow_interrupt = interruptable;
-		reversed = reversed_in;
-		loop = loop_in;
-		back_forth = back_and_forth;
-		anim_speed = speed;
-		
+		if (act == action && reversed != reversed_in) {
 
-		if (reversed) {
-			play_seq = array_size(action, facing) - 1;
-			increasing = false;
+			action = act;
+			allow_interrupt = interruptable;
+			reversed = reversed_in;
+			loop = loop_in;
+			back_forth = back_and_forth;
+			anim_speed = speed;
+
+			increasing = !increasing;
 		}
-		else {
-			play_seq = 0;
-			increasing = true;
+
+		if (act != action) {
+
+			action = act;
+			allow_interrupt = interruptable;
+			reversed = reversed_in;
+			loop = loop_in;
+			back_forth = back_and_forth;
+			anim_speed = speed;
+
+			if (reversed) {
+				play_seq = array_size(action, facing) - 1;
+				increasing = false;
+			}
+			else {
+				play_seq = 0;
+				increasing = true;
+			}
 		}
 	}
 }
@@ -44,7 +58,7 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 			play_seq -= eTime * anim_speed;
 
 
-		if (int(play_seq) >= num_sequences || play_seq < 0) {	
+		if (int(play_seq) >= num_sequences || play_seq < 0) {	// we either reached the start or the end of our interval; 
 
 			if (back_forth) {
 				if (increasing == false)  /// we finished decreasing and want to increase
