@@ -18,8 +18,8 @@ int Actor::lookAtMouse()
 	float dx = pge->GetMouseX() - location.x;
 	float dy = pge->GetMouseY() - location.y;
 	
-	double angle = atan2(dy,dx);
-	angle = roundf (angle / ((2 * PI) / 8) + 4);
+	float angle = atan2(dy,dx);
+	angle = (roundf (angle / ((2 * PI) / 8) + 4) );
 	if (angle == 8)
 		angle = 0;
 
@@ -51,7 +51,7 @@ int Actor::lookAtMouse()
 		break;
 	}
 
-	return angle;
+	return int (angle);
 }
 
 bool Actor::walking_backwards()
@@ -61,11 +61,7 @@ bool Actor::walking_backwards()
 
 	Vec2 direction = location - old_location;
 
-	if ((direction.GetNormalized().x > 0 && mouse_to_player_distance.GetNormalized().x > 0) || (direction.GetNormalized().y > 0 && mouse_to_player_distance.GetNormalized().y > 0) || (direction.GetNormalized().x < 0 && mouse_to_player_distance.GetNormalized().x < 0) || (direction.GetNormalized().y < 0 && mouse_to_player_distance.GetNormalized().y < 0))
-		return false;
-	else
-		true;
-	
+	return !((direction.GetNormalized().x > 0 && mouse_to_player_distance.GetNormalized().x > 0) || (direction.GetNormalized().y > 0 && mouse_to_player_distance.GetNormalized().y > 0) || (direction.GetNormalized().x < 0 && mouse_to_player_distance.GetNormalized().x < 0) || (direction.GetNormalized().y < 0 && mouse_to_player_distance.GetNormalized().y < 0));
 }
 
 
@@ -104,20 +100,18 @@ void Actor::update(float fElapTm)
 
 	if (old_location != location) {
 	
-		if (!walking_backwards()){
-			speed = 70.0f; cout << speed << endl;
-			renderer.request_animation(WALK, 1, 0, 0, 0, 6.5f);
-		}
-		else {
+		if (walking_backwards()){
 			speed = 45.0f; cout << speed << endl;
 			renderer.request_animation(WALK, 1, 1, 0, 0, 4.0f);
+		}
+		else {
+			speed = 70.0f; cout << speed << endl;
+			renderer.request_animation(WALK, 1, 0, 0, 0, 6.5f);	
 		}
 	}
 	else 
 		renderer.request_animation(IDLE, 1, 0, 1, 1, 1.5f);
 	
-
-
 	renderer.update_and_play(eTime, location, facing);
 }	
 

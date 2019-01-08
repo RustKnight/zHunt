@@ -29,7 +29,7 @@ void AnimationRenderer::request_animation(int act, bool interruptable, bool reve
 			anim_speed = speed;
 
 			if (reversed) {
-				play_seq = array_size(action, facing) - 1;
+				play_seq = float (array_size(action, facing) - 1);
 				increasing = false;
 			}
 			else {
@@ -64,7 +64,7 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 				if (increasing == false)  /// we finished decreasing and want to increase
 					play_seq = 1;		  /// set play_seq to 0 // or to 1 if we want small delay
 				else
-					play_seq = num_sequences - 1;
+					play_seq = float (num_sequences - 1);
 				
 				increasing = !increasing;
 			}
