@@ -21,7 +21,7 @@ class Actor {
 					CLIMB, PICK_UP, TIED, SIT, TIED_DIE, CARRIED, IDLE, SMOKE, ACTIONS_SIZE};
 	enum facings {N = 2, NE = 3, E = 4, SE = 5, S = 6, SW = 7, W = 0, NW = 1, FACINGS_SIZE = 8};
 
-
+	//enum animation_states { INTERRUPTABLE, REVERSED, LOOP, BACK_FORTH }; junk
 
 
 public:

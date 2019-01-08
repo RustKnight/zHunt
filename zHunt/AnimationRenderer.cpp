@@ -1,18 +1,28 @@
 #include "AnimationRenderer.h"
 
 
-void AnimationRenderer::request_animation(int act, bool interruptable, bool loop_in, bool back_and_forth, float speed)
+void AnimationRenderer::request_animation(int act, bool interruptable, bool reversed_in, bool loop_in, bool back_and_forth, float speed)
 {
 	// 0 = Walk, 1 = Run; moving always cancels whatever anim you're playing
 
 	if (act != action && (allow_interrupt || task_done || act == 0 || act == 1)) {	// check if we should allow incoming animation
-		play_seq = 0;
-
+	
 		action = act;
 		allow_interrupt = interruptable;
+		reversed = reversed_in;
 		loop = loop_in;
 		back_forth = back_and_forth;
 		anim_speed = speed;
+		
+
+		if (reversed) {
+			play_seq = array_size(action, facing) - 1;
+			increasing = false;
+		}
+		else {
+			play_seq = 0;
+			increasing = true;
+		}
 	}
 }
 
@@ -23,23 +33,44 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 	location = loc;
 	facing = face;
 	task_done = false;
+	// update carried out
 
 	int num_sequences = array_size(action, facing);
-	play_seq += eTime * anim_speed;
 
 
-		if (int(play_seq) >= num_sequences) {
-			play_seq = 0;
+		if (increasing)
+			play_seq += eTime * anim_speed;
+		else
+			play_seq -= eTime * anim_speed;
 
-			if (!loop)
-				task_done = true; // could have used allow_interrupt as switch, but chose another bool for clarity
+
+		if (int(play_seq) >= num_sequences || play_seq < 0) {	
+
+			if (back_forth) {
+				if (increasing == false)  /// we finished decreasing and want to increase
+					play_seq = 1;		  /// set play_seq to 0 // or to 1 if we want small delay
+				else
+					play_seq = num_sequences - 1;
+				
+				increasing = !increasing;
+			}
+
+			else if (!reversed)
+				play_seq = 0;
+			else if (reversed)
+				play_seq = num_sequences - 0.000001f;
+
+			if (!loop && !back_forth) //one time
+				task_done = true; // could have used allow_interrupt as bool, but chose another for clarity
 		}
 
+		
 
 	const spr_sqn& requested_sqn = anm_hdl.get_coords(action, facing, int(play_seq));
-
-	draw_centered(location.x, location.y, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 1);
+	draw_centered(location.x, location.y, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 2);
+	cout << play_seq << endl;
 }
+
 
 
 

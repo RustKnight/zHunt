@@ -74,19 +74,25 @@ void Actor::update(float fElapTm)
 
 	
 	if (pge->GetKey(olc::P).bPressed) {
-		renderer.request_animation(PICK_UP, 0, 0, 0, 4.5f);
+		renderer.request_animation(PICK_UP, 0, 0, 0, 0, 4.5f);
 	}
 	
 	else if (pge->GetKey(olc::K).bPressed) {
-		renderer.request_animation(SMOKE, 0, 1, 0, 0.5f);
+		renderer.request_animation(SMOKE, 0, 0, 1, 1, 1.0f);
 	}
 
+	else if (pge->GetKey(olc::C).bPressed) {
+		renderer.request_animation(CLIMB, 0, 0, 1, 1, 2.5f);
+	}
+
+	//enum animation_states { INTERRUPTABLE, REVERSED, LOOP, BACK_FORTH }; junk
+
 	if (old_location != location) {
-		renderer.request_animation(WALK, 1, 1, 1, 6.5f);
+		renderer.request_animation(WALK, 1, 1, 0, 0, 2.5f);
 		//done_playing = true;  dirty way of stoping a play_once animation
 	}
 	else 
-		renderer.request_animation(IDLE, 1, 1, 1, 1.5f);
+		renderer.request_animation(IDLE, 1, 0, 1, 1, 1.5f);
 	
 
 

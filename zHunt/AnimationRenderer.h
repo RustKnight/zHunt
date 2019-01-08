@@ -6,11 +6,9 @@
 #include "Vec2.h"
 
 
-// needs to know about SQNs and must have an AnimationRenderer object, PixelGE
+// request parameters should be some enums so they don't use magic numbers like 0, 1, etc.
 
-// checks on update (elapsed time)
 
-// request parameters (anim [loop, once, back/forth], play_speed
 
 
 class AnimationRenderer {
@@ -23,7 +21,7 @@ public:
 			task_done{false}, loop {true}, done_playing {true}, allow_interrupt {true}
 	{}
 
-	void request_animation(int act, bool interruptable, bool loop_in, bool back_and_forth, float speed);
+	void request_animation(int act, bool interruptable, bool reversed, bool loop_in, bool back_and_forth, float speed);
 	void update_and_play(float& elapT, const Vec2& loc, int face);
 
 	void get_spr_ptr(olc::Sprite* spr_in);
@@ -53,6 +51,7 @@ private:
 	bool loop;
 	bool done_playing;
 	bool increasing;
+	bool reversed;
 
 	olc::PixelGameEngine* pge;
 	olc::Sprite* spr;
