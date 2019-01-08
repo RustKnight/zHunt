@@ -101,12 +101,18 @@ void Actor::update(float fElapTm)
 	if (old_location != location) {
 	
 		if (walking_backwards()){
-			speed = 45.0f; cout << speed << endl;
 			renderer.request_animation(WALK, 1, 1, 0, 0, 4.0f);
+			speed = 45.0f; cout << speed << endl;
 		}
 		else {
-			speed = 70.0f; cout << speed << endl;
-			renderer.request_animation(WALK, 1, 0, 0, 0, 6.5f);	
+			if (!pge->GetKey(olc::SHIFT).bHeld) {
+				renderer.request_animation(WALK, 1, 0, 0, 0, 6.5f);
+				speed = 70.0f; cout << speed << endl;
+			}
+			else {
+				renderer.request_animation(RUN, 1, 0, 0, 0, 6.5f);
+				speed = 110.0f; cout << speed << endl;
+			}
 		}
 	}
 	else 
