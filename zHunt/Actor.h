@@ -34,7 +34,7 @@ public:
 	Actor (Vec2 loc, olc::PixelGameEngine* in_pge):
 		location{loc},
 		pge		{in_pge},
-		speed	{1.0f},
+		speed	{0.8f},
 		action	{ IDLE },
 		facing	{N},
 		renderer{ in_pge,  ACTIONS_SIZE }
@@ -45,7 +45,7 @@ public:
 public:
 	void load_spr_sheet(std::string adrs);
 	
-	void update (float fElapTm);
+	void update (float fElapTm, const Vec2& cam_off);
 	int lookAtMouse();
 	bool walking_backwards();
 
@@ -60,8 +60,9 @@ private:
 	
 	Vec2 location;
 	Vec2 old_location;
+
+	Vec2 camera_offset;
 	Vec2 mouse_to_player_distance;
-	Vec2 old_distance;
 	Vec2 velocity;
 	float speed;
 	float eTime = 0.0f;

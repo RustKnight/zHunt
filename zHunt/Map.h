@@ -1,7 +1,8 @@
 #pragma once
-#include "olcPixelGameEngine.h"
+#include <string>
 
 class Map {
+
 public:
 	Map () 	
 	{
@@ -25,10 +26,7 @@ public:
 	int get_height();
 
 
-
 private:
-	olc::Sprite* fields;
-
 	std::wstring karte;
 	int map_width = 16;
 	int map_height = 10;

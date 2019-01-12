@@ -15,9 +15,11 @@ int Actor::lookAtMouse()
 #define PI 3.14159265
 
 	// we determine the vector between the mouse position and the location of the character
-	float dx = pge->GetMouseX() - location.x * 128;
-	float dy = pge->GetMouseY() - location.y * 128;
-	
+	float dx = pge->GetMouseX() - ((location.x - camera_offset.x) * 128);
+	float dy = pge->GetMouseY() - ((location.y - camera_offset.y) * 128);
+	pge->DrawLine(pge->GetMouseX(), pge->GetMouseY(), (location.x - camera_offset.x) * 128, (location.y - camera_offset.y) * 128, olc::RED);
+
+
 	float angle = atan2(dy,dx);
 	angle = (roundf (angle / ((2 * PI) / 8) + 4) );
 	if (angle == 8)
@@ -56,8 +58,8 @@ int Actor::lookAtMouse()
 
 bool Actor::walking_backwards()
 {
-	mouse_to_player_distance.x = pge->GetMouseX() - location.x;
-	mouse_to_player_distance.y = pge->GetMouseY() - location.y;
+	mouse_to_player_distance.x = pge->GetMouseX() - (location.x - camera_offset.x) * 128;
+	mouse_to_player_distance.y = pge->GetMouseY() - (location.y - camera_offset.y) * 128;
 
 	Vec2 direction = location - old_location;
 
@@ -71,12 +73,14 @@ Vec2 Actor::get_location()
 
 
 
-void Actor::update(float fElapTm)
+void Actor::update(float fElapTm, const Vec2& cam_off)
 {
 	eTime = fElapTm;
 	old_location = location;
-	old_distance = mouse_to_player_distance;
 	facing = facings(lookAtMouse());
+
+	camera_offset = cam_off;
+	renderer.update_offset(camera_offset);
 
 
 	if (pge->GetKey(olc::UP).bHeld)
@@ -112,17 +116,17 @@ void Actor::update(float fElapTm)
 	
 		if (walking_backwards()){
 			renderer.request_animation(WALK, INTERRUPTABLE, REVERSED, NOT_LOOPED, NOT_BACK_FORTH, 4.0f);
-//			speed = 45.0f; cout << speed << endl;
+			speed = 0.32f; cout << speed << endl;
 		}
 
 		else {
 			if (!pge->GetKey(olc::SHIFT).bHeld) {
 				renderer.request_animation(WALK, 1, 0, 0, 0, 6.5f);
-//				speed = 70.0f; cout << speed << endl;
+				speed = 0.8f; cout << speed << endl;
 			}
 			else {
 				renderer.request_animation(RUN, 1, 0, 0, 0, 6.5f);
-//				speed = 110.0f; cout << speed << endl;
+				speed = 1.300f; cout << speed << endl;
 			}
 		}
 	}

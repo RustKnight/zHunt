@@ -1,7 +1,6 @@
 #include "Map.h"
 
 
-
 	wchar_t Map::get_tile(int x, int y){
 
 

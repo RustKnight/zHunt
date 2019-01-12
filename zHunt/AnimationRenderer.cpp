@@ -79,8 +79,8 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 		}
 
 	const spr_sqn& requested_sqn = anm_hdl.get_coords(action, facing, int(play_seq));
-//	draw_centered((location.x - off_set.x) * 128, (location.y - off_set.y) * 128, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 1);
-	pge->DrawPartialSprite_BottomUp((location.x - off_set.x) * 128, (location.y - off_set.y) * 128, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 1);
+	draw_centered((location.x - off_set.x) * 128, (location.y - off_set.y) * 128, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 1);
+//	pge->DrawPartialSprite_BottomUp( (location.x - off_set.x) * 128, (location.y - off_set.y) * 128, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 1);
 	//cout << play_seq << endl;
 }
 
@@ -92,7 +92,7 @@ void AnimationRenderer::get_spr_ptr(olc::Sprite* spr_in)
 	spr = spr_in;
 }
 
-void AnimationRenderer::update_offset(Vec2 offset)
+void AnimationRenderer::update_offset(const Vec2& offset)
 {
 	off_set = offset;
 }
