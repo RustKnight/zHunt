@@ -26,7 +26,7 @@ public:
 
 
 	void get_spr_ptr(olc::Sprite* spr_in);
-
+	void update_offset(Vec2 offset);
 
 private:
 	void draw_centered(float x, float y, olc::Sprite* spr, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale) const;
@@ -43,6 +43,7 @@ private:
 	float play_seq;
 	float anim_speed;				// might need an animation speed according to the size of the anim_seq
 	float eTime;
+	
 
 	bool allow_interrupt;
 	bool back_forth;
@@ -55,4 +56,5 @@ private:
 	olc::Sprite* spr;
 	AnimationHandler anm_hdl; // total animations 
 	Vec2 location;
+	Vec2 off_set;
 };

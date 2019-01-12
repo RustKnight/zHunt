@@ -3,7 +3,7 @@
 #include "RectF.h"
 #include "Vec2.h"
 #include "Actor.h"
-
+#include "Value_checker.h"
 
 
 
@@ -44,6 +44,8 @@ private:
 	float offset_x;
 	float offset_y;
 
-	Vec2 location = {1, 1 };
-	float speed = 70;
+	Vec2 location = { 1, 1 };
+	float speed = 2;
+
+	Value_checker VC;
 };

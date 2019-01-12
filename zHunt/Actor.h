@@ -34,7 +34,7 @@ public:
 	Actor (Vec2 loc, olc::PixelGameEngine* in_pge):
 		location{loc},
 		pge		{in_pge},
-		speed	{50.0f},
+		speed	{1.0f},
 		action	{ IDLE },
 		facing	{N},
 		renderer{ in_pge,  ACTIONS_SIZE }
@@ -50,7 +50,7 @@ public:
 	bool walking_backwards();
 
 	Vec2 get_location();
-	
+	AnimationRenderer renderer;
 private:
 	
 	
@@ -75,8 +75,6 @@ private:
 
 	float dx;
 	float dy;
-
-	AnimationRenderer renderer;
 };
 
 

@@ -15,8 +15,8 @@ int Actor::lookAtMouse()
 #define PI 3.14159265
 
 	// we determine the vector between the mouse position and the location of the character
-	float dx = pge->GetMouseX() - location.x;
-	float dy = pge->GetMouseY() - location.y;
+	float dx = pge->GetMouseX() - location.x * 128;
+	float dy = pge->GetMouseY() - location.y * 128;
 	
 	float angle = atan2(dy,dx);
 	angle = (roundf (angle / ((2 * PI) / 8) + 4) );
@@ -112,17 +112,17 @@ void Actor::update(float fElapTm)
 	
 		if (walking_backwards()){
 			renderer.request_animation(WALK, INTERRUPTABLE, REVERSED, NOT_LOOPED, NOT_BACK_FORTH, 4.0f);
-			speed = 45.0f; cout << speed << endl;
+//			speed = 45.0f; cout << speed << endl;
 		}
 
 		else {
 			if (!pge->GetKey(olc::SHIFT).bHeld) {
 				renderer.request_animation(WALK, 1, 0, 0, 0, 6.5f);
-				speed = 70.0f; cout << speed << endl;
+//				speed = 70.0f; cout << speed << endl;
 			}
 			else {
 				renderer.request_animation(RUN, 1, 0, 0, 0, 6.5f);
-				speed = 110.0f; cout << speed << endl;
+//				speed = 110.0f; cout << speed << endl;
 			}
 		}
 	}
