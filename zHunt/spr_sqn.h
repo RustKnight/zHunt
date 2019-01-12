@@ -5,7 +5,7 @@
 #include <sstream>
 
 
-using namespace std;
+
 
 
 
@@ -19,12 +19,12 @@ struct spr_sqn {
 	{}
 
 
-	friend ostream& operator << (ostream& os, const spr_sqn& d) {
+	friend std::ostream& operator << (std::ostream& os, const spr_sqn& d) {
 
-		os << "x: " << d.x << endl;
-		os << "y: " << d.y << endl;
-		os << "w: " << d.w << endl;
-		os << "h: " << d.h << endl << endl;
+		os << "x: " << d.x << std::endl;
+		os << "y: " << d.y << std::endl;
+		os << "w: " << d.w << std::endl;
+		os << "h: " << d.h << std::endl << std::endl;
 
 		return os;
 	}	

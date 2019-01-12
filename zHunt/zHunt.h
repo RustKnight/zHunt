@@ -3,8 +3,8 @@
 #include "RectF.h"
 #include "Vec2.h"
 #include "Actor.h"
+#include "Map.h"
 #include "Value_checker.h"
-
 
 
 class zHunt : public olc::PixelGameEngine
@@ -26,13 +26,9 @@ public:
 private:
 	float winWidth;
 	float winHeight;
+	Map map;
 	Actor actor;
-
-
 	olc::Sprite* fields;
-	wstring karte;
-	int map_width = 16;
-	int map_height = 10;
 
 	int tile_width = 128;
 	int tile_height = 128;

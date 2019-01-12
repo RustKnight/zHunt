@@ -7,6 +7,7 @@ zHunt::zHunt() :
 	winWidth { 768.0f},
 	winHeight{ 640.0f },
 	actor{ Vec2 {1.0f, 1.0f}, this }
+
 {
 	sAppName = "RustKnight";
 }
@@ -16,18 +17,8 @@ zHunt::zHunt() :
 bool zHunt::OnUserCreate() 
 {
 	actor.load_spr_sheet("survivor_expanded.png");
-	fields = new olc::Sprite{ "SUEL001.png" };
-	
-	karte += L"..o.............";
-	karte += L".o...o..........";
-	karte += L".....o..........";
-	karte += L".....o..........";
-	karte += L"................";
-	karte += L"................";
-	karte += L"................";
-	karte += L"................";
-	karte += L"................";
-	karte += L"................";
+	fields = new olc::Sprite ("SUEL001.png");
+
 
 	return true;
 }
@@ -39,19 +30,6 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	Clear(olc::VERY_DARK_GREEN);
 	SetPixelMode(olc::Pixel::ALPHA);
 
-	auto GetTile = [&](int x, int y)
-	{
-		if (x >= 0 && x < map_width && y >= 0 && y < map_height)
-			return karte[y * map_width + x];
-		else
-			return L' ';
-	};
-
-	auto SetTile = [&](int x, int y, wchar_t c)
-	{
-		if (x >= 0 && x < map_width && y >= 0 && y < map_height)
-			karte[y * map_width + x] = c;
-	};
 
 
 	if (GetKey(olc::UP).bHeld)
@@ -78,8 +56,8 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 	if (offset_x < 0) offset_x = 0;
 	if (offset_y < 0) offset_y = 0;
-	if (offset_x > map_width - tiles_visible_x) offset_x = map_width - tiles_visible_x;
-	if (offset_y > map_height - tiles_visible_y) offset_y = map_height - tiles_visible_y;
+	if (offset_x > map.get_width() - tiles_visible_x) offset_x = map.get_width() - tiles_visible_x;
+	if (offset_y > map.get_height() - tiles_visible_y) offset_y = map.get_height() - tiles_visible_y;
 
 	float fTileOffsetX = (offset_x - (int)offset_x) * tile_width;
 	float fTileOffsetY = (offset_y - (int)offset_y) * tile_height;
@@ -88,7 +66,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	for (int x = -1; x < tiles_visible_x + 1; ++x)
 		for (int y = -1; y < tiles_visible_y + 1; ++y) {
 
-			wchar_t tileID = GetTile(x + offset_x, y + offset_y);
+			wchar_t tileID = map.get_tile(x + offset_x, y + offset_y);
 			
 			switch (tileID) {
 			case L'.':
@@ -102,6 +80,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 	FillRect((location.x - offset_x) * tile_width, (location.y - offset_y)  * tile_height, 20, 40, olc::DARK_RED);
 	Vec2 offset{ offset_x , offset_y };
+
 
 	actor.renderer.update_offset(offset);
 	actor.update(fElapsedTime);
