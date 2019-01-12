@@ -64,6 +64,11 @@ bool Actor::walking_backwards()
 	return !((direction.GetNormalized().x > 0 && mouse_to_player_distance.GetNormalized().x > 0) || (direction.GetNormalized().y > 0 && mouse_to_player_distance.GetNormalized().y > 0) || (direction.GetNormalized().x < 0 && mouse_to_player_distance.GetNormalized().x < 0) || (direction.GetNormalized().y < 0 && mouse_to_player_distance.GetNormalized().y < 0));
 }
 
+Vec2 Actor::get_location()
+{
+	return location;
+}
+
 
 
 void Actor::update(float fElapTm)
@@ -96,14 +101,20 @@ void Actor::update(float fElapTm)
 		renderer.request_animation(CLIMB, 0, 0, 1, 1, 2.5f);
 	}
 
+	//r{ NOT_INTERRUPTABLE, INTERRUPTABLE }
+	//sed{ NOT_REVERESED, REVERSED };
+	//{NOT_LOOPED, LOOPED};
+	//forth{ NOT_BACK_FORTH, BACK_FORTH };
+
 	//{ INTERRUPTABLE, REVERSED, LOOP, BACK_FORTH }
 
 	if (old_location != location) {
 	
 		if (walking_backwards()){
-			renderer.request_animation(WALK, 1, 1, 0, 0, 4.0f);
+			renderer.request_animation(WALK, INTERRUPTABLE, REVERSED, NOT_LOOPED, NOT_BACK_FORTH, 4.0f);
 			speed = 45.0f; cout << speed << endl;
 		}
+
 		else {
 			if (!pge->GetKey(olc::SHIFT).bHeld) {
 				renderer.request_animation(WALK, 1, 0, 0, 0, 6.5f);
