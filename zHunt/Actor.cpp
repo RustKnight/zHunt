@@ -17,7 +17,7 @@ int Actor::lookAtMouse()
 	// we determine the vector between the mouse position and the location of the character
 	float dx = pge->GetMouseX() - ((location.x - camera_offset.x) * 128);
 	float dy = pge->GetMouseY() - ((location.y - camera_offset.y) * 128);
-	pge->DrawLine(pge->GetMouseX(), pge->GetMouseY(), (location.x - camera_offset.x) * 128, (location.y - camera_offset.y) * 128, olc::RED);
+//	pge->DrawLine(pge->GetMouseX(), pge->GetMouseY(), (location.x - camera_offset.x) * 128, (location.y - camera_offset.y) * 128, olc::RED);
 
 
 	float angle = atan2(dy,dx);
@@ -82,21 +82,20 @@ void Actor::update(float fElapTm, const Vec2& cam_off)
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
 
+	if (pge->GetKey(olc::W).bHeld)
+		location.y -= eTime * speed;
+	if (pge->GetKey(olc::S).bHeld)
+		location.y += eTime * speed;
+	if (pge->GetKey(olc::A).bHeld)
+		location.x -= eTime * speed;
+	if (pge->GetKey(olc::D).bHeld)
+		location.x += eTime * speed;
 
-	if (pge->GetKey(olc::UP).bHeld)
-		location.y -= fElapTm * speed;
-	if (pge->GetKey(olc::DOWN).bHeld)
-		location.y += fElapTm * speed;
-	if (pge->GetKey(olc::LEFT).bHeld)
-		location.x -= fElapTm * speed;
-	if (pge->GetKey(olc::RIGHT).bHeld)
-		location.x += fElapTm * speed;
 
-	
 	if (pge->GetKey(olc::P).bPressed) {
 		renderer.request_animation(PICK_UP, 0, 0, 0, 0, 4.5f);
 	}
-	
+
 	else if (pge->GetKey(olc::K).bPressed) {
 		renderer.request_animation(SMOKE, 0, 0, 1, 1, 1.0f);
 	}
@@ -104,6 +103,7 @@ void Actor::update(float fElapTm, const Vec2& cam_off)
 	else if (pge->GetKey(olc::C).bPressed) {
 		renderer.request_animation(CLIMB, 0, 0, 1, 1, 2.5f);
 	}
+
 
 	//r{ NOT_INTERRUPTABLE, INTERRUPTABLE }
 	//sed{ NOT_REVERESED, REVERSED };
@@ -134,7 +134,35 @@ void Actor::update(float fElapTm, const Vec2& cam_off)
 		renderer.request_animation(IDLE, 1, 0, 1, 1, 1.5f);
 	
 	renderer.update_and_play(eTime, location, facing);
-}	
+}
+void Actor::controlls()
+{
+
+	if (pge->GetKey(olc::W).bHeld)
+		location.y -= eTime * speed;
+	if (pge->GetKey(olc::S).bHeld)
+		location.y += eTime * speed;
+	if (pge->GetKey(olc::A).bHeld)
+		location.x -= eTime * speed;
+	if (pge->GetKey(olc::D).bHeld)
+		location.x += eTime * speed;
+
+
+	if (pge->GetKey(olc::P).bPressed) {
+		renderer.request_animation(PICK_UP, 0, 0, 0, 0, 4.5f);
+	}
+
+	else if (pge->GetKey(olc::K).bPressed) {
+		renderer.request_animation(SMOKE, 0, 0, 1, 1, 1.0f);
+	}
+
+	else if (pge->GetKey(olc::C).bPressed) {
+		renderer.request_animation(CLIMB, 0, 0, 1, 1, 2.5f);
+	}
+
+
+}
+
 
 
 

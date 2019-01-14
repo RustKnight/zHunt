@@ -28,7 +28,7 @@ void AnimationHandler::load_mapping_info()
 
 		// ask on discord after implementation is done, how it should been the "better" way of doing this
 
-		string dest = "C:\\Users\\Carmen\\source\\repos\\zHunt\\zHunt\\sprites_mapping.txt";
+		string dest = "sprites_mapping.txt";
 		std::ifstream file{ dest };
 		enum identifier { ACTION, FACING, SQN, X, Y, W, H };
 

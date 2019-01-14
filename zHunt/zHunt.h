@@ -32,6 +32,7 @@ private:
 
 	Map map;
 	Actor actor;
+	Actor clone;
 	olc::Sprite* fields;
 	Camera camera;
 	

@@ -7,6 +7,7 @@ zHunt::zHunt() :
 	winWidth { 768.0f},
 	winHeight{ 640.0f },
 	actor{ Vec2 {1.0f, 1.0f}, this },
+	clone{ Vec2{ 7.0f, 10.0f }, this },
 	camera {this, &map, getWinWidth(), getWinHeight()}
 {
 	sAppName = "RustKnight";
@@ -17,6 +18,7 @@ zHunt::zHunt() :
 bool zHunt::OnUserCreate() 
 {
 	actor.load_spr_sheet("survivor_expanded.png");
+	clone.load_spr_sheet("survivor_expanded.png");
 	camera.load_fields("SUEL001.png");
 
 	return true;
@@ -32,8 +34,11 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 	camera.update(actor.get_location());
 	camera.screen_in_view();
-	actor.update(fElapsedTime, camera.get_offset());
 
+	actor.update(fElapsedTime, camera.get_offset());
+	//actor.controlls();
+
+	clone.update(fElapsedTime, camera.get_offset()); // why does this work opposed to giving a Vec2{0, 0} -> that keeps the clone stuck in upper left corner
 
 	return true;
 }

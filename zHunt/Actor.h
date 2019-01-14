@@ -46,6 +46,7 @@ public:
 	void load_spr_sheet(std::string adrs);
 	
 	void update (float fElapTm, const Vec2& cam_off);
+	void controlls();
 	int lookAtMouse();
 	bool walking_backwards();
 
