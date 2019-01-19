@@ -1507,14 +1507,17 @@ namespace olc
 
 		if (scale > 1)
 		{
+			int32_t start0_i = w - 1;
+
 			for (int32_t i = 0; i < w; i++) {
 				int32_t start0_j = 0;
 				for (int32_t j = h; j > 0; j--) {
 					for (uint32_t is = 0; is < scale; is++)
 						for (uint32_t js = 0; js < scale; js++)
-							Draw(x + (i*scale) + is, y - (start0_j*scale) + js, sprite->GetPixel(i + ox, j + oy));
+							Draw(x + (i*scale) + is, y - (start0_j*scale) + js, sprite->GetPixel(start0_i + ox, j + oy));
 					start0_j++;
 				}
+				start0_i--;
 			}
 		}
 

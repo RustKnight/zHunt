@@ -1,15 +1,16 @@
 #include "AnimationRenderer.h"
 
 
-void AnimationRenderer::request_animation(int act, bool interruptable, bool reversed_in, bool loop_in, bool back_and_forth, float speed)
+void AnimationRenderer::request_animation(int act, olc::Sprite* spr_in, bool interruptable, bool reversed_in, bool loop_in, bool back_and_forth, float speed)
 {
 	// 0 = Walk, 1 = Run; moving always cancels whatever anim you're playing
 
-	if (allow_interrupt || task_done || act == 0 || act == 1) {	// check if we should allow incoming animation
+	if (allow_interrupt || task_done || act == 4 || act == 5) {	// check if we should allow incoming animation // WARNING hardcoded exceptions, for walk and run // basically move animations
 	
 		if (act == action && reversed != reversed_in) {
 
 			action = act;
+			spr = spr_in;
 			allow_interrupt = interruptable;
 			reversed = reversed_in;
 			loop = loop_in;
@@ -22,6 +23,7 @@ void AnimationRenderer::request_animation(int act, bool interruptable, bool reve
 		if (act != action) {
 
 			action = act;
+			spr = spr_in;
 			allow_interrupt = interruptable;
 			reversed = reversed_in;
 			loop = loop_in;
@@ -63,7 +65,7 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 
 	int num_sequences = anm_hdl.get_sqn_size(action, facing);
 
-	cout << "increasing: " << increasing << endl;
+//	cout << "increasing: " << increasing << endl;
 		if (increasing)
 			play_seq += eTime * anim_speed;
 		else
@@ -89,13 +91,13 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 			if (!loop && !back_forth) //one time
 				task_done = true; // could have used allow_interrupt as bool, but chose another for clarity
 		}
-		cout << play_seq << endl;
+	//	cout << play_seq << endl;
 
 
 	const spr_sqn& requested_sqn = anm_hdl.get_coords(action, facing, int(play_seq));
 
 	// maybe we shouldn't try to draw if off the screen
-	draw_centered((location.x - off_set.x) * 128, (location.y - off_set.y) * 128, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 1, mirror);
+	draw_centered((location.x - off_set.x) * 128, (location.y - off_set.y) * 128, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 2, mirror);
 //	pge->DrawPartialSprite_BottomUp( (location.x - off_set.x) * 128, (location.y - off_set.y) * 128, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 1);
 	//cout << play_seq << endl;
 }
@@ -106,6 +108,7 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 void AnimationRenderer::get_spr_ptr(olc::Sprite* spr_in)
 {
 	spr = spr_in;
+	cout << spr << endl;
 }
 
 void AnimationRenderer::update_offset(const Vec2& offset)

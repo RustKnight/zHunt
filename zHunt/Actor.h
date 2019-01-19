@@ -59,7 +59,6 @@ public:
 	void load_spr_sheet(std::string adrs);
 	
 	void update (float fElapTm, const Vec2& cam_off);
-	void controlls();
 	facings lookAtMouse();
 	bool walking_backwards();
 
@@ -83,7 +82,7 @@ private:
 	float eTime = 0.0f;
 
 	Value_checker vc;
-	olc::Sprite* spr = nullptr;
+	vector <olc::Sprite*> vSpriteSheetPointers;
 	olc::PixelGameEngine* pge;
 
 	actions action;

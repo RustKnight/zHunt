@@ -10,7 +10,8 @@
 // handle cases of facing where mirroring is needed
 // watch out for proper facing allignment [file_read <-> with coded read]
 
-
+// WARNING Renderer MUST know which animations move the player, in order to be able to stop other animations.
+// currently hardcoded
 
 class AnimationRenderer {
 public:
@@ -22,7 +23,7 @@ public:
 			task_done{false}, loop {true}, allow_interrupt {true}
 	{}
 
-	void request_animation(int act, bool interruptable, bool reversed, bool loop_in, bool back_and_forth, float speed);
+	void request_animation(int act, olc::Sprite* spr_in, bool interruptable, bool reversed, bool loop_in, bool back_and_forth, float speed);
 	void update_and_play(float& elapT, const Vec2& loc, int face);
 
 

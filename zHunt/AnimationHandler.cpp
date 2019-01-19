@@ -67,7 +67,7 @@ void AnimationHandler::load_mapping_info(vector<string>& vec) {
 				continue;
 
 
-			if (ch == 'E')
+			if (ch == '<')
 				facing_complete = true;
 			if (ch == ',')
 				comma_found = true;
