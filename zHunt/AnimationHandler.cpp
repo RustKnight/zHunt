@@ -20,11 +20,13 @@ void AnimationHandler::load_mapping_info(vector<string>& vec) {
 	vector<vector <spr_sqn>> facings;
 	vector <spr_sqn> sequences;
 
+	vector <int> facings_order_spritesheet;
 
-	for (string path : vec) {
+
+	for (string path : vec) {				// read loop for all animations files
 
 		std::ifstream file{ path };
-		if (!file.is_open()) {
+		if (!file.is_open()) {				
 			cout << "File not open.";
 		}
 
@@ -40,18 +42,37 @@ void AnimationHandler::load_mapping_info(vector<string>& vec) {
 		int16_t y;
 		int16_t w;
 		int16_t h;
+		
 
 		bool comma_found = false;
 		bool facing_complete = false;
+		bool read_facings_order = false;
+		
 
-		for (char ch; file.get(ch);) {
+		for (char ch; file.get(ch);) {				// read loop for entire file
+
+		
+			if (ch == '$')										// might create a proper function for this part of code
+				read_facings_order = !read_facings_order;
+
+			if (read_facings_order) {
+				if (isdigit(ch)) {
+					string s;
+					s += ch;
+					facings_order_spritesheet.push_back(stoi(s));
+				}
+			}
+
+			if (read_facings_order)	//	as long as we're reading facings order, don't start saving coords yet
+				continue;
+
 
 			if (ch == 'E')
 				facing_complete = true;
 			if (ch == ',')
 				comma_found = true;
 
-
+					
 			if (comma_found) {
 
 				if (isdigit(ch))
@@ -95,6 +116,19 @@ void AnimationHandler::load_mapping_info(vector<string>& vec) {
 
 			}
 		}
+
+
+		int limit = facings.size();				// need an external stop condition for loop. otherwise, since vector limit keeps changing, stop condition will never hit
+		for (int i = 0; i < limit; ++i)
+			facings.push_back(facings[i]);
+
+		int copied_values_offset = facings_order_spritesheet.size();
+
+		for (int i = 0; i < facings_order_spritesheet.size(); ++i)		// use read in facings to arrange them properly
+			iter_swap(facings.begin() + facings_order_spritesheet[i], facings.begin() + (i + copied_values_offset));
+
+		facings.resize	(facings_order_spritesheet.size());			// get rid of coppied values
+
 		//iter_swap(facings.begin() + 0, facings.begin() + 4);		// need to allign facings entry to match current system
 		//iter_swap(facings.begin() + 1, facings.begin() + 5);		// order is N, N-E, E, S-E, S, S-W, W, N-W
 		//iter_swap(facings.begin() + 2, facings.begin() + 6);
@@ -102,6 +136,7 @@ void AnimationHandler::load_mapping_info(vector<string>& vec) {
 
 		animations.push_back(facings);
 		facings.clear();
+		facings_order_spritesheet.clear();
 	}
 
 	a3d_mapping_data = animations;

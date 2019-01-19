@@ -48,6 +48,18 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 	facing = face;
 	task_done = false;
 	// update carried out
+	bool mirror = false;
+
+	// code that handles mirroring in case of non indexed facing
+	// N-0, NE-1, E-2, SE-3, S-4, SW-5, W-6, NW-7.
+	if (facing == 5 || facing == 6 || facing == 7) {
+		switch (facing) {
+		case 5: facing = 3; break;
+		case 6: facing = 2; break;
+		case 7: facing = 1; break;
+		}
+		mirror = true;
+	}
 
 	int num_sequences = anm_hdl.get_sqn_size(action, facing);
 
@@ -77,11 +89,13 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 			if (!loop && !back_forth) //one time
 				task_done = true; // could have used allow_interrupt as bool, but chose another for clarity
 		}
-
 		cout << play_seq << endl;
+
+
 	const spr_sqn& requested_sqn = anm_hdl.get_coords(action, facing, int(play_seq));
+
 	// maybe we shouldn't try to draw if off the screen
-	draw_centered((location.x - off_set.x) * 128, (location.y - off_set.y) * 128, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 1, 0);
+	draw_centered((location.x - off_set.x) * 128, (location.y - off_set.y) * 128, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 1, mirror);
 //	pge->DrawPartialSprite_BottomUp( (location.x - off_set.x) * 128, (location.y - off_set.y) * 128, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 1);
 	//cout << play_seq << endl;
 }

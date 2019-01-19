@@ -9,4 +9,10 @@
 9.Interact	/ E, SE, S, N, NE
 10.Carry	/ E, SE, S, N, NE
 11.Die		/ n/a, n/a
-12.
+12.Die_tied / n/a, n/a, n/a
+13.Grave	/ n/a
+14.Idle		/ E, SE, S, N, NE
+15.Fire		/ E, SE, S, N, NE
+16.Hurt		/ n/a, n/a
+--- Raw pngs order have between these 2, naked solder animations; excluded
+17.Reload	/ E, SE, S, N, NE

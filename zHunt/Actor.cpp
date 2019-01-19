@@ -10,8 +10,7 @@ void Actor::load_spr_sheet(std::string adrs)
 
 
 
-int Actor::lookAtMouse()
-{
+Actor::facings Actor::lookAtMouse(){
 #define PI 3.14159265
 
 	// we determine the vector between the mouse position and the location of the character
@@ -53,7 +52,7 @@ int Actor::lookAtMouse()
 		break;
 	}
 
-	return int (angle);
+	return facings(int (angle) );
 }
 
 bool Actor::walking_backwards()
@@ -77,7 +76,7 @@ void Actor::update(float fElapTm, const Vec2& cam_off)
 {
 	eTime = fElapTm;
 	old_location = location;
-	facing = facings(lookAtMouse());
+	facing = lookAtMouse();
 
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
