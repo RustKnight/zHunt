@@ -1,0 +1,8 @@
+rifleman_aim_01E,99,0,16,51
+rifleman_aim_02E,0,0,26,47
+rifleman_aim_03E,0,48,32,36
+rifleman_aim_04E,72,0,26,38
+rifleman_aim_05E,53,0,18,44
+rifleman_aim_06E,72,39,26,38
+rifleman_aim_07E,33,48,32,36
+rifleman_aim_08E,27,0,25,46

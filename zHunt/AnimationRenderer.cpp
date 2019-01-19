@@ -29,7 +29,7 @@ void AnimationRenderer::request_animation(int act, bool interruptable, bool reve
 			anim_speed = speed;
 
 			if (reversed) {
-				play_seq = float (array_size(action, facing) - 1);
+				play_seq = float (anm_hdl.get_sqn_size(action, facing));
 				increasing = false;
 			}
 			else {
@@ -49,9 +49,9 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 	task_done = false;
 	// update carried out
 
-	int num_sequences = array_size(action, facing);
+	int num_sequences = anm_hdl.get_sqn_size(action, facing);
 
-
+	cout << "increasing: " << increasing << endl;
 		if (increasing)
 			play_seq += eTime * anim_speed;
 		else
@@ -78,9 +78,10 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 				task_done = true; // could have used allow_interrupt as bool, but chose another for clarity
 		}
 
+		cout << play_seq << endl;
 	const spr_sqn& requested_sqn = anm_hdl.get_coords(action, facing, int(play_seq));
 	// maybe we shouldn't try to draw if off the screen
-	draw_centered((location.x - off_set.x) * 128, (location.y - off_set.y) * 128, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 1);
+	draw_centered((location.x - off_set.x) * 128, (location.y - off_set.y) * 128, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 1, 0);
 //	pge->DrawPartialSprite_BottomUp( (location.x - off_set.x) * 128, (location.y - off_set.y) * 128, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 1);
 	//cout << play_seq << endl;
 }
@@ -100,24 +101,18 @@ void AnimationRenderer::update_offset(const Vec2& offset)
 
 
 
-int AnimationRenderer::array_size(int act, int facing) const
-{
-	for (int i = 0; i < sqn_size; ++i)
-		if (anm_hdl.get_coords(act, facing, i).x == 32167)
-			return i;
-
-	return sqn_size;
-}
 
 
-
-void AnimationRenderer::draw_centered(float x, float y, olc::Sprite * spr, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale) const
+void AnimationRenderer::draw_centered(float x, float y, olc::Sprite * spr, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale, bool mirrored_x) const
 {
 	float center_x = x - (w*scale) / 2.0f;
 	float center_y = y + (h*scale) / 2.0f;
 
-	pge->DrawPartialSprite_BottomUp(int32_t(center_x), int32_t(center_y), spr, ox, oy, w, h, scale);
-
+	if (mirrored_x)
+		pge->DrawPartialSprite_BottomUp_mirrored_horizontally(int32_t(center_x), int32_t(center_y), spr, ox, oy, w, h, scale);
+	else
+		pge->DrawPartialSprite_BottomUp(int32_t(center_x), int32_t(center_y), spr, ox, oy, w, h, scale);
+	
 	//pge->FillCircle(400, 300, 2, olc::RED);
 	//pge->DrawRect(int32_t(center_x), int32_t(center_y) - h * scale, (w*scale), (h*scale));
 }

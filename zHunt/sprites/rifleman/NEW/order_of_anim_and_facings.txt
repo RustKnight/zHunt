@@ -1,0 +1,12 @@
+1.Climb		/ E, SE, S, N, NE
+2.Aim		/ E, SE, S, N, NE
+3.Pick		/ E, SE, S, N, NE
+4.Walk		/ E, SE, S, N, NE
+5.Tied		/ n/a, n/a, n/a
+6.Run		/ E, SE, S, N, NE
+7.Sit		/ E, SE, S, N, NE
+8.Smoke		/ E, SE, S, N, NE
+9.Interact	/ E, SE, S, N, NE
+10.Carry	/ E, SE, S, N, NE
+11.Die		/ n/a, n/a
+12.

@@ -12,17 +12,17 @@ using namespace std;
 class AnimationHandler {
 public:
 	AnimationHandler() = default;
-	AnimationHandler(int total_animations) :	
-		a3d_mapping_data (total_animations, vector<vector <spr_sqn>> (8, vector<spr_sqn>(8)))
+
+	AnimationHandler(vector<string>& paths)
 	{
-		load_mapping_info();
+		load_mapping_info(paths);
 	}
 
 	const spr_sqn& get_coords(int anim, int face, int sqn) const;
-
+	const int get_sqn_size(int anim, int face) const;
 
 private:
-	void load_mapping_info();
+	void load_mapping_info(vector<string>& vec);
 
 private:	
 	vector<vector<vector <spr_sqn>>> a3d_mapping_data;

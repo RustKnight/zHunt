@@ -7,17 +7,18 @@
 
 
 // request parameters should be some enums so they don't use magic numbers like 0, 1, etc.
-
+// handle cases of facing where mirroring is needed
+// watch out for proper facing allignment [file_read <-> with coded read]
 
 
 
 class AnimationRenderer {
 public:
 
-	AnimationRenderer (olc::PixelGameEngine* pge_in, int tot_anim)
+	AnimationRenderer (olc::PixelGameEngine* pge_in, std::vector<std::string>& paths)
 		:	pge {pge_in}, 
-			anm_hdl{ tot_anim },
-			action{ 0 }, facing{ 0 }, play_seq {0}, eTime{0},
+			anm_hdl{ paths },
+			action{ -1 }, facing{ 0 }, play_seq {0}, eTime{0},
 			task_done{false}, loop {true}, allow_interrupt {true}
 	{}
 
@@ -29,8 +30,8 @@ public:
 	void update_offset(const Vec2& offset);
 
 private:
-	void draw_centered(float x, float y, olc::Sprite* spr, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale) const;
-	int array_size(int act, int facing) const;	// build a function that checks values from start to end |||for (x : arr)||| and when it // meets x = 32167 it stops counting and returns the size
+	void draw_centered(float x, float y, olc::Sprite* spr, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale, bool mirrored_x) const;
+	
 	
 	
 

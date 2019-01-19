@@ -16,9 +16,10 @@
 class Actor {
 
 	//tools
-
-	enum actions {	WALK, RUN, RELOAD, AIM, RECOIL, DIE, HURT, DIE2, GRAVE,
-					CLIMB, PICK_UP, TIED, SIT, TIED_DIE, CARRIED, IDLE, SMOKE, ACTIONS_SIZE};
+	// WARNING temp swap AIM with IDLE
+	//enum actions {IDLE, CARRIED, CLIMB, DIE, DIE_TIED, DIE2, FIRE, GRAVE, HIT, AIM,
+	//				PICK, RELOAD, RUN, SIT, SMOKE, TIED, WALK, ACTIONS_SIZE};
+	enum actions {AIM, CLIMB, IDLE, PICK, RUN, WALK };
 	enum facings {N = 2, NE = 3, E = 4, SE = 5, S = 6, SW = 7, W = 0, NW = 1, FACINGS_SIZE = 8};
 
 	enum interr {NOT_INTERRUPTABLE, INTERRUPTABLE};
@@ -31,15 +32,27 @@ class Actor {
 
 public:
 	Actor() = default;
-	Actor (Vec2 loc, olc::PixelGameEngine* in_pge):
+
+	Actor (Vec2 loc, olc::PixelGameEngine* in_pge, vector<string>& paths):
+		isPlayer{false},
 		location{loc},
 		pge		{in_pge},
 		speed	{0.8f},
 		action	{ IDLE },
 		facing	{N},
-		renderer{ in_pge,  ACTIONS_SIZE }
-	{
-	}
+		renderer{ in_pge,  paths }
+	{}
+
+	Actor(Vec2 loc, olc::PixelGameEngine* in_pge, vector<string>& paths, bool is_player) :
+		isPlayer{ is_player },
+		location{ loc },
+		pge{ in_pge },
+		speed{ 0.8f },
+		action{ IDLE },
+		facing{ N },
+		renderer{ in_pge, paths }
+	{}
+
 
 
 public:
@@ -58,7 +71,8 @@ private:
 private:
 	//string dest{ "C://Users//Carmen//Desktop//output.txt" };
 	//ofstream out{ dest };
-	
+	bool isPlayer;
+
 	Vec2 location;
 	Vec2 old_location;
 

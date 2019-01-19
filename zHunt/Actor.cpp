@@ -28,28 +28,28 @@ int Actor::lookAtMouse()
 	switch (int (angle) ) {
 		//N = 2, NE = 3, E = 4, SE = 5, S = 6, SW = 7, W = 0, NW = 1,
 	case 0 :
-		angle = 6;
+		angle = W;
 		break;
 	case 1:
-		angle = 7;
+		angle = NW;
 		break;
 	case 2:
-		angle = 0;
+		angle = N;
 		break;
 	case 3:
-		angle = 1;
+		angle = NE;
 		break;
 	case 4:
-		angle = 2;
+		angle = E;
 		break;
 	case 5:
-		angle = 3;
+		angle = SE;
 		break;
 	case 6:
-		angle = 4;
+		angle = S;
 		break;
 	case 7:
-		angle = 5;
+		angle = SW;
 		break;
 	}
 
@@ -82,59 +82,66 @@ void Actor::update(float fElapTm, const Vec2& cam_off)
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
 
-	if (pge->GetKey(olc::W).bHeld)
-		location.y -= eTime * speed;
-	if (pge->GetKey(olc::S).bHeld)
-		location.y += eTime * speed;
-	if (pge->GetKey(olc::A).bHeld)
-		location.x -= eTime * speed;
-	if (pge->GetKey(olc::D).bHeld)
-		location.x += eTime * speed;
+	if (isPlayer) {
+
+		if (pge->GetKey(olc::W).bHeld)
+			location.y -= eTime * speed;
+		if (pge->GetKey(olc::S).bHeld)
+			location.y += eTime * speed;
+		if (pge->GetKey(olc::A).bHeld)
+			location.x -= eTime * speed;
+		if (pge->GetKey(olc::D).bHeld)
+			location.x += eTime * speed;
 
 
-	if (pge->GetKey(olc::P).bPressed) {
-		renderer.request_animation(PICK_UP, 0, 0, 0, 0, 4.5f);
-	}
-
-	else if (pge->GetKey(olc::K).bPressed) {
-		renderer.request_animation(SMOKE, 0, 0, 1, 1, 1.0f);
-	}
-
-	else if (pge->GetKey(olc::C).bPressed) {
-		renderer.request_animation(CLIMB, 0, 0, 1, 1, 2.5f);
-	}
-
-
-	//r{ NOT_INTERRUPTABLE, INTERRUPTABLE }
-	//sed{ NOT_REVERESED, REVERSED };
-	//{NOT_LOOPED, LOOPED};
-	//forth{ NOT_BACK_FORTH, BACK_FORTH };
-
-	//{ INTERRUPTABLE, REVERSED, LOOP, BACK_FORTH }
-
-	if (old_location != location) {
-	
-		if (walking_backwards()){
-			renderer.request_animation(WALK, INTERRUPTABLE, REVERSED, NOT_LOOPED, NOT_BACK_FORTH, 4.0f);
-			speed = 0.32f; cout << speed << endl;
+		if (pge->GetKey(olc::P).bPressed) {
+			renderer.request_animation(PICK, 0, 0, 0, 0, 4.5f);
 		}
 
-		else {
-			if (!pge->GetKey(olc::SHIFT).bHeld) {
-				renderer.request_animation(WALK, 1, 0, 0, 0, 6.5f);
-				speed = 0.8f; cout << speed << endl;
+		else if (pge->GetKey(olc::K).bPressed) {
+		//	renderer.request_animation(SMOKE, 0, 0, 1, 1, 1.0f);  smoke not yet implemented
+		}
+
+		else if (pge->GetKey(olc::C).bPressed) {
+			renderer.request_animation(CLIMB, 0, 0, 1, 1, 2.5f);
+		}
+
+
+		//r{ NOT_INTERRUPTABLE, INTERRUPTABLE }
+		//sed{ NOT_REVERESED, REVERSED };
+		//{NOT_LOOPED, LOOPED};
+		//forth{ NOT_BACK_FORTH, BACK_FORTH };
+
+		//{ INTERRUPTABLE, REVERSED, LOOP, BACK_FORTH }
+	}
+
+
+		if (old_location != location) {
+
+			if (walking_backwards()) {
+				renderer.request_animation(WALK, INTERRUPTABLE, REVERSED, NOT_LOOPED, NOT_BACK_FORTH, 4.0f);
+				speed = 0.32f; cout << speed << endl;
 			}
+
 			else {
-				renderer.request_animation(RUN, 1, 0, 0, 0, 6.5f);
-				speed = 1.300f; cout << speed << endl;
+				if (!pge->GetKey(olc::SHIFT).bHeld) {
+					renderer.request_animation(WALK, 1, 0, 0, 0, 6.5f);
+					speed = 0.8f; cout << speed << endl;
+				}
+				else {
+					renderer.request_animation(RUN, 1, 0, 0, 0, 6.5f);
+					speed = 1.300f; cout << speed << endl;
+				}
 			}
 		}
-	}
-	else 
-		renderer.request_animation(IDLE, 1, 0, 1, 1, 1.5f);
+		else
+			renderer.request_animation(IDLE, 1, 0, 1, 1, 1.5f);
 	
+
 	renderer.update_and_play(eTime, location, facing);
 }
+
+
 void Actor::controlls()
 {
 
@@ -149,11 +156,11 @@ void Actor::controlls()
 
 
 	if (pge->GetKey(olc::P).bPressed) {
-		renderer.request_animation(PICK_UP, 0, 0, 0, 0, 4.5f);
+		renderer.request_animation(PICK, 0, 0, 0, 0, 4.5f);
 	}
 
 	else if (pge->GetKey(olc::K).bPressed) {
-		renderer.request_animation(SMOKE, 0, 0, 1, 1, 1.0f);
+		//	renderer.request_animation(SMOKE, 0, 0, 1, 1, 1.0f);  smoke not yet implemented
 	}
 
 	else if (pge->GetKey(olc::C).bPressed) {

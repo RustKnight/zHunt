@@ -1,0 +1,8 @@
+rifleman_carried_01E,0,45,15,23
+rifleman_carried_02E,13,0,19,23
+rifleman_carried_03E,33,0,20,19
+rifleman_carried_04E,35,45,18,22
+rifleman_carried_05E,0,0,12,24
+rifleman_carried_06E,16,45,18,22
+rifleman_carried_07E,0,25,20,19
+rifleman_carried_08E,33,20,19,23

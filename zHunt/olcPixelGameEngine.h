@@ -433,6 +433,7 @@ namespace olc // All OneLoneCoder stuff will now exist in the "olc" namespace
 		// Draws a single line of text
 		void DrawPartialSprite_BottomUp(int32_t x, int32_t y, Sprite *sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale = 1);
 		// Draws a single line of text
+		void DrawPartialSprite_BottomUp_mirrored_horizontally(int32_t x, int32_t y, Sprite *sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale);
 		void DrawString(int32_t x, int32_t y, std::string sText, Pixel col = olc::WHITE, uint32_t scale = 1);
 		// Clears entire draw target to Pixel
 		void Clear(Pixel p);
@@ -1499,7 +1500,7 @@ namespace olc
 		}
 	}
 
-	void PixelGameEngine::DrawPartialSprite_BottomUp(int32_t x, int32_t y, Sprite *sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale)
+	void PixelGameEngine::DrawPartialSprite_BottomUp_mirrored_horizontally(int32_t x, int32_t y, Sprite *sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale)
 	{
 		if (sprite == nullptr)
 			return;
@@ -1519,14 +1520,46 @@ namespace olc
 
 		else
 		{
-
+			int32_t start0_i = w - 1;
 
 			for (int32_t i = 0; i < w; i++) {
 				int32_t start0_j = 0;
 
 				for (int32_t j = h; j > 0; j--) {
-					Draw(x + i, y - start0_j, sprite->GetPixel(i + ox, j + oy));
+					Draw(x + i, y - start0_j, sprite->GetPixel(start0_i + ox, j + oy));
 					start0_j++;
+				}
+				start0_i--;
+			}
+		}
+	}
+
+	void PixelGameEngine::DrawPartialSprite_BottomUp(int32_t x, int32_t y, Sprite *sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale)
+	{
+		if (sprite == nullptr)
+			return;
+
+		if (scale > 1)
+		{
+			for (int32_t i = 0; i < w; i++) {
+				int32_t start0_j = 0;
+				for (int32_t j = h; j > 0; j--) {
+					for (uint32_t is = 0; is < scale; is++)
+						for (uint32_t js = 0; js < scale; js++)
+							Draw(x + (i*scale) + is, y - (start0_j*scale) + js, sprite->GetPixel(i + ox, j + oy));
+								start0_j++;
+				}
+			}
+		}
+
+		else
+		{
+			for (int32_t i = 0; i < w; i++) {
+				int32_t start0_j = 0;
+
+				for (int32_t j = h; j > 0; j--) {
+					Draw(x + i, y - start0_j, sprite->GetPixel(i + ox, j + oy));
+						start0_j++;
 				}
 			}
 		}

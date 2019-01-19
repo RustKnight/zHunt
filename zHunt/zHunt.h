@@ -13,7 +13,7 @@
 class zHunt : public olc::PixelGameEngine
 {
 public:
-	zHunt();
+	zHunt(vector<string>& paths);
 
 	bool OnUserCreate() override;
 	bool OnUserUpdate(float fElapsedTime) override;
