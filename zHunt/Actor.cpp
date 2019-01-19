@@ -119,17 +119,20 @@ void Actor::update(float fElapTm, const Vec2& cam_off)
 
 			if (walking_backwards()) {
 				renderer.request_animation(WALK, vSpriteSheetPointers[WALK], INTERRUPTABLE, REVERSED, NOT_LOOPED, NOT_BACK_FORTH, 4.0f);
-				speed = 0.32f; cout << speed << endl;
+				speed = 0.32f; 
+				cout << speed << endl;
 			}
 
 			else {
 				if (!pge->GetKey(olc::SHIFT).bHeld) {
 					renderer.request_animation(WALK, vSpriteSheetPointers[WALK], 1, 0, 0, 0, 6.5f);
-					speed = 0.8f; cout << speed << endl;
+					speed = 0.8f; 
+					cout << speed << endl;
 				}
 				else {
 					renderer.request_animation(RUN, vSpriteSheetPointers[RUN], 1, 0, 0, 0, 6.5f);
-					speed = 1.300f; cout << speed << endl;
+					speed = 1.300f; 
+					cout << speed << endl;
 				}
 			}
 		}

@@ -75,6 +75,10 @@ void AnimationHandler::load_mapping_info(vector<string>& vec) {
 					
 			if (comma_found) {
 
+				
+				if (facings_order_spritesheet.empty())
+					cout << "Facings entry order was not read!\n";
+
 				if (isdigit(ch))
 					str += ch;
 

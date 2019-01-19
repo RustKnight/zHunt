@@ -25,12 +25,12 @@ bool zHunt::OnUserCreate()
 	actor.load_spr_sheet("sprites\\rifleman\\NEW\\run\\r_run.png");
 	actor.load_spr_sheet("sprites\\rifleman\\NEW\\walk\\r_walk.png");
 											 
-	//clone.load_spr_sheet("sprites\\rifleman\\NEW\\aim\\r_aim.png");
-	//clone.load_spr_sheet("sprites\\rifleman\\NEW\\climb\\r_climb.png");
-	//clone.load_spr_sheet("sprites\\rifleman\\NEW\\idle\\r_idle.png");
-	//clone.load_spr_sheet("sprites\\rifleman\\NEW\\pick\\r_pick.png");
-	//clone.load_spr_sheet("sprites\\rifleman\\NEW\\run\\r_run.png");
-	//clone.load_spr_sheet("sprites\\rifleman\\NEW\\walk\\r_walk.png");
+	clone.load_spr_sheet("sprites\\rifleman\\NEW\\aim\\r_aim.png");
+	clone.load_spr_sheet("sprites\\rifleman\\NEW\\climb\\r_climb.png");
+	clone.load_spr_sheet("sprites\\rifleman\\NEW\\idle\\r_idle.png");
+	clone.load_spr_sheet("sprites\\rifleman\\NEW\\pick\\r_pick.png");
+	clone.load_spr_sheet("sprites\\rifleman\\NEW\\run\\r_run.png");
+	clone.load_spr_sheet("sprites\\rifleman\\NEW\\walk\\r_walk.png");
 
 
 	camera.load_fields("sprites\\terrain\\SUEL001.png");
@@ -51,7 +51,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 	actor.update(fElapsedTime, camera.get_offset());
 	
-	//clone.update(fElapsedTime, camera.get_offset()); // why does this work opposed to giving a Vec2{0, 0} -> that keeps the clone stuck in upper left corner
+	clone.update(fElapsedTime, camera.get_offset()); // why does this work opposed to giving a Vec2{0, 0} -> that keeps the clone stuck in upper left corner
 
 	return true;
 }

@@ -13,6 +13,9 @@
 // WARNING Renderer MUST know which animations move the player, in order to be able to stop other animations.
 // currently hardcoded
 
+// WARNING - CURRENTLY RENDERER IS CALIBRATED FOR SPRITES THAT NEED MIRRORING TO COMPENSATE FOR INCOMPLETE FACINGS
+// ZOMBIE WILL HAVE ALL 8 FACINGS
+
 class AnimationRenderer {
 public:
 

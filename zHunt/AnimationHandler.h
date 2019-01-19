@@ -16,6 +16,9 @@ using namespace std;
 // delete surplus
 // facings are now alligned with actor ENUMs
 
+/// Animation Handler could/should be broken down into functions (Ex: read sprite facing order, reorder facings sprites, and possibly more).
+
+
 class AnimationHandler {
 public:
 	AnimationHandler() = default;
