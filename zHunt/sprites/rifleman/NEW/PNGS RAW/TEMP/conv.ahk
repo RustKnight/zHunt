@@ -6,9 +6,8 @@ Loop, Files, %A_ScriptDir%\*.bmp
     Width := Gdip_GetImageWidth(pBitmap)
     Height := Gdip_GetImageHeight(pBitmap)
      TopRight := Gdip_GetPixel(pBitmap, 0, 0)
-  Run, % convert.exe "" A_LoopFilePath """ -transparent " ARGB_TO_RGB(TopRight) " " StrReplace(A_LoopFileFullPath, A_LoopFileExt, "png")
+ Run, % A_ScriptDir "\convert.exe """ A_LoopFilePath """ -transparent " ARGB_TO_RGB(TopRight) " """ StrReplace(A_LoopFileFullPath, A_LoopFileExt, "png") """"
      Gdip_DisposeImage(pBitmap)
-PAUSE
 }
 Return
 
