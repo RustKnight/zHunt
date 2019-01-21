@@ -8,13 +8,7 @@
 
 using namespace std;
 
-// must first be able to read the order of facings before starting to load mapping data
-// copy all facings in continuation of the first series Ex : 0, 1, 2, 3 SIZE -> 4		; copy
-//															0, 1, 2, 3 / 4 [0], 5 [1], 6 [2], 7 [3] -> SIZE 8
-// swap first copied member with first !!value!! of order of facings
-// swap second copied member with second !!value!! of order of facings
-// delete surplus
-// facings are now alligned with actor ENUMs
+
 
 /// Animation Handler could/should be broken down into functions (Ex: read sprite facing order, reorder facings sprites, and possibly more).
 

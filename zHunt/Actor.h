@@ -10,12 +10,10 @@
 #include "Value_checker.h"
 
 
-// all parts responsible in playing an animation will be moved into a class of its own, contained within an actor class
-
 
 class Actor {
 
-	//tools
+	
 	// WARNING temp swap AIM with IDLE
 	//enum actions {IDLE, CARRIED, CLIMB, DIE, DIE_TIED, DIE2, FIRE, GRAVE, HIT, AIM,
 	//				PICK, RELOAD, RUN, SIT, SMOKE, TIED, WALK, ACTIONS_SIZE};

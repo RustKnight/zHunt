@@ -7,8 +7,6 @@
 
 
 // request parameters should be some enums so they don't use magic numbers like 0, 1, etc.
-// handle cases of facing where mirroring is needed
-// watch out for proper facing allignment [file_read <-> with coded read]
 
 // WARNING Renderer MUST know which animations move the player, in order to be able to stop other animations.
 // currently hardcoded
@@ -35,8 +33,6 @@ public:
 
 private:
 	void draw_centered(float x, float y, olc::Sprite* spr, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale, bool mirrored_x) const;
-	
-	
 	
 
 private:

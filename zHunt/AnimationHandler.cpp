@@ -34,10 +34,6 @@ void AnimationHandler::load_mapping_info(vector<string>& vec) {
 		int num;
 		int id = 0;
 
-		int anim;
-		int face;
-		int index = 0;
-
 		int16_t x;
 		int16_t y;
 		int16_t w;
@@ -52,7 +48,7 @@ void AnimationHandler::load_mapping_info(vector<string>& vec) {
 		for (char ch; file.get(ch);) {				// read loop for entire file
 
 		
-			if (ch == '$')										// might create a proper function for this part of code
+			if (ch == '$')										
 				read_facings_order = !read_facings_order;
 
 			if (read_facings_order) {
@@ -133,11 +129,6 @@ void AnimationHandler::load_mapping_info(vector<string>& vec) {
 
 		facings.resize	(facings_order_spritesheet.size());			// get rid of coppied values
 
-		//iter_swap(facings.begin() + 0, facings.begin() + 4);		// need to allign facings entry to match current system
-		//iter_swap(facings.begin() + 1, facings.begin() + 5);		// order is N, N-E, E, S-E, S, S-W, W, N-W
-		//iter_swap(facings.begin() + 2, facings.begin() + 6);
-		//iter_swap(facings.begin() + 3, facings.begin() + 7);
-
 		animations.push_back(facings);
 		facings.clear();
 		facings_order_spritesheet.clear();
@@ -147,20 +138,12 @@ void AnimationHandler::load_mapping_info(vector<string>& vec) {
 }
 
 
-// Legacy comment regarding previous version of the animation handler's resource loader
 
-// index of 3d array will be requested on demand by file input. loop no longer needed. 
-// data will have 3 ints and 4 ints - first int is the anim type, second will be facing, the int after will be
-// the number of the anim seq, respectivly the third array index. These 3 ints before the actual coords will be responsible
-// to set the correct array indexes before writting the actual data to it
 
-//	for (int act = 0; act < actions; ++act
-//		for (int facing = 0; facing < facings; ++facing
-//			for (int sqn = 0; sqn < total_sqn; ++sqn			
-//				a3d_mapping_data[act][facing][sqn] = text_file_input
-
-/*read values of interest (individually?) and store them in named ints (x,y,w,h), use ints to init. spr_sqn and assign*/
-/*figure out how to properly read values from a txt and develop method of accurate association between array and read values */
-// run through all stored animations and test them if they work properly
-
-// ask on discord after implementation is done, how it should been the "better" way of doing this
+// must first be able to read the order of facings before starting to load mapping data
+// copy all facings in continuation of the first series Ex : 0, 1, 2, 3 SIZE -> 4		; copy
+//															0, 1, 2, 3 / 4 [0], 5 [1], 6 [2], 7 [3] -> SIZE 8
+// swap first copied member with first !!value!! of order of facings
+// swap second copied member with second !!value!! of order of facings
+// delete surplus
+// facings are now alligned with actor ENUMs

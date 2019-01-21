@@ -45,12 +45,14 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	Clear(olc::VERY_DARK_GREEN);
 	SetPixelMode(olc::Pixel::ALPHA);
 	
+	(toggle_camera) ? camera.update(actor.get_location()) : camera.update(clone.get_location());
 
-	camera.update(actor.get_location());
+	if (GetKey(olc::Q).bPressed)
+		toggle_camera = !toggle_camera;
+
 	camera.screen_in_view();
 
 	actor.update(fElapsedTime, camera.get_offset());
-	
 	clone.update(fElapsedTime, camera.get_offset()); // why does this work opposed to giving a Vec2{0, 0} -> that keeps the clone stuck in upper left corner
 
 	return true;

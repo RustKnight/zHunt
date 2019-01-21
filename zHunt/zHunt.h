@@ -35,7 +35,7 @@ private:
 	Actor clone;
 	olc::Sprite* fields;
 	Camera camera;
-	
+	bool toggle_camera = true;
 
 	Value_checker VC;
 };
