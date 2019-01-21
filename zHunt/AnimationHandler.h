@@ -27,7 +27,13 @@ public:
 
 private:
 	void load_mapping_info(vector<string>& vec);
+	bool facings_entry_loaded(char ch);
+
 
 private:	
+	bool comma_found = false;
+	bool facing_complete = false;
+	bool read_facings_order = false;
 	vector<vector<vector <spr_sqn>>> a3d_mapping_data;
+	vector <int> facings_order_spritesheet;
 };
