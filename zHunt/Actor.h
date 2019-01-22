@@ -41,26 +41,19 @@ public:
 		renderer{ in_pge,  paths }
 	{}
 
-	Actor(Vec2 loc, olc::PixelGameEngine* in_pge, vector<string>& paths, bool is_player) :
-		isPlayer{ is_player },
-		location{ loc },
-		pge{ in_pge },
-		speed{ 0.8f },
-		action{ IDLE },
-		facing{ N },
-		renderer{ in_pge, paths }
-	{}
-
-
 
 public:
 	void load_spr_sheet(std::string adrs);
 	
 	virtual void update (float fElapTm, const Vec2& cam_off);
+
 	facings lookAtMouse();
 	bool walking_backwards();
+	void become_player(bool toggle);
 
 	Vec2 get_location();
+
+
 	AnimationRenderer renderer;
 private:
 	

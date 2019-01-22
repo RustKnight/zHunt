@@ -6,7 +6,7 @@
 zHunt::zHunt(vector <vector<string>>& paths) :
 	winWidth { 768.0f},
 	winHeight{ 640.0f },
-	actor{ Vec2 {1.0f, 1.0f}, this, paths[0], 1 },
+	actor{ Vec2 {1.0f, 1.0f}, this, paths[0] },
 	zombie{ Vec2{ 5.0f, 5.0f }, this, paths[1] },
 	camera {this, &map, getWinWidth(), getWinHeight()}
 {
@@ -31,8 +31,13 @@ bool zHunt::OnUserCreate()
 	zombie.load_spr_sheet("sprites\\zombie\\idle\\z_idle.png");
 	zombie.load_spr_sheet("sprites\\zombie\\walk\\z_walk.png");
 
+	for (int i = 0; i < 40; i++) {
+		vZombies.push_back(zombie);
+		vZombies[i].randomize_location();
+	}
 
-	camera.load_fields("sprites\\terrain\\green2.png");
+	camera.load_fields("sprites\\terrain\\green.png");
+	actor.become_player(1);
 
 	return true;
 }
@@ -53,7 +58,12 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 	actor.update(fElapsedTime, camera.get_offset());
 	zombie.update(fElapsedTime, camera.get_offset()); // why does this work opposed to giving a Vec2{0, 0} -> that keeps the zombie stuck in upper left corner
+	
 
+	for (Zombie& z : vZombies) {
+		z.look_at_vec(actor.get_location());
+		z.update(fElapsedTime, camera.get_offset());
+	}
 	return true;
 }
 

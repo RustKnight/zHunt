@@ -38,5 +38,6 @@ private:
 	Camera camera;
 	bool toggle_camera = true;
 
+	vector<Zombie> vZombies;
 	Value_checker VC;
 };
