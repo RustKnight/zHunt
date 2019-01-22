@@ -94,17 +94,17 @@ void AnimationHandler::load_mapping_info(vector<string>& vec) {
 							sequences.clear();
 						}
 					}
-
 				}
 			}
 		}
 
+		
 
 		int limit = facings.size();				// need an external stop condition for loop. otherwise, since vector limit keeps changing, stop condition will never hit
 		for (int i = 0; i < limit; ++i)
-			facings.push_back(facings[i]);
+			facings.push_back(facings[i]);		// we make some room for swaping operation, by expanding the vector 2times with the same values
 
-		int copied_values_offset = facings_order_spritesheet.size();
+		int copied_values_offset = facings_order_spritesheet.size();	// index from where our copied values start 
 
 		for (int i = 0; i < facings_order_spritesheet.size(); ++i)		// use read in facings to arrange them properly
 			iter_swap(facings.begin() + facings_order_spritesheet[i], facings.begin() + (i + copied_values_offset));
@@ -115,6 +115,9 @@ void AnimationHandler::load_mapping_info(vector<string>& vec) {
 		facings.clear();
 		facings_order_spritesheet.clear();
 	}
+
+	if (!facings_entry_loaded(' '))
+		cout << "Sprites facing order of entry was not read!\n";
 
 	a3d_mapping_data = animations;
 }

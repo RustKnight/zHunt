@@ -103,8 +103,6 @@ void Actor::update(float fElapTm, const Vec2& cam_off)
 
 		else if (pge->GetKey(olc::C).bPressed) 
 			renderer.request_animation(CLIMB, vSpriteSheetPointers[CLIMB], 0, 0, 1, 1, 4.5f);
-		
-
 
 		//r{ NOT_INTERRUPTABLE, INTERRUPTABLE }
 		//sed{ NOT_REVERESED, REVERSED };
@@ -139,6 +137,7 @@ void Actor::update(float fElapTm, const Vec2& cam_off)
 		else {
 			renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 1.5f);
 		}
+
 	renderer.update_and_play(eTime, location, facing);
 }
 

@@ -5,6 +5,7 @@
 #include "Value_checker.h"
 
 #include "Actor.h"
+#include "Zombie.h"
 #include "Map.h"
 #include "Camera.h"
 
@@ -13,7 +14,7 @@
 class zHunt : public olc::PixelGameEngine
 {
 public:
-	zHunt(vector<string>& paths);
+	zHunt(vector <vector<string>>& paths);
 
 	bool OnUserCreate() override;
 	bool OnUserUpdate(float fElapsedTime) override;
@@ -32,7 +33,7 @@ private:
 
 	Map map;
 	Actor actor;
-	Actor clone;
+	Zombie zombie;
 	olc::Sprite* fields;
 	Camera camera;
 	bool toggle_camera = true;

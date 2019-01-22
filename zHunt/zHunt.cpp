@@ -3,11 +3,11 @@
 
 //Constructor
 
-zHunt::zHunt(vector<string>& paths) :
+zHunt::zHunt(vector <vector<string>>& paths) :
 	winWidth { 768.0f},
 	winHeight{ 640.0f },
-	actor{ Vec2 {1.0f, 1.0f}, this, paths, 1 },
-	clone{ Vec2{ 5.0f, 5.0f }, this, paths },
+	actor{ Vec2 {1.0f, 1.0f}, this, paths[0], 1 },
+	zombie{ Vec2{ 5.0f, 5.0f }, this, paths[1] },
 	camera {this, &map, getWinWidth(), getWinHeight()}
 {
 	sAppName = "RustKnight";
@@ -25,15 +25,14 @@ bool zHunt::OnUserCreate()
 	actor.load_spr_sheet("sprites\\rifleman\\NEW\\run\\r_run.png");
 	actor.load_spr_sheet("sprites\\rifleman\\NEW\\walk\\r_walk.png");
 											 
-	clone.load_spr_sheet("sprites\\rifleman\\NEW\\aim\\r_aim.png");
-	clone.load_spr_sheet("sprites\\rifleman\\NEW\\climb\\r_climb.png");
-	clone.load_spr_sheet("sprites\\rifleman\\NEW\\idle\\r_idle.png");
-	clone.load_spr_sheet("sprites\\rifleman\\NEW\\pick\\r_pick.png");
-	clone.load_spr_sheet("sprites\\rifleman\\NEW\\run\\r_run.png");
-	clone.load_spr_sheet("sprites\\rifleman\\NEW\\walk\\r_walk.png");
+	zombie.load_spr_sheet("sprites\\zombie\\attack\\z_attack.png");
+	zombie.load_spr_sheet("sprites\\zombie\\die\\z_die.png");
+	zombie.load_spr_sheet("sprites\\zombie\\hit\\z_hit.png");
+	zombie.load_spr_sheet("sprites\\zombie\\idle\\z_idle.png");
+	zombie.load_spr_sheet("sprites\\zombie\\walk\\z_walk.png");
 
 
-	camera.load_fields("sprites\\terrain\\SUEL001.png");
+	camera.load_fields("sprites\\terrain\\green2.png");
 
 	return true;
 }
@@ -45,7 +44,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	Clear(olc::VERY_DARK_GREEN);
 	SetPixelMode(olc::Pixel::ALPHA);
 	
-	(toggle_camera) ? camera.update(actor.get_location()) : camera.update(clone.get_location());
+	(toggle_camera) ? camera.update(actor.get_location()) : camera.update(zombie.get_location());
 
 	if (GetKey(olc::Q).bPressed)
 		toggle_camera = !toggle_camera;
@@ -53,7 +52,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	camera.screen_in_view();
 
 	actor.update(fElapsedTime, camera.get_offset());
-	clone.update(fElapsedTime, camera.get_offset()); // why does this work opposed to giving a Vec2{0, 0} -> that keeps the clone stuck in upper left corner
+	zombie.update(fElapsedTime, camera.get_offset()); // why does this work opposed to giving a Vec2{0, 0} -> that keeps the zombie stuck in upper left corner
 
 	return true;
 }

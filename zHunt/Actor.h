@@ -17,9 +17,9 @@ class Actor {
 	// WARNING temp swap AIM with IDLE
 	//enum actions {IDLE, CARRIED, CLIMB, DIE, DIE_TIED, DIE2, FIRE, GRAVE, HIT, AIM,
 	//				PICK, RELOAD, RUN, SIT, SMOKE, TIED, WALK, ACTIONS_SIZE};
-	enum actions {AIM, CLIMB, IDLE, PICK, RUN, WALK };
+protected:
 	enum facings {N, NE, E, SE, S, SW, W, NW, FACINGS_SIZE = 8};
-
+	enum actions { AIM, CLIMB, IDLE, PICK, RUN, WALK };
 	enum interr {NOT_INTERRUPTABLE, INTERRUPTABLE};
 	enum reversed {NOT_REVERESED, REVERSED};
 	enum loop {NOT_LOOPED, LOOPED};
@@ -56,7 +56,7 @@ public:
 public:
 	void load_spr_sheet(std::string adrs);
 	
-	void update (float fElapTm, const Vec2& cam_off);
+	virtual void update (float fElapTm, const Vec2& cam_off);
 	facings lookAtMouse();
 	bool walking_backwards();
 
@@ -65,7 +65,7 @@ public:
 private:
 	
 	
-private:
+protected:
 	bool isPlayer;
 
 	Vec2 location;

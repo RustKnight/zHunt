@@ -152,9 +152,11 @@
     <ClCompile Include="RectF.cpp" />
     <ClCompile Include="Vec2.cpp" />
     <ClCompile Include="zHunt.cpp" />
+    <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="Ai.h" />
     <ClInclude Include="AnimationHandler.h" />
     <ClInclude Include="AnimationRenderer.h" />
     <ClInclude Include="Camera.h" />
@@ -166,6 +168,7 @@
     <ClInclude Include="Value_checker.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="zHunt.h" />
+    <ClInclude Include="Zombie.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
