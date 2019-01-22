@@ -31,7 +31,7 @@ bool zHunt::OnUserCreate()
 	zombie.load_spr_sheet("sprites\\zombie\\idle\\z_idle.png");
 	zombie.load_spr_sheet("sprites\\zombie\\walk\\z_walk.png");
 
-	for (int i = 0; i < 40; i++) {
+	for (int i = 0; i < 90; i++) {
 		vZombies.push_back(zombie);
 		vZombies[i].randomize_location();
 	}
@@ -53,17 +53,32 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 	if (GetKey(olc::Q).bPressed)
 		toggle_camera = !toggle_camera;
+	if (GetKey(olc::G).bPressed)
+		toggle_hunger = !toggle_hunger;
+
 
 	camera.screen_in_view();
-
 	actor.update(fElapsedTime, camera.get_offset());
 	zombie.update(fElapsedTime, camera.get_offset()); // why does this work opposed to giving a Vec2{0, 0} -> that keeps the zombie stuck in upper left corner
 	
+	
+	// this code assures that we draw by height so we avoid unclear rendering
+	struct by_height {
+		bool operator()(Zombie const &a, Zombie const &b) const noexcept {
+			return a.get_location().y < b.get_location().y;
+		}
+	};
+	std::sort(vZombies.begin(), vZombies.end(), by_height());
+
+
 
 	for (Zombie& z : vZombies) {
-		z.look_at_vec(actor.get_location());
 		z.update(fElapsedTime, camera.get_offset());
+		if (toggle_hunger) z.move_towards_vec (actor.get_location());
+		z.look_at_vec(actor.get_location());
 	}
+
+
 	return true;
 }
 

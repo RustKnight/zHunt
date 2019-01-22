@@ -70,7 +70,7 @@ void Actor::become_player(bool toggle)
 	isPlayer = toggle;
 }
 
-Vec2 Actor::get_location()
+Vec2 Actor::get_location() const
 {
 	return location;
 }

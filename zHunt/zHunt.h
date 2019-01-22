@@ -1,4 +1,6 @@
 #pragma once
+#include <algorithm>
+
 #include "olcPixelGameEngine.h"
 #include "RectF.h"
 #include "Vec2.h"
@@ -37,6 +39,7 @@ private:
 	olc::Sprite* fields;
 	Camera camera;
 	bool toggle_camera = true;
+	bool toggle_hunger = false;
 
 	vector<Zombie> vZombies;
 	Value_checker VC;

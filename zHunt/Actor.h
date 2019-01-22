@@ -51,7 +51,7 @@ public:
 	bool walking_backwards();
 	void become_player(bool toggle);
 
-	Vec2 get_location();
+	Vec2 get_location() const;
 
 
 	AnimationRenderer renderer;

@@ -13,8 +13,11 @@ public:
 
 	void randomize_location();
 	void look_at_vec(Vec2 pos);
+	void move_towards_vec(Vec2 goal);
 
 public:
 	void update(float fElapTm, const Vec2& cam_off) override ;
 
+private:
+	float speed = 0.4f;
 };
