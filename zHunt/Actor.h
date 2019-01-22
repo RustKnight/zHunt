@@ -66,8 +66,6 @@ private:
 	
 	
 private:
-	//string dest{ "C://Users//Carmen//Desktop//output.txt" };
-	//ofstream out{ dest };
 	bool isPlayer;
 
 	Vec2 location;
@@ -85,9 +83,5 @@ private:
 
 	actions action;
 	facings facing;
-
-	float dx;
-	float dy;
 };
-
 

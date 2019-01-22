@@ -11,6 +11,7 @@ using namespace std;
 
 
 /// Animation Handler could/should be broken down into functions (Ex: read sprite facing order, reorder facings sprites, and possibly more).
+// ask for advice on how this class be structured - small enough to fit in a conversation with someone, but will contain relevant info for a basic understanding
 
 
 class AnimationHandler {
