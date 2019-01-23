@@ -1,12 +1,12 @@
 #include "Zombie.h"
 
 
-void Zombie::randomize_location()
+void Zombie::randomize_stats(float speed_in)
 {
-
+	speed = speed_in;
 	location.x = rand() % 16;
 	location.y = rand() % 10;
-
+	
 }
 
 void Zombie::look_at_vec(Vec2 pos)
@@ -58,9 +58,9 @@ void Zombie::look_at_vec(Vec2 pos)
 		
 
 		if (old_location != location)
-			renderer.request_animation(WALK, vSpriteSheetPointers[WALK], 1, 0, 0, 0, 11.5f);
+			renderer.request_animation(WALK, vSpriteSheetPointers[WALK], 1, 0, 0, 0, speed * 30.0f);
 		else
-			renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 1.5f);
+			renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, speed * 5.0f);
 
 		renderer.update_and_play(eTime, location, facing);
 }

@@ -1,5 +1,7 @@
 #pragma once
 #include <algorithm>
+#include <chrono>
+#include <random>
 
 #include "olcPixelGameEngine.h"
 #include "RectF.h"
@@ -8,6 +10,7 @@
 
 #include "Actor.h"
 #include "Zombie.h"
+#include "Rifleman.h"
 #include "Map.h"
 #include "Camera.h"
 
@@ -34,7 +37,7 @@ private:
 	float winHeight;
 
 	Map map;
-	Actor actor;
+	Rifleman rifleman;
 	Zombie zombie;
 	olc::Sprite* fields;
 	Camera camera;

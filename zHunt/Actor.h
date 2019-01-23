@@ -17,6 +17,7 @@ class Actor {
 	// WARNING temp swap AIM with IDLE
 	//enum actions {IDLE, CARRIED, CLIMB, DIE, DIE_TIED, DIE2, FIRE, GRAVE, HIT, AIM,
 	//				PICK, RELOAD, RUN, SIT, SMOKE, TIED, WALK, ACTIONS_SIZE};
+
 protected:
 	enum facings {N, NE, E, SE, S, SW, W, NW, FACINGS_SIZE = 8};
 	enum actions { AIM, CLIMB, IDLE, PICK, RUN, WALK };
@@ -76,5 +77,7 @@ protected:
 
 	actions action;
 	facings facing;
+
+	int hp;
 };
 
