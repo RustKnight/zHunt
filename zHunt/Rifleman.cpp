@@ -1,8 +1,8 @@
 #include "Rifleman.h"
 
-void Rifleman::update(float fElapTm, const Vec2 & cam_off)
+bool Rifleman::update(float fElapTm, const Vec2 & cam_off)
 {
-
+	bool fired = false;
 	eTime = fElapTm;
 	old_location = location;
 	facing = lookAtMouse();
@@ -21,18 +21,6 @@ void Rifleman::update(float fElapTm, const Vec2 & cam_off)
 		if (pge->GetKey(olc::D).bHeld)
 			location.x += eTime * speed;
 
-
-		if (pge->GetKey(olc::P).bPressed)
-			renderer.request_animation(PICK, vSpriteSheetPointers[PICK], 0, 0, 0, 0, 4.5f);
-
-
-		else if (pge->GetKey(olc::K).bPressed) {
-			//	renderer.request_animation(SMOKE, 0, 0, 1, 1, 1.0f);  smoke not yet implemented
-		}
-
-		else if (pge->GetKey(olc::C).bPressed)
-			renderer.request_animation(CLIMB, vSpriteSheetPointers[CLIMB], 0, 0, 1, 1, 4.5f);
-
 		//r{ NOT_INTERRUPTABLE, INTERRUPTABLE }
 		//sed{ NOT_REVERESED, REVERSED };
 		//{NOT_LOOPED, LOOPED};
@@ -40,6 +28,14 @@ void Rifleman::update(float fElapTm, const Vec2 & cam_off)
 
 		//{ INTERRUPTABLE, REVERSED, LOOP, BACK_FORTH }
 	}
+
+
+	if (pge->GetKey(olc::R).bPressed)
+		renderer.request_animation(RELOAD, vSpriteSheetPointers[RELOAD], 0, 0, 0, 0, 3.0f);
+	else if (pge->GetKey(olc::K).bPressed) {
+		//	renderer.request_animation(SMOKE, 0, 0, 1, 1, 1.0f);  smoke not yet implemented
+	}
+	
 
 
 	if (old_location != location) {
@@ -63,9 +59,26 @@ void Rifleman::update(float fElapTm, const Vec2 & cam_off)
 			}
 		}
 	}
-	else {
-		renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 1.5f);
-	}
 
-	renderer.update_and_play(eTime, location, facing);
+	else if (pge->GetMouse(1).bHeld) {
+		renderer.request_animation(AIM, vSpriteSheetPointers[AIM], 1, 0, 1, 0, 3.0f);
+
+		if (pge->GetMouse(0).bPressed) {
+			renderer.request_animation(FIRE, vSpriteSheetPointers[FIRE], 0, 0, 0, 0, 4.5f);
+			fired = true;
+		}
+	}
+	else 
+		renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 1.5f);
+
+
+	return fired;
+}
+
+Vec2 Rifleman::get_fire_angle() const
+{
+	float dx = pge->GetMouseX() - ((location.x - camera_offset.x) * 128);
+	float dy = pge->GetMouseY() - ((location.y - camera_offset.y) * 128);
+
+	return Vec2{ dx, dy }.Normalize();
 }

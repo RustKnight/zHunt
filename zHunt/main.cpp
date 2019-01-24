@@ -18,6 +18,8 @@ int main()
 	paths.push_back({ "sprites\\rifleman\\NEW\\pick\\r_pick.txt" });
 	paths.push_back({ "sprites\\rifleman\\NEW\\run\\r_run.txt" });
 	paths.push_back({ "sprites\\rifleman\\NEW\\walk\\r_walk.txt" });
+	paths.push_back({ "sprites\\rifleman\\NEW\\fire\\r_fire.txt" });
+	paths.push_back({ "sprites\\rifleman\\NEW\\reload\\r_reload.txt" });
 
 	actors_mapping.push_back(paths);
 	paths.clear();

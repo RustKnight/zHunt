@@ -164,6 +164,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="olcPGEX_Sound.h" />
     <ClInclude Include="olcPixelGameEngine.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="RectF.h" />
     <ClInclude Include="Rifleman.h" />
     <ClInclude Include="spr_sqn.h" />

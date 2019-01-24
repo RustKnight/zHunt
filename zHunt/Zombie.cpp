@@ -55,23 +55,22 @@ void Zombie::look_at_vec(Vec2 pos)
 
 		facing = facings (int (angle));
 
-		
-
-		if (old_location != location)
-			renderer.request_animation(WALK, vSpriteSheetPointers[WALK], 1, 0, 0, 0, speed * 30.0f);
-		else
-			renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, speed * 5.0f);
-
-		renderer.update_and_play(eTime, location, facing);
 }
 
 void Zombie::move_towards_vec(Vec2 goal)
 {
 	Vec2 go_to = ((goal - Vec2{ camera_offset.x, camera_offset.y }) - (location - Vec2{ camera_offset.x, camera_offset.y })).Normalize();
 	location += go_to * eTime * speed;
+
+	if (old_location != location)
+		renderer.request_animation(WALK, vSpriteSheetPointers[WALK], 1, 0, 0, 0, speed * 30.0f);
+	else
+		renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, speed * 5.0f);
+
+	look_at_vec(goal);
 }
 
-void Zombie::update(float fElapTm, const Vec2 & cam_off)
+bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 {
 	eTime = fElapTm;
 	old_location = location;
@@ -93,14 +92,9 @@ void Zombie::update(float fElapTm, const Vec2 & cam_off)
 
 		if (pge->GetKey(olc::I).bPressed)
 			renderer.request_animation(DIE, vSpriteSheetPointers[DIE], 0, 0, 0, 0, 13.5f);
-
-		//r{ NOT_INTERRUPTABLE, INTERRUPTABLE }
-		//sed{ NOT_REVERESED, REVERSED };
-		//{NOT_LOOPED, LOOPED};
-		//forth{ NOT_BACK_FORTH, BACK_FORTH };
-
-		//{ INTERRUPTABLE, REVERSED, LOOP, BACK_FORTH }
 	}
 
-	
+
+	return 0;
 }
+

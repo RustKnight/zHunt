@@ -11,6 +11,7 @@
 #include "Actor.h"
 #include "Zombie.h"
 #include "Rifleman.h"
+#include "Projectile.h"
 #include "Map.h"
 #include "Camera.h"
 
@@ -42,8 +43,10 @@ private:
 	olc::Sprite* fields;
 	Camera camera;
 	bool toggle_camera = true;
-	bool toggle_hunger = false;
+	bool toggle_hunger = true;
 
 	vector<Zombie> vZombies;
+	vector<Actor*> vActors;
+	vector<Projectile> vBullets;
 	Value_checker VC;
 };

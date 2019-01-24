@@ -19,7 +19,8 @@ public:
 	void move_towards_vec(Vec2 goal);
 
 public:
-	void update(float fElapTm, const Vec2& cam_off) override ;
+	bool update(float fElapTm, const Vec2& cam_off) override ;
+
 
 private:
 	float speed;	

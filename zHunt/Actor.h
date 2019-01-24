@@ -20,7 +20,8 @@ class Actor {
 
 protected:
 	enum facings {N, NE, E, SE, S, SW, W, NW, FACINGS_SIZE = 8};
-	enum actions { AIM, CLIMB, IDLE, PICK, RUN, WALK };
+
+
 	enum interr {NOT_INTERRUPTABLE, INTERRUPTABLE};
 	enum reversed {NOT_REVERESED, REVERSED};
 	enum loop {NOT_LOOPED, LOOPED};
@@ -37,7 +38,6 @@ public:
 		location{loc},
 		pge		{in_pge},
 		speed	{0.8f},
-		action	{ IDLE },
 		facing	{N},
 		renderer{ in_pge,  paths }
 	{}
@@ -46,7 +46,8 @@ public:
 public:
 	void load_spr_sheet(std::string adrs);
 	
-	virtual void update (float fElapTm, const Vec2& cam_off);
+	virtual bool update (float fElapTm, const Vec2& cam_off);
+	void draw();
 
 	facings lookAtMouse();
 	bool walking_backwards();
@@ -75,7 +76,6 @@ protected:
 	vector <olc::Sprite*> vSpriteSheetPointers;
 	olc::PixelGameEngine* pge;
 
-	actions action;
 	facings facing;
 
 	int hp;

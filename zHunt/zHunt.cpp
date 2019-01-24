@@ -1,7 +1,15 @@
 #include "zHunt.h"
 
 
-//Constructor
+// box hit detection
+// bullet pixel-level-hit detection
+// hit splatter animation
+// pushback on hit ?
+// zombie attack when near
+// creatures HP
+// fire animation
+// cursor hide, cursor-while-moving, cursor-while-aiming
+// proper ALL creature draw order
 
 zHunt::zHunt(vector <vector<string>>& paths) :
 	winWidth { 768.0f},
@@ -24,6 +32,8 @@ bool zHunt::OnUserCreate()
 	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\pick\\r_pick.png");
 	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\run\\r_run.png");
 	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\walk\\r_walk.png");
+	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\fire\\r_fire.png");
+	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\reload\\r_reload.png");
 											 
 	zombie.load_spr_sheet("sprites\\zombie\\attack\\z_attack.png");
 	zombie.load_spr_sheet("sprites\\zombie\\die\\z_die.png");
@@ -36,13 +46,18 @@ bool zHunt::OnUserCreate()
 	std::uniform_real_distribution <float> distR(0.1f, 0.6f);
 
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 20; i++) {
 		vZombies.push_back(zombie);
 		vZombies[i].randomize_stats(distR(e) );
 	}
 
 	camera.load_fields("sprites\\terrain\\green.png");
 	rifleman.become_player(1);
+	
+
+	vActors.push_back(&rifleman);
+	for (Zombie& z : vZombies)
+		vActors.push_back(&z);
 
 	return true;
 }
@@ -55,6 +70,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	SetPixelMode(olc::Pixel::ALPHA);
 	
 	(toggle_camera) ? camera.update(rifleman.get_location()) : camera.update(zombie.get_location());
+	camera.screen_in_view();
 
 	if (GetKey(olc::Q).bPressed)
 		toggle_camera = !toggle_camera;
@@ -62,30 +78,39 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 		toggle_hunger = !toggle_hunger;
 
 
-	camera.screen_in_view();
-	rifleman.update(fElapsedTime, camera.get_offset());
-	zombie.update(fElapsedTime, camera.get_offset()); // why does this work opposed to giving a Vec2{0, 0} -> that keeps the zombie stuck in upper left corner
-	
-	
 	// this code assures that we draw by height so we avoid unclear rendering
 	struct by_height {
-		bool operator()(Zombie const &a, Zombie const &b) const noexcept {
-			return a.get_location().y < b.get_location().y;
+		bool operator()(Actor* const a, Actor* const b) const noexcept {
+			return a->get_location().y < b->get_location().y;
 		}
 	};
-	std::sort(vZombies.begin(), vZombies.end(), by_height());
+	std::sort(vActors.begin(), vActors.end(), by_height());
 
+	
+
+	if (rifleman.update(fElapsedTime, camera.get_offset()))
+		vBullets.push_back( Projectile{ rifleman.get_location(), rifleman.get_fire_angle() });
+
+
+	for (Projectile& p : vBullets) {
+		p.location = p.location + (p.direction * p.speed * fElapsedTime);
+		FillCircle((p.location.x - camera.get_offset().x) * 128, (p.location.y - camera.get_offset().y) * 128, 1, olc::BLACK);
+	}
+	
 
 
 	for (Zombie& z : vZombies) {
 		z.update(fElapsedTime, camera.get_offset());
 		if (toggle_hunger) z.move_towards_vec (rifleman.get_location());
-		z.look_at_vec(rifleman.get_location());
 	}
 
+	for (Actor* a : vActors)
+		a->draw();
 
 	return true;
 }
+
+
 
 //std::string pos = std::to_string (actor.location.y);
 //DrawString(40, 40, pos, olc::YELLOW);
