@@ -94,7 +94,7 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 	//	cout << play_seq << endl;
 
 
-	const spr_sqn& requested_sqn = anm_hdl.get_coords(action, facing, int(play_seq));
+	requested_sqn = anm_hdl.get_coords(action, facing, int(play_seq));
 	//cout << play_seq << endl;
 	// maybe we shouldn't try to draw if off the screen
 	draw_centered((location.x - off_set.x) * 128, (location.y - off_set.y) * 128, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 2, mirror);
@@ -102,6 +102,35 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 	//cout << play_seq << endl;
 }
 
+bool AnimationRenderer::check_collision(Projectile & bullet)
+{
+	//pge->GetDrawTarget()->GetPixel(x, y);  friendly way of getting pixel on screen
+	// seems that only last bullet triggers collision
+	// warning - bullet seems to change direction if target also moved , not a problem for 1 hit bullets
+
+	int x = (bullet.location.x - off_set.x) * 128;
+	int y = (bullet.location.y - off_set.y) * 128;
+	
+
+	if ((y > r_rect.top && y < r_rect.bottom) && (x > r_rect.left && x < r_rect.right)) {
+
+		pge->FillRect(0, 0, requested_sqn.w * 2, requested_sqn.h * 2, olc::BLACK);
+		pge->DrawPartialSprite(0, 0, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 2);
+
+		if (int(pge->pDrawTarget->GetPixel(x - r_rect.left, y - r_rect.top).r) > 0) {
+			pge->DrawCircle(x - r_rect.left, y - r_rect.top, 1, olc::RED);
+			return true;
+		}
+		else
+			pge->DrawCircle(x - r_rect.left, y - r_rect.top, 1, olc::BLUE);
+
+
+		colliding = true;
+	}
+	else
+		colliding = false;
+
+}
 
 
 
@@ -117,21 +146,29 @@ void AnimationRenderer::update_offset(const Vec2& offset)
 }
 
 
-
-
-
-void AnimationRenderer::draw_centered(float x, float y, olc::Sprite * spr, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale, bool mirrored_x) const
+void AnimationRenderer::draw_centered(float x, float y, olc::Sprite * spr, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale, bool mirrored_x)
 {
+
 	float center_x = x - (w*scale) / 2.0f;
 	float center_y = y + (h*scale) / 2.0f;
+
 
 	if (mirrored_x)
 		pge->DrawPartialSprite_BottomUp_mirrored_horizontally(int32_t(center_x), int32_t(center_y), spr, ox, oy, w, h, scale);
 	else
 		pge->DrawPartialSprite_BottomUp(int32_t(center_x), int32_t(center_y), spr, ox, oy, w, h, scale);
+
+
+	if (!colliding)
+		pge->DrawRect(center_x, center_y - h*scale, w * scale, h * scale, olc::BLACK);
+	else
+		pge->DrawRect(center_x, center_y - h * scale, w * scale, h * scale, olc::RED);
 	
+
 	//pge->FillCircle(400, 300, 2, olc::RED);
-	//pge->DrawRect(int32_t(center_x), int32_t(center_y) - h * scale, (w*scale), (h*scale));
+
+	r_rect.get_dim(int32_t(center_x), int32_t(center_y) - h * scale, (w*scale), (h*scale));
+
 }
 
 

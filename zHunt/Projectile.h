@@ -10,5 +10,5 @@ struct Projectile {
 
 	Vec2 location;
 	Vec2 direction;
-	float speed = 1.2f;
+	float speed = 0.13f;
 };

@@ -1,0 +1,8 @@
+faster_recoil-0001,0,0,44,44
+faster_recoil-0002,0,45,44,44
+faster_recoil-0003,45,0,44,44
+faster_recoil-0004,45,45,44,44
+faster_recoil-0005,0,90,44,44
+faster_recoil-0006,45,90,44,44
+faster_recoil-0007,90,0,44,44
+faster_recoil-0008,90,45,44,44

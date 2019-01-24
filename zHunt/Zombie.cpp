@@ -15,8 +15,8 @@ void Zombie::look_at_vec(Vec2 pos)
 #define PI 3.14159265
 
 		// we determine the vector between the mouse position and the location of the character
-		float dx = ((pos.x - camera_offset.x) * 128) - ((location.x - camera_offset.x) * 128);
-		float dy = ((pos.y - camera_offset.y) * 128) - ((location.y - camera_offset.y) * 128);
+		float dx = (pos.x * 128) - (location.x * 128);
+		float dy = (pos.y * 128) - (location.y * 128);
 		//	pge->DrawLine(pge->GetMouseX(), pge->GetMouseY(), (location.x - camera_offset.x) * 128, (location.y - camera_offset.y) * 128, olc::RED);
 
 
@@ -59,7 +59,7 @@ void Zombie::look_at_vec(Vec2 pos)
 
 void Zombie::move_towards_vec(Vec2 goal)
 {
-	Vec2 go_to = ((goal - Vec2{ camera_offset.x, camera_offset.y }) - (location - Vec2{ camera_offset.x, camera_offset.y })).Normalize();
+	Vec2 go_to = (goal - location).Normalize();
 	location += go_to * eTime * speed;
 
 	if (old_location != location)
@@ -69,6 +69,8 @@ void Zombie::move_towards_vec(Vec2 goal)
 
 	look_at_vec(goal);
 }
+
+
 
 bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 {

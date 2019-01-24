@@ -27,6 +27,7 @@ public:
 
 	//tool functions
 	Vec2 placeInCenter() const;
+	void sort_actors_by_height();
 
 	//getters
 	float getWinWidth()	const;

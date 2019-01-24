@@ -29,10 +29,11 @@ int main()
 	paths.push_back({ "sprites\\zombie\\hit\\z_hit.txt" });
 	paths.push_back({ "sprites\\zombie\\idle\\z_idle.txt" });
 	paths.push_back({ "sprites\\zombie\\walk\\z_walk.txt" });
-	
+
 	actors_mapping.push_back(paths);
 	paths.clear();
 
+	
 
 	zHunt game (actors_mapping);
 	if (game.Construct(int (game.getWinWidth()), int (game.getWinHeight()), 1, 1))
