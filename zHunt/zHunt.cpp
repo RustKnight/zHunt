@@ -5,7 +5,7 @@
 //DONE box hit detection
 //DONE bullet pixel-level-hit detection
 //DONE hit splatter animation ///!!! maybe darker blood color and less animation sequences ; also, alternate splat animations
-// creatures HP/Death/stay static
+//DONE creatures HP/Death/stay static
 // pushback on hit ?
 // zombie attack when near
 // fire animation
@@ -92,12 +92,6 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 		vBullets.push_back( Projectile{ rifleman.get_location(), rifleman.get_fire_angle() });
 
 
-	for (Projectile& p : vBullets) {
-		// if (p.hit_body) {vBullets.erase(vec.begin() + indice); continue;}
-		p.location = p.location + (p.direction * p.speed * fElapsedTime);
-		FillCircle((p.location.x - camera.get_offset().x) * 128, (p.location.y - camera.get_offset().y) * 128, 1, olc::BLACK);
-	}
-
 	for (Zombie& z : vZombies) {
 		z.update(fElapsedTime, camera.get_offset());
 		if (toggle_hunger) z.move_towards_vec (rifleman.get_location());
@@ -111,9 +105,23 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 					z.shot = true;
 					z.hp -= 5 + rand() % 5;
 					cout << z.hp << endl;
+
+						p.body_hit_times = p.body_hit_times + 1;
 				}
 			}
 	}
+
+
+	for (int i = 0; i < vBullets.size(); ++i) {
+		if (vBullets[i].body_hit_times > 0 || vBullets[i].location.x > map.get_width() || vBullets[i].location.y > map.get_height()) {
+			vBullets.erase(vBullets.begin() + i);
+			continue;
+		}
+		// if (p.hit_body) {vBullets.erase(vec.begin() + indice); continue;}
+		vBullets[i].location = vBullets[i].location + (vBullets[i].direction * vBullets[i].speed * fElapsedTime);
+		FillCircle((vBullets[i].location.x - camera.get_offset().x) * 128, (vBullets[i].location.y - camera.get_offset().y) * 128, 1, olc::BLACK);
+	}
+
 
 	// draw dead actors first
 	for (Actor* a : vActors)
@@ -126,7 +134,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 		if (a->alive)
 			a->draw();
 
-
+	// renders candidates for splat effect
 	effect.render_effect(this, fElapsedTime, camera.get_offset());
 
 	return true;

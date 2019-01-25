@@ -7,8 +7,10 @@ struct Projectile {
 		location {location_in}, direction { direction_in }
 	{}
 
+	
 
 	Vec2 location;
 	Vec2 direction;
+	int body_hit_times = 0;
 	float speed = 7.13f;
 };

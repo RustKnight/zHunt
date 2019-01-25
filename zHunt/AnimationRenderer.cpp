@@ -96,7 +96,7 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 			if (end_lock)
 				play_seq = num_sequences - 1;
 		}
-	//	cout << play_seq << endl;
+	
 
 
 	requested_sqn = anm_hdl.get_coords(action, facing, int(play_seq));
