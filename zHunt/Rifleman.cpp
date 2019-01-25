@@ -31,7 +31,7 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off)
 
 
 	if (pge->GetKey(olc::R).bPressed)
-		renderer.request_animation(RELOAD, vSpriteSheetPointers[RELOAD], 0, 0, 0, 0, 3.0f);
+		renderer.request_animation(RELOAD, vSpriteSheetPointers[RELOAD], 0, 0, 0, 0, 0, 3.0f);
 	else if (pge->GetKey(olc::K).bPressed) {
 		//	renderer.request_animation(SMOKE, 0, 0, 1, 1, 1.0f);  smoke not yet implemented
 	}
@@ -41,19 +41,19 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off)
 	if (old_location != location) {
 
 		if (walking_backwards()) {
-			renderer.request_animation(WALK, vSpriteSheetPointers[WALK], INTERRUPTABLE, REVERSED, NOT_LOOPED, NOT_BACK_FORTH, 4.0f);
+			renderer.request_animation(WALK, vSpriteSheetPointers[WALK], INTERRUPTABLE, REVERSED, NOT_LOOPED, NOT_BACK_FORTH, 0, 4.0f);
 			speed = 0.32f;
 			//cout << speed << endl;
 		}
 
 		else {
 			if (!pge->GetKey(olc::SHIFT).bHeld) {
-				renderer.request_animation(WALK, vSpriteSheetPointers[WALK], 1, 0, 0, 0, 6.5f);
+				renderer.request_animation(WALK, vSpriteSheetPointers[WALK], 1, 0, 0, 0, 0, 6.5f);
 				speed = 0.8f;
 				//cout << speed << endl;
 			}
 			else {
-				renderer.request_animation(RUN, vSpriteSheetPointers[RUN], 1, 0, 0, 0, 9.5f);
+				renderer.request_animation(RUN, vSpriteSheetPointers[RUN], 1, 0, 0, 0, 0, 9.5f);
 				speed = 1.300f;
 				//cout << speed << endl;
 			}
@@ -61,15 +61,20 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off)
 	}
 
 	else if (pge->GetMouse(1).bHeld) {
-		renderer.request_animation(AIM, vSpriteSheetPointers[AIM], 1, 0, 1, 0, 3.0f);
+		renderer.request_animation(AIM, vSpriteSheetPointers[AIM], 1, 0, 1, 0, 0, 3.0f);
 
 		if (pge->GetMouse(0).bPressed) {
-			renderer.request_animation(FIRE, vSpriteSheetPointers[FIRE], 0, 0, 0, 0, 4.5f);
+			renderer.request_animation(FIRE_SLOW, vSpriteSheetPointers[FIRE_SLOW], 0, 0, 0, 0, 0, 15.5f);
+			fired = true;
+		}
+
+		else if (pge->GetMouse(2).bHeld) {
+			renderer.request_animation(FIRE_FAST, vSpriteSheetPointers[FIRE_FAST], 0, 0, 0, 0, 0, 15.5f);
 			fired = true;
 		}
 	}
 	else 
-		renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 1.5f);
+		renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 0, 1.5f);
 
 
 	return fired;

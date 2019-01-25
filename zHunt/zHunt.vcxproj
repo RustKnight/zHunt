@@ -161,6 +161,7 @@
     <ClInclude Include="AnimationHandler.h" />
     <ClInclude Include="AnimationRenderer.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Effect.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="olcPGEX_Sound.h" />
     <ClInclude Include="olcPixelGameEngine.h" />

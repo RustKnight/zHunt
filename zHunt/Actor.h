@@ -52,16 +52,19 @@ public:
 	facings lookAtMouse();
 	bool walking_backwards();
 	void become_player(bool toggle);
+	bool shot = false;
 
 	Vec2 get_location() const;
 
 
 	AnimationRenderer renderer;
-private:
+	int hp;
+	bool alive;
 	
 	
 protected:
 	bool isPlayer;
+	
 
 	Vec2 location;
 	Vec2 old_location;
@@ -77,7 +80,5 @@ protected:
 	olc::PixelGameEngine* pge;
 
 	facings facing;
-
-	int hp;
 };
 

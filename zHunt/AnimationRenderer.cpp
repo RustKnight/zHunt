@@ -1,7 +1,7 @@
 #include "AnimationRenderer.h"
 
 
-void AnimationRenderer::request_animation(int act, olc::Sprite* spr_in, bool interruptable, bool reversed_in, bool loop_in, bool back_and_forth, float speed)
+void AnimationRenderer::request_animation(int act, olc::Sprite* spr_in, bool interruptable, bool reversed_in, bool loop_in, bool back_and_forth, bool end_lock_in, float speed)
 {
 	// 0 = Walk, 1 = Run; moving always cancels whatever anim you're playing
 
@@ -16,6 +16,7 @@ void AnimationRenderer::request_animation(int act, olc::Sprite* spr_in, bool int
 			loop = loop_in;
 			back_forth = back_and_forth;
 			anim_speed = speed;
+			end_lock = end_lock_in;
 
 			increasing = !increasing;
 		}
@@ -29,6 +30,7 @@ void AnimationRenderer::request_animation(int act, olc::Sprite* spr_in, bool int
 			loop = loop_in;
 			back_forth = back_and_forth;
 			anim_speed = speed;
+			end_lock = end_lock_in;
 
 			if (reversed) {
 				play_seq = float (anm_hdl.get_sqn_size(action, facing));
@@ -65,7 +67,7 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 
 	int num_sequences = anm_hdl.get_sqn_size(action, facing);
 
-//	cout << "increasing: " << increasing << endl;
+
 		if (increasing)
 			play_seq += eTime * anim_speed;
 		else
@@ -88,8 +90,11 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 			else if (reversed)
 				play_seq = num_sequences - 0.000001f;
 
-			if (!loop && !back_forth) //one time
-				task_done = true; // could have used allow_interrupt as bool, but chose another for clarity
+			if (!loop && !back_forth && !end_lock) //one time
+				task_done = true; 
+
+			if (end_lock)
+				play_seq = num_sequences - 1;
 		}
 	//	cout << play_seq << endl;
 
@@ -113,23 +118,12 @@ bool AnimationRenderer::check_collision(Projectile & bullet)
 	
 
 	if ((y > r_rect.top && y < r_rect.bottom) && (x > r_rect.left && x < r_rect.right)) {
-
-		pge->FillRect(0, 0, requested_sqn.w * 2, requested_sqn.h * 2, olc::BLACK);
-		pge->DrawPartialSprite(0, 0, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 2);
-
-		if (int(pge->pDrawTarget->GetPixel(x - r_rect.left, y - r_rect.top).r) > 0) {
-			pge->DrawCircle(x - r_rect.left, y - r_rect.top, 1, olc::RED);
-			return true;
-		}
-		else
-			pge->DrawCircle(x - r_rect.left, y - r_rect.top, 1, olc::BLUE);
-
-
 		colliding = true;
+		return true;
 	}
 	else
 		colliding = false;
-
+		return false;
 }
 
 
@@ -159,10 +153,10 @@ void AnimationRenderer::draw_centered(float x, float y, olc::Sprite * spr, int32
 		pge->DrawPartialSprite_BottomUp(int32_t(center_x), int32_t(center_y), spr, ox, oy, w, h, scale);
 
 
-	if (!colliding)
-		pge->DrawRect(center_x, center_y - h*scale, w * scale, h * scale, olc::BLACK);
-	else
-		pge->DrawRect(center_x, center_y - h * scale, w * scale, h * scale, olc::RED);
+	//if (!colliding)
+	//	pge->DrawRect(center_x, center_y - h*scale, w * scale, h * scale, olc::BLACK);
+	//else
+	//	pge->DrawRect(center_x, center_y - h * scale, w * scale, h * scale, olc::RED);
 	
 
 	//pge->FillCircle(400, 300, 2, olc::RED);

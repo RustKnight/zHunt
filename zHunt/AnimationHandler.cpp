@@ -122,6 +122,12 @@ void AnimationHandler::load_mapping_info(vector<string>& vec) {
 	a3d_mapping_data = animations;
 }
 
+void AnimationHandler::load_mapping_info_string(string s)
+{
+	odd_mapping.push_back(s);
+	load_mapping_info(odd_mapping);
+}
+
 
 bool AnimationHandler::facings_entry_loaded(char ch)
 {

@@ -6,7 +6,7 @@ void Zombie::randomize_stats(float speed_in)
 	speed = speed_in;
 	location.x = rand() % 16;
 	location.y = rand() % 10;
-	
+	random_death_anim = rand() % 8;
 }
 
 void Zombie::look_at_vec(Vec2 pos)
@@ -59,21 +59,32 @@ void Zombie::look_at_vec(Vec2 pos)
 
 void Zombie::move_towards_vec(Vec2 goal)
 {
-	Vec2 go_to = (goal - location).Normalize();
-	location += go_to * eTime * speed;
+	if (alive) {
+		Vec2 go_to = (goal - location).Normalize();
+		location += go_to * eTime * speed;
 
-	if (old_location != location)
-		renderer.request_animation(WALK, vSpriteSheetPointers[WALK], 1, 0, 0, 0, speed * 30.0f);
-	else
-		renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, speed * 5.0f);
+		if (old_location != location)
+			renderer.request_animation(WALK, vSpriteSheetPointers[WALK], 1, 0, 0, 0, 0, speed * 30.0f);
+		else
+			renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 0, speed * 5.0f);
 
-	look_at_vec(goal);
+		look_at_vec(goal);
+	}
+
+	else {
+		facing = facings (random_death_anim);
+		renderer.request_animation(DIE, vSpriteSheetPointers[DIE], 0, 0, 0, 0, 1, 13.5f);
+	}
 }
 
 
 
 bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 {
+	if (hp < 0) 
+		alive = false;
+		
+	
 	eTime = fElapTm;
 	old_location = location;
 
@@ -93,7 +104,7 @@ bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 
 
 		if (pge->GetKey(olc::I).bPressed)
-			renderer.request_animation(DIE, vSpriteSheetPointers[DIE], 0, 0, 0, 0, 13.5f);
+			renderer.request_animation(DIE, vSpriteSheetPointers[DIE], 0, 0, 0, 0, 0, 13.5f);
 	}
 
 

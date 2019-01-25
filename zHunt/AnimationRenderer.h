@@ -45,6 +45,12 @@ private:
 class AnimationRenderer {
 public:
 
+	AnimationRenderer(olc::PixelGameEngine* pge_in)
+		: pge{ pge_in },
+		action{ 0 }, facing{ 0 }, play_seq{ 0 }, eTime{ 0 },
+		task_done{ false }, loop{ true }, allow_interrupt{ true }
+	{}
+
 	AnimationRenderer (olc::PixelGameEngine* pge_in, std::vector<std::string>& paths)
 		:	pge {pge_in}, 
 			anm_hdl{ paths },
@@ -52,17 +58,18 @@ public:
 			task_done{false}, loop {true}, allow_interrupt {true}
 	{}
 
-	void request_animation(int act, olc::Sprite* spr_in, bool interruptable, bool reversed, bool loop_in, bool back_and_forth, float speed);
+	void request_animation(int act, olc::Sprite* spr_in, bool interruptable, bool reversed, bool loop_in, bool back_and_forth, bool end_lock_in, float speed);
 	void update_and_play(float& elapT, const Vec2& loc, int face);
 
 
 	void get_spr_ptr(olc::Sprite* spr_in);
 	void update_offset(const Vec2& offset);
 	bool check_collision(Projectile& bullet);
+	AnimationHandler effects_handler;
+	olc::Sprite* effects_sprite_sheet;
 
 private:
-	void draw_centered(float x, float y, olc::Sprite* spr, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale, bool mirrored_x);
-	
+	void draw_centered(float x, float y, olc::Sprite* spr, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale, bool mirrored_x);	
 
 private:
 	static constexpr int sqn_size = 8; // this is the greatest number of sequences of any given animation
@@ -81,6 +88,7 @@ private:
 	bool loop;
 	bool increasing;
 	bool reversed;
+	bool end_lock;
 
 	olc::PixelGameEngine* pge;
 	olc::Sprite* spr;

@@ -25,9 +25,13 @@ public:
 
 	const spr_sqn& get_coords(int anim, int face, int sqn) const;
 	const int get_sqn_size(int anim, int face) const;
+	void load_mapping_info(vector<string>& vec);
+	void load_mapping_info_string(string s);
+
+
 
 private:
-	void load_mapping_info(vector<string>& vec);
+	
 	bool facings_entry_loaded(char ch);
 
 
@@ -37,4 +41,5 @@ private:
 	bool read_facings_order = false;
 	vector<vector<vector <spr_sqn>>> a3d_mapping_data;
 	vector <int> facings_order_spritesheet;
+	vector <string> odd_mapping;
 };

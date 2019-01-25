@@ -8,13 +8,15 @@
 #include "Vec2.h"
 #include "Value_checker.h"
 
+
 #include "Actor.h"
 #include "Zombie.h"
 #include "Rifleman.h"
 #include "Projectile.h"
 #include "Map.h"
 #include "Camera.h"
-
+#include "AnimationHandler.h"
+#include "Effect.h"
 
 
 class zHunt : public olc::PixelGameEngine
@@ -28,6 +30,7 @@ public:
 	//tool functions
 	Vec2 placeInCenter() const;
 	void sort_actors_by_height();
+	void draw_effect_on_actor(Actor& actor);
 
 	//getters
 	float getWinWidth()	const;
@@ -48,6 +51,8 @@ private:
 
 	vector<Zombie> vZombies;
 	vector<Actor*> vActors;
+	
 	vector<Projectile> vBullets;
 	Value_checker VC;
+	Effect effect;
 };
