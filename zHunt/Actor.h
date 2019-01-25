@@ -8,7 +8,7 @@
 #include "AnimationHandler.h"
 #include "spr_sqn.h"
 #include "Value_checker.h"
-
+#include "RectF.h"
 
 
 class Actor {

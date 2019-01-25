@@ -31,7 +31,7 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off)
 
 
 	if (pge->GetKey(olc::R).bPressed)
-		renderer.request_animation(RELOAD, vSpriteSheetPointers[RELOAD], 0, 0, 0, 0, 0, 3.0f);
+		renderer.request_animation(RELOAD, vSpriteSheetPointers[RELOAD], 0, 0, 0, 0, 0, 1.5f);
 	else if (pge->GetKey(olc::K).bPressed) {
 		//	renderer.request_animation(SMOKE, 0, 0, 1, 1, 1.0f);  smoke not yet implemented
 	}
@@ -64,12 +64,12 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off)
 		renderer.request_animation(AIM, vSpriteSheetPointers[AIM], 1, 0, 1, 0, 0, 3.0f);
 
 		if (pge->GetMouse(0).bPressed) {
-			renderer.request_animation(FIRE_SLOW, vSpriteSheetPointers[FIRE_SLOW], 0, 0, 0, 0, 0, 15.5f);
+			renderer.request_animation(FIRE, vSpriteSheetPointers[FIRE], 0, 0, 0, 0, 0, 15.5f);
 			fired = true;
 		}
 
 		else if (pge->GetMouse(2).bHeld) {
-			renderer.request_animation(FIRE_FAST, vSpriteSheetPointers[FIRE_FAST], 0, 0, 0, 0, 0, 15.5f);
+			renderer.request_animation(FIRE, vSpriteSheetPointers[FIRE], 0, 0, 0, 0, 0, 15.5f);
 			fired = true;
 		}
 	}
@@ -87,3 +87,4 @@ Vec2 Rifleman::get_fire_angle() const
 
 	return Vec2{ dx, dy }.Normalize();
 }
+

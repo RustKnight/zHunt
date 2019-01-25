@@ -12,10 +12,10 @@ public:
 	static RectF fromCenter(Vec2 center, float halfWidth, float halfHeight);
 	Vec2 getCenter() const;
 
+	Vec2 location;
 public:
 	float left;
 	float right;
 	float top;
 	float bottom;
-
 };

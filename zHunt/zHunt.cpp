@@ -6,13 +6,14 @@
 //DONE bullet pixel-level-hit detection
 //DONE hit splatter animation ///!!! maybe darker blood color and less animation sequences ; also, alternate splat animations
 //DONE creatures HP/Death/stay static
-// pushback on hit ?
-// zombie attack when near
-// fire animation
+//DONE fire animation
+// pushback on hit// animation of zombie being hit
+// zombie attack when near // pass for zombies to follow location and rectangle struct for them to check if near
 // cursor hide, cursor-while-moving, cursor-while-aiming
 // new terrain might be added via GRID edit in asprite, facilitates 8 direction grid creation
 // stamina + deplete when running OR
 // when pushing back
+// minimap ?
 
 zHunt::zHunt(vector <vector<string>>& paths) :
 	winWidth { 768.0f},
@@ -29,7 +30,7 @@ zHunt::zHunt(vector <vector<string>>& paths) :
 bool zHunt::OnUserCreate() 
 {
 
-	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\aim\\aim_temp.png");
+	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\aim\\r_aim.png");
 	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\climb\\r_climb.png");
 	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\idle\\r_idle.png");
 	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\pick\\r_pick.png");
@@ -37,8 +38,7 @@ bool zHunt::OnUserCreate()
 	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\walk\\r_walk.png");
 	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\fire\\r_fire.png");
 	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\reload\\r_reload.png");
-	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\fire\\fire_slow.png");
-	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\fire\\fire_faster.png");
+
 											 
 	zombie.load_spr_sheet("sprites\\zombie\\attack\\z_attack.png");
 	zombie.load_spr_sheet("sprites\\zombie\\die\\z_die.png");
@@ -129,13 +129,18 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 			a->draw();
 
 	// draw alive actors by height
-	sort_actors_by_height();
-	for (Actor* a : vActors)
+	sort_actors_by_height(); 
+	for (Actor* a : vActors) {
 		if (a->alive)
 			a->draw();
 
+		//FillCircle( (a->get_location().x - camera.get_offset().x)  * 128, (a->get_location().y - camera.get_offset().y) * 128, 3, olc::RED);
+	}
+
 	// renders candidates for splat effect
 	effect.render_effect(this, fElapsedTime, camera.get_offset());
+
+
 
 	return true;
 }

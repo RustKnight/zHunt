@@ -63,6 +63,8 @@ void Zombie::move_towards_vec(Vec2 goal)
 		Vec2 go_to = (goal - location).Normalize();
 		location += go_to * eTime * speed;
 
+	
+
 		if (old_location != location)
 			renderer.request_animation(WALK, vSpriteSheetPointers[WALK], 1, 0, 0, 0, 0, speed * 30.0f);
 		else

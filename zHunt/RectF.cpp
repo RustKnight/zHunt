@@ -17,7 +17,9 @@ RectF::RectF(Vec2 top_left, Vec2 in_bottom) :
 
 RectF::RectF(Vec2 top_left, float width, float height) :
 	RectF(top_left, top_left + Vec2 {width, height})
-{}
+{
+	location = top_left;
+}
 
 
 
