@@ -92,6 +92,7 @@ bool Zombie::check_collision(Projectile & bullet)
 	RenderRect r_rect = renderer.get_render_rect();
 
 	if ((y > r_rect.top && y < r_rect.bottom) && (x > r_rect.left && x < r_rect.right)) {
+		hp -= 5 + rand() % 5;
 		return true;
 	}
 	else

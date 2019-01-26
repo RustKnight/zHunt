@@ -99,15 +99,12 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 		for (Projectile& p : vBullets)
 			if (z.check_collision(p)) {
-			
+
 				if (z.shot == false && z.alive) {
 					EffectOnActorPointer ac{ &z };
 					effect.vEff_struct.push_back(ac);
 					z.shot = true;
-					z.hp -= 5 + rand() % 5;
-					cout << z.hp << endl;
-
-						p.body_hit_times = p.body_hit_times + 1;
+					p.body_hit_times++;
 				}
 			}
 	}
