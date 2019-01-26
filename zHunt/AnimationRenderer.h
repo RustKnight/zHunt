@@ -35,6 +35,7 @@ public:
 	void request_animation(int act, olc::Sprite* spr_in, bool interruptable, bool reversed, bool loop_in, bool back_and_forth, bool end_lock_in, float speed);
 	void update_and_play(float& elapT, const Vec2& loc, int face);
 
+	int get_current_anim() const;
 	void get_spr_ptr(olc::Sprite* spr_in);
 	void update_offset(const Vec2& offset);
 	AnimationHandler effects_handler;

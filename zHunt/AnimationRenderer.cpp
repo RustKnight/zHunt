@@ -5,7 +5,7 @@ void AnimationRenderer::request_animation(int act, olc::Sprite* spr_in, bool int
 {
 	// 0 = Walk, 1 = Run; moving always cancels whatever anim you're playing
 
-	if (allow_interrupt || task_done || act == 4 || act == 5) {	// check if we should allow incoming animation // WARNING hardcoded exceptions, for walk and run // basically move animations
+	if (allow_interrupt || task_done || act == 4 || act == 5) {	// check if we should allow incoming animation // WARNING hardcoded exceptions, for walk and run // basically move animations, or death anim
 	
 		if (act == action && reversed != reversed_in) {
 
@@ -114,6 +114,11 @@ RenderRect AnimationRenderer::get_render_rect() const
 }
 
 
+
+int AnimationRenderer::get_current_anim() const
+{
+	return action;
+}
 
 void AnimationRenderer::get_spr_ptr(olc::Sprite* spr_in)
 {

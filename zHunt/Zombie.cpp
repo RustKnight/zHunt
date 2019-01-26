@@ -1,6 +1,8 @@
 #include "Zombie.h"
 
 
+
+
 void Zombie::randomize_stats(float speed_in)
 {
 	speed = speed_in;
@@ -59,11 +61,11 @@ void Zombie::look_at_vec(Vec2 pos)
 
 void Zombie::move_towards_vec(Vec2 goal)
 {
-	if (alive) {
+
+	if (alive && renderer.get_current_anim() != HIT) {
 		Vec2 go_to = (goal - location).Normalize();
 		location += go_to * eTime * speed;
 
-	
 
 		if (old_location != location)
 			renderer.request_animation(WALK, vSpriteSheetPointers[WALK], 1, 0, 0, 0, 0, speed * 30.0f);
@@ -79,25 +81,29 @@ void Zombie::move_towards_vec(Vec2 goal)
 	}
 }
 
+void Zombie::is_hit()
+{	
+	hp -= 5 + rand() % 5;
+
+	if (hp < 0)
+		alive = false;
+
+	if (alive)
+		renderer.request_animation(HIT, vSpriteSheetPointers[HIT], 0, 0, 0, 0, 0, 11.5f);
+}
+
 bool Zombie::check_collision(Projectile & bullet)
 {
-
-	//pge->GetDrawTarget()->GetPixel(x, y);  friendly way of getting pixel on screen
-	// seems that only last bullet triggers collision
-	// warning - bullet seems to change direction if target also moved , not a problem for 1 hit bullets
 
 	int x = (bullet.location.x - camera_offset.x) * 128;
 	int y = (bullet.location.y - camera_offset.y) * 128;
 
 	RenderRect r_rect = renderer.get_render_rect();
 
-	if ((y > r_rect.top && y < r_rect.bottom) && (x > r_rect.left && x < r_rect.right)) {
-		hp -= 5 + rand() % 5;
+	if ((y > r_rect.top && y < r_rect.bottom) && (x > r_rect.left && x < r_rect.right)) 
 		return true;
-	}
 	else
 		return false;
-
 }
 
 void Zombie::stay()
@@ -109,10 +115,7 @@ void Zombie::stay()
 
 
 bool Zombie::update(float fElapTm, const Vec2 & cam_off)
-{
-	if (hp < 0) 
-		alive = false;
-		
+{	
 	
 	eTime = fElapTm;
 	old_location = location;

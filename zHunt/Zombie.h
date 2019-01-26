@@ -16,15 +16,15 @@ public:
 		alive = true;
 	}
 
-
+public:
 	void randomize_stats(float speed_in);
 	void look_at_vec(Vec2 pos);
 	void move_towards_vec(Vec2 goal);
 	bool check_collision(Projectile & bullet);
 	void stay();
-
-public:
-	bool update(float fElapTm, const Vec2& cam_off) override ;
+	bool update(float fElapTm, const Vec2& cam_off) override;
+	void is_hit();
+	
 
 private:
 	float speed;	

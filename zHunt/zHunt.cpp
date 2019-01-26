@@ -14,6 +14,7 @@
 // stamina + deplete when running OR
 // when pushing back
 // minimap ?
+// zombie rotate speed - move towards goal, only if facing is correct, takes time to turn around depending on their speed
 
 zHunt::zHunt(vector <vector<string>>& paths) :
 	winWidth { 768.0f},
@@ -99,6 +100,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 		for (Projectile& p : vBullets)
 			if (z.check_collision(p)) {
+				z.is_hit();
 
 				if (z.shot == false && z.alive) {
 					EffectOnActorPointer ac{ &z };
