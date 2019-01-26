@@ -15,8 +15,8 @@ void Zombie::look_at_vec(Vec2 pos)
 #define PI 3.14159265
 
 		// we determine the vector between the mouse position and the location of the character
-		float dx = (pos.x * 128) - (location.x * 128);
-		float dy = (pos.y * 128) - (location.y * 128);
+		float dx = (pos.x - location.x) * 128;
+		float dy = (pos.y - location.y) * 128;
 		//	pge->DrawLine(pge->GetMouseX(), pge->GetMouseY(), (location.x - camera_offset.x) * 128, (location.y - camera_offset.y) * 128, olc::RED);
 
 
@@ -79,6 +79,32 @@ void Zombie::move_towards_vec(Vec2 goal)
 	}
 }
 
+bool Zombie::check_collision(Projectile & bullet)
+{
+
+	//pge->GetDrawTarget()->GetPixel(x, y);  friendly way of getting pixel on screen
+	// seems that only last bullet triggers collision
+	// warning - bullet seems to change direction if target also moved , not a problem for 1 hit bullets
+
+	int x = (bullet.location.x - camera_offset.x) * 128;
+	int y = (bullet.location.y - camera_offset.y) * 128;
+
+	RenderRect r_rect = renderer.get_render_rect();
+
+	if ((y > r_rect.top && y < r_rect.bottom) && (x > r_rect.left && x < r_rect.right)) {
+		return true;
+	}
+	else
+		return false;
+
+}
+
+void Zombie::stay()
+{
+	location = old_location;
+	renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 0, speed * 5.0f);
+}
+
 
 
 bool Zombie::update(float fElapTm, const Vec2 & cam_off)
@@ -108,6 +134,8 @@ bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 		if (pge->GetKey(olc::I).bPressed)
 			renderer.request_animation(DIE, vSpriteSheetPointers[DIE], 0, 0, 0, 0, 0, 13.5f);
 	}
+
+
 
 
 	return 0;

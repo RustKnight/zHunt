@@ -18,7 +18,7 @@
 zHunt::zHunt(vector <vector<string>>& paths) :
 	winWidth { 768.0f},
 	winHeight{ 640.0f },
-	rifleman{ Vec2 {1.0f, 1.0f}, this, paths[0] },
+	rifleman{ Vec2 {7.0f, 5.0f}, this, paths[0] },
 	zombie{ Vec2{ 5.0f, 5.0f }, this, paths[1] },
 	camera {this, &map, getWinWidth(), getWinHeight()}
 {
@@ -52,10 +52,10 @@ bool zHunt::OnUserCreate()
 
 	unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
 	std::default_random_engine e(seed);
-	std::uniform_real_distribution <float> distR(0.1f, 0.6f);
+	std::uniform_real_distribution <float> distR(0.1f, 0.4f);
 
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 25; i++) {
 		vZombies.push_back(zombie);
 		vZombies[i].randomize_stats(distR(e) );
 	}
@@ -94,10 +94,11 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 	for (Zombie& z : vZombies) {
 		z.update(fElapsedTime, camera.get_offset());
-		if (toggle_hunger) z.move_towards_vec (rifleman.get_location());
+		z.move_towards_vec (rifleman.get_location());
+		if (toggle_hunger) z.stay();
 
 		for (Projectile& p : vBullets)
-			if (z.renderer.check_collision(p)) {
+			if (z.check_collision(p)) {
 			
 				if (z.shot == false && z.alive) {
 					EffectOnActorPointer ac{ &z };

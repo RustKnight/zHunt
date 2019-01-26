@@ -107,23 +107,10 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 	//cout << play_seq << endl;
 }
 
-bool AnimationRenderer::check_collision(Projectile & bullet)
+
+RenderRect AnimationRenderer::get_render_rect() const
 {
-	//pge->GetDrawTarget()->GetPixel(x, y);  friendly way of getting pixel on screen
-	// seems that only last bullet triggers collision
-	// warning - bullet seems to change direction if target also moved , not a problem for 1 hit bullets
-
-	int x = (bullet.location.x - off_set.x) * 128;
-	int y = (bullet.location.y - off_set.y) * 128;
-	
-
-	if ((y > r_rect.top && y < r_rect.bottom) && (x > r_rect.left && x < r_rect.right)) {
-		colliding = true;
-		return true;
-	}
-	else
-		colliding = false;
-		return false;
+	return r_rect;
 }
 
 

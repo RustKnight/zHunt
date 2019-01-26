@@ -4,7 +4,7 @@
 #include "spr_sqn.h"
 
 #include "Vec2.h"
-#include "Projectile.h"
+#include "RenderRect.h"
 
 // request parameters should be some enums so they don't use magic numbers like 0, 1, etc.
 
@@ -14,32 +14,6 @@
 // WARNING - CURRENTLY RENDERER IS CALIBRATED FOR SPRITES THAT NEED MIRRORING TO COMPENSATE FOR INCOMPLETE FACINGS
 // ZOMBIE WILL HAVE ALL 8 FACINGS
 
-struct RenderRect {
-
-	void get_dim (int xx, int yy, int wwidth, int hheight) {
-
-		x = xx;
-		y = yy;
-		width = wwidth;
-		height = hheight;
-
-		top = y;
-		bottom = y + height;
-		left = x;
-		right = x + width;
-	}
-
-	int top = 0;
-	int bottom = 0;
-	int left = 0;
-	int right = 0;
-
-private:
-	int x = 0;
-	int y = 0;
-	int width = 0;
-	int height = 0;	
-};
 
 
 class AnimationRenderer {
@@ -63,9 +37,10 @@ public:
 
 	void get_spr_ptr(olc::Sprite* spr_in);
 	void update_offset(const Vec2& offset);
-	bool check_collision(Projectile& bullet);
 	AnimationHandler effects_handler;
 	olc::Sprite* effects_sprite_sheet;
+	RenderRect get_render_rect() const;
+
 
 private:
 	void draw_centered(float x, float y, olc::Sprite* spr, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale, bool mirrored_x);	
