@@ -18,6 +18,7 @@ Actor::facings Actor::lookAtMouse(){
 	float dy = pge->GetMouseY() - ((location.y - camera_offset.y) * 128);
 //	pge->DrawLine(pge->GetMouseX(), pge->GetMouseY(), (location.x - camera_offset.x) * 128, (location.y - camera_offset.y) * 128, olc::RED);
 
+	
 
 	float angle = atan2(dy,dx);
 	angle = (roundf (angle / ((2 * PI) / 8) + 4) );
@@ -55,6 +56,11 @@ Actor::facings Actor::lookAtMouse(){
 	return facings(int (angle) );
 }
 
+void Actor::changeFacing(facings face)
+{
+	facing = face;
+}
+
 bool Actor::walking_backwards()
 {
 	mouse_to_player_distance.x = pge->GetMouseX() - (location.x - camera_offset.x) * 128;
@@ -82,6 +88,30 @@ void Actor::take_damage(int damage)
 void Actor::become_player(bool toggle)
 {
 	isPlayer = toggle;
+}
+
+void Actor::moveUp()
+{
+	moving = true;
+	location.y -= eTime * speed;	
+}
+
+void Actor::moveDown()
+{
+	moving = true;
+	location.y += eTime * speed;
+}
+
+void Actor::moveLeft()
+{
+	moving = true;
+	location.x -= eTime * speed;
+}
+
+void Actor::moveRight()
+{
+	moving = true;
+	location.x += eTime * speed;
 }
 
 void Actor::load_assets(vector<string> in_mappings)

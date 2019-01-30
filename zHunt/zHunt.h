@@ -17,6 +17,8 @@
 #include "Camera.h"
 #include "AnimationHandler.h"
 #include "Effect.h"
+#include "Controller.h"
+
 
 
 class zHunt : public olc::PixelGameEngine
@@ -51,6 +53,8 @@ private:
 
 	vector<Zombie*> vZombies;
 	vector<Actor*> vActors;
+	Controller control;
+
 	
 	vector<Projectile> vBullets;
 	Value_checker VC;

@@ -26,7 +26,8 @@ zHunt::zHunt() :
 	winHeight{ 640.0f },
 	rifleman{ Vec2 {7.0f, 5.0f}, this},
 	zombie{ Vec2{ 5.0f, 5.0f }, this},
-	camera {this, &map, getWinWidth(), getWinHeight()}
+	camera {this, &map, getWinWidth(), getWinHeight()},
+	control {this}
 {
 	sAppName = "RustKnight";
 }
@@ -42,8 +43,10 @@ bool zHunt::OnUserCreate()
 	std::default_random_engine e(seed);
 	std::uniform_real_distribution <float> distR(0.1f, 0.4f);
 
+
 	rifleman.load_assets();
-								 
+	Rifleman* rf = new Rifleman{ Vec2{ 7.0f, 4.0f }, this };
+	rf->load_assets();
 
 	for (int i = 0; i < 3; i++) {
 
@@ -59,6 +62,7 @@ bool zHunt::OnUserCreate()
 	rifleman.become_player(1);
 	
 
+	vActors.push_back(rf);
 	vActors.push_back(&rifleman);
 	for (Zombie* z : vZombies)
 		vActors.push_back(z);
@@ -90,10 +94,11 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	if (GetKey(olc::G).bPressed)
 		toggle_hunger = !toggle_hunger;
 	
+	control.control(rifleman);
 
 	if (rifleman.update(fElapsedTime, camera.get_offset()))
 		vBullets.push_back( Projectile{ rifleman.get_location(), rifleman.get_fire_angle() });
-
+	vActors[0]->update(fElapsedTime, camera.get_offset());
 	
 
 	for (Zombie* z : vZombies) {

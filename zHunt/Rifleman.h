@@ -15,9 +15,15 @@ public:
 
 	bool update(float fElapTm, const Vec2& cam_off) override;
 	Vec2 get_fire_angle() const;
+	void reload();
+	void running();
+	void aim();
+	void fire(bool b);
+
 	void load_assets();
 
-
 private:
+	bool fired = false;
+	bool aiming = false;
 	//static constexpr int max_chamber = 5;
 };

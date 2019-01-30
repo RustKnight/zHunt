@@ -50,10 +50,18 @@ public:
 	void draw();
 
 	facings lookAtMouse();
+	void changeFacing(facings face);
 	bool walking_backwards();
 	void take_damage(int damage);
 	void become_player(bool toggle);
 	bool shot = false;
+	bool moving = false;
+	bool running = false;
+
+	void moveUp();
+	void moveDown();
+	void moveLeft();
+	void moveRight();
 
 	void load_assets(vector<string> in_mappings);
 	Vec2 get_location() const;

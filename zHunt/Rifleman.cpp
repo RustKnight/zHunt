@@ -4,79 +4,48 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off)
 {
 	eTime = fElapTm;
 	camera_offset = cam_off;
-	old_location = location;
 	renderer.update_offset(camera_offset);
-	bool fired = false;
+	facing = lookAtMouse();
 
 
-	if (isPlayer && alive) {
 
-		facing = lookAtMouse();
+	if (moving) {
 
-
-		if (pge->GetKey(olc::W).bHeld)
-			location.y -= eTime * speed;
-		if (pge->GetKey(olc::S).bHeld)
-			location.y += eTime * speed;
-		if (pge->GetKey(olc::A).bHeld)
-			location.x -= eTime * speed;
-		if (pge->GetKey(olc::D).bHeld)
-			location.x += eTime * speed;
-
-		//r{ NOT_INTERRUPTABLE, INTERRUPTABLE }
-		//sed{ NOT_REVERESED, REVERSED };
-		//{NOT_LOOPED, LOOPED};
-		//forth{ NOT_BACK_FORTH, BACK_FORTH };
-
-		//{ INTERRUPTABLE, REVERSED, LOOP, BACK_FORTH }
-	}
-
-
-	if (pge->GetKey(olc::R).bPressed)
-		renderer.request_animation(RELOAD, vSpriteSheetPointers[RELOAD], 0, 0, 0, 0, 0, 2.0f);
-	else if (pge->GetKey(olc::K).bPressed) {
-		//	renderer.request_animation(SMOKE, 0, 0, 1, 1, 1.0f);  smoke not yet implemented
-	}
-	
-
-
-	if (old_location != location) {
+		cout << "Moved\n";
 
 		if (walking_backwards()) {
 			renderer.request_animation(WALK, vSpriteSheetPointers[WALK], INTERRUPTABLE, REVERSED, NOT_LOOPED, NOT_BACK_FORTH, 0, 4.0f);
 			speed = 0.32f;
-			//cout << speed << endl;
 		}
 
 		else {
-			if (!pge->GetKey(olc::SHIFT).bHeld) {
+			if (!Actor::running) {
 				renderer.request_animation(WALK, vSpriteSheetPointers[WALK], 1, 0, 0, 0, 0, 6.5f);
 				speed = 0.8f;
-				//cout << speed << endl;
 			}
+
 			else {
 				renderer.request_animation(RUN, vSpriteSheetPointers[RUN], 1, 0, 0, 0, 0, 9.5f);
 				speed = 1.300f;
-				//cout << speed << endl;
 			}
 		}
 	}
 
-	else if (pge->GetMouse(1).bHeld) {
+	else if (fired)
+		renderer.request_animation(FIRE, vSpriteSheetPointers[FIRE], 0, 0, 0, 0, 0, 15.5f);
+
+	else if (aiming) 
 		renderer.request_animation(AIM, vSpriteSheetPointers[AIM], 1, 0, 1, 0, 0, 3.0f);
 
-		if (pge->GetMouse(0).bPressed) {
-			renderer.request_animation(FIRE, vSpriteSheetPointers[FIRE], 0, 0, 0, 0, 0, 15.5f);
-			fired = true;
-		}
-
-		else if (pge->GetMouse(2).bHeld) {
-			renderer.request_animation(FIRE, vSpriteSheetPointers[FIRE], 0, 0, 0, 0, 0, 15.5f);
-			fired = true;
-		}
-	}
-	else 
+	else {
 		renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 0, 1.5f);
+		cout << "STILL\n";
+	}
+
+	old_location = location;			// needed for facing
+	moving = false;
+	Actor::running = false;
+	aiming = false;
 
 
 	return fired;
@@ -88,6 +57,26 @@ Vec2 Rifleman::get_fire_angle() const
 	float dy = pge->GetMouseY() - ((location.y - camera_offset.y) * 128);
 
 	return Vec2{ dx, dy }.Normalize();
+}
+
+void Rifleman::reload()
+{
+	renderer.request_animation(RELOAD, vSpriteSheetPointers[RELOAD], 0, 0, 0, 0, 0, 2.0f);
+}
+
+void Rifleman::running()
+{
+	Actor::running = true;
+}
+
+void Rifleman::aim()
+{
+	aiming = true;
+}
+
+void Rifleman::fire(bool b)
+{
+	fired = b;
 }
 
 void Rifleman::load_assets()
