@@ -92,11 +92,61 @@ void Zombie::is_hit()
 		renderer.request_animation(HIT, vSpriteSheetPointers[HIT], 0, 0, 0, 0, 0, 11.5f);
 }
 
-bool Zombie::check_collision(Projectile & bullet)
+void Zombie::attack_target(Actor& target)
+{
+	renderer.request_animation(ATTACK, vSpriteSheetPointers[ATTACK], 0, 0, 0, 0, 0, 8.0f);
+	
+	target.take_damage(rand() % 5);
+}
+
+bool Zombie::attack_cooldown_over()
+{
+	// if speed of cooldown matches speed of animation - we get synced constant attacks
+	// if a brake between attacks is wanted, then another float that grows slower than att_anim_cd_over should be implemented
+	// if (att_anim_cd_over && att_cd_over) -> attack;
+
+	if ((int)att_cooldown >= renderer.get_animation_seqences_count(ATTACK, facing)) {
+		att_cooldown = 0;
+		return true;
+	}
+
+	return false;
+}
+
+void Zombie::load_assets()
 {
 
-	int x = (bullet.location.x - camera_offset.x) * 128;
-	int y = (bullet.location.y - camera_offset.y) * 128;
+	load_spr_sheet("sprites\\zombie\\attack\\z_attack.png");
+	load_spr_sheet("sprites\\zombie\\die\\z_die.png");
+	load_spr_sheet("sprites\\zombie\\hit\\z_hit.png");
+	load_spr_sheet("sprites\\zombie\\idle\\z_idle.png");
+	load_spr_sheet("sprites\\zombie\\walk\\z_walk.png");
+
+
+	vector <string> map;
+
+	map.push_back({ "sprites\\zombie\\attack\\z_attack.txt" });
+	map.push_back({ "sprites\\zombie\\die\\z_die.txt" });
+	map.push_back({ "sprites\\zombie\\hit\\z_hit.txt" });
+	map.push_back({ "sprites\\zombie\\idle\\z_idle.txt" });
+	map.push_back({ "sprites\\zombie\\walk\\z_walk.txt" });
+
+	Actor::load_assets(map);
+}
+
+bool Zombie::in_range(Vec2 target) const
+{
+	if (check_collision(target))
+		return true;
+
+	return false;
+}
+
+bool Zombie::check_collision(Vec2 location) const
+{
+
+	int x = (location.x - camera_offset.x) * 128;
+	int y = (location.y - camera_offset.y) * 128;
 
 	RenderRect r_rect = renderer.get_render_rect();
 
@@ -123,6 +173,9 @@ bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
 
+	if (att_cooldown < 200.0f)
+		att_cooldown += eTime * 4.0f;
+
 	if (isPlayer) {
 
 		if (pge->GetKey(olc::W).bHeld)
@@ -138,8 +191,6 @@ bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 		if (pge->GetKey(olc::I).bPressed)
 			renderer.request_animation(DIE, vSpriteSheetPointers[DIE], 0, 0, 0, 0, 0, 13.5f);
 	}
-
-
 
 
 	return 0;

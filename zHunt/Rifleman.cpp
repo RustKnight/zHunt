@@ -2,15 +2,17 @@
 
 bool Rifleman::update(float fElapTm, const Vec2 & cam_off)
 {
-	bool fired = false;
 	eTime = fElapTm;
-	old_location = location;
-	facing = lookAtMouse();
-
 	camera_offset = cam_off;
+	old_location = location;
 	renderer.update_offset(camera_offset);
+	bool fired = false;
 
-	if (isPlayer) {
+
+	if (isPlayer && alive) {
+
+		facing = lookAtMouse();
+
 
 		if (pge->GetKey(olc::W).bHeld)
 			location.y -= eTime * speed;
@@ -31,7 +33,7 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off)
 
 
 	if (pge->GetKey(olc::R).bPressed)
-		renderer.request_animation(RELOAD, vSpriteSheetPointers[RELOAD], 0, 0, 0, 0, 0, 1.5f);
+		renderer.request_animation(RELOAD, vSpriteSheetPointers[RELOAD], 0, 0, 0, 0, 0, 2.0f);
 	else if (pge->GetKey(olc::K).bPressed) {
 		//	renderer.request_animation(SMOKE, 0, 0, 1, 1, 1.0f);  smoke not yet implemented
 	}
@@ -86,5 +88,37 @@ Vec2 Rifleman::get_fire_angle() const
 	float dy = pge->GetMouseY() - ((location.y - camera_offset.y) * 128);
 
 	return Vec2{ dx, dy }.Normalize();
+}
+
+void Rifleman::load_assets()
+{
+
+	load_spr_sheet("sprites\\rifleman\\NEW\\aim\\r_aim.png");
+	load_spr_sheet("sprites\\rifleman\\NEW\\climb\\r_climb.png");
+	load_spr_sheet("sprites\\rifleman\\NEW\\idle\\r_idle.png");
+	load_spr_sheet("sprites\\rifleman\\NEW\\pick\\r_pick.png");
+	load_spr_sheet("sprites\\rifleman\\NEW\\run\\r_run.png");
+	load_spr_sheet("sprites\\rifleman\\NEW\\walk\\r_walk.png");
+	load_spr_sheet("sprites\\rifleman\\NEW\\fire\\r_fire.png");
+	load_spr_sheet("sprites\\rifleman\\NEW\\reload\\r_reload.png");
+	load_spr_sheet("sprites\\rifleman\\NEW\\hurt\\r_hurt.png");
+	load_spr_sheet("sprites\\rifleman\\NEW\\die\\r_die.png");
+
+
+	vector <string> mappingData;
+
+	mappingData.push_back({ "sprites\\rifleman\\NEW\\aim\\r_aim.txt" });
+	mappingData.push_back({ "sprites\\rifleman\\NEW\\climb\\r_climb.txt" });
+	mappingData.push_back({ "sprites\\rifleman\\NEW\\idle\\r_idle.txt" });
+	mappingData.push_back({ "sprites\\rifleman\\NEW\\pick\\r_pick.txt" });
+	mappingData.push_back({ "sprites\\rifleman\\NEW\\run\\r_run.txt" });
+	mappingData.push_back({ "sprites\\rifleman\\NEW\\walk\\r_walk.txt" });
+	mappingData.push_back({ "sprites\\rifleman\\NEW\\fire\\r_fire.txt" });
+	mappingData.push_back({ "sprites\\rifleman\\NEW\\reload\\r_reload.txt" });
+	mappingData.push_back({ "sprites\\rifleman\\NEW\\hurt\\r_hurt.txt" });
+	mappingData.push_back({ "sprites\\rifleman\\NEW\\die\\r_die.txt" });
+
+	Actor::load_assets(mappingData);
+
 }
 

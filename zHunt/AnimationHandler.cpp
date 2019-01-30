@@ -3,6 +3,11 @@
 
 const spr_sqn& AnimationHandler::get_coords(int anim, int face, int sqn) const
 {
+	if (a3d_mapping_data[anim][face].size() <= sqn) {
+		cout << "WARNING - animation " << anim << ", facing " << face << ", sequence " << sqn << ", does not exist!\nRandom sqn returned!";
+		return a3d_mapping_data[anim][face][rand() % get_sqn_size(anim, face)];
+	}
+
 	return a3d_mapping_data[anim][face][sqn];
 }
 

@@ -33,13 +33,13 @@ protected:
 public:
 	Actor() = default;
 
-	Actor (Vec2 loc, olc::PixelGameEngine* in_pge, vector<string>& paths):
+	Actor (Vec2 loc, olc::PixelGameEngine* in_pge):
 		isPlayer{false},
 		location{loc},
 		pge		{in_pge},
 		speed	{0.8f},
 		facing	{N},
-		renderer{ in_pge,  paths }
+		renderer{ in_pge}
 	{}
 
 
@@ -51,9 +51,11 @@ public:
 
 	facings lookAtMouse();
 	bool walking_backwards();
+	void take_damage(int damage);
 	void become_player(bool toggle);
 	bool shot = false;
 
+	void load_assets(vector<string> in_mappings);
 	Vec2 get_location() const;
 
 

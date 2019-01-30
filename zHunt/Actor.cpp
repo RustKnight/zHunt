@@ -65,9 +65,28 @@ bool Actor::walking_backwards()
 	return !((direction.GetNormalized().x > 0 && mouse_to_player_distance.GetNormalized().x > 0) || (direction.GetNormalized().y > 0 && mouse_to_player_distance.GetNormalized().y > 0) || (direction.GetNormalized().x < 0 && mouse_to_player_distance.GetNormalized().x < 0) || (direction.GetNormalized().y < 0 && mouse_to_player_distance.GetNormalized().y < 0));
 }
 
+void Actor::take_damage(int damage)
+{
+	hp -= damage;
+	facing = N;
+
+	if (hp < 0) {
+		
+		renderer.request_animation(9, vSpriteSheetPointers[9], 0, 0, 0, 0, 1, 7.5f);
+		alive = false;
+	}
+	else
+		renderer.request_animation (8, vSpriteSheetPointers[8], 0, 0, 0, 0, 0, 10.0f);
+}
+
 void Actor::become_player(bool toggle)
 {
 	isPlayer = toggle;
+}
+
+void Actor::load_assets(vector<string> in_mappings)
+{
+	renderer.passMappingData(in_mappings);
 }
 
 Vec2 Actor::get_location() const

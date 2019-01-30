@@ -22,7 +22,7 @@
 class zHunt : public olc::PixelGameEngine
 {
 public:
-	zHunt(vector <vector<string>>& paths);
+	zHunt();
 
 	bool OnUserCreate() override;
 	bool OnUserUpdate(float fElapsedTime) override;
@@ -49,7 +49,7 @@ private:
 	bool toggle_camera = true;
 	bool toggle_hunger = true;
 
-	vector<Zombie> vZombies;
+	vector<Zombie*> vZombies;
 	vector<Actor*> vActors;
 	
 	vector<Projectile> vBullets;

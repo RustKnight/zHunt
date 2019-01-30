@@ -44,7 +44,7 @@ public:
 			else {
 				// randomize hit location
 
-				pge->DrawPartialSprite(x - hit_offset_x, y - hit_offset_y, splat_effects, eff.x, eff.y, eff.w, eff.h, 2);
+			//	pge->DrawPartialSprite(x - hit_offset_x, y - hit_offset_y, splat_effects, eff.x, eff.y, eff.w, eff.h, 1);
 
 				//cout << "x: " << x - hit_offset_x << endl;
 				//cout << "y: " << y - hit_offset_y << endl;

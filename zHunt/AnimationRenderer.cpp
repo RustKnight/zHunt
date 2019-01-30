@@ -53,6 +53,7 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 	task_done = false;
 	// update carried out
 	bool mirror = false;
+	
 
 	// code that handles mirroring in case of non indexed facing
 	// N-0, NE-1, E-2, SE-3, S-4, SW-5, W-6, NW-7.
@@ -64,6 +65,9 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 		}
 		mirror = true;
 	}
+
+	//if (action == 8)
+	//	facing = 0;
 
 	int num_sequences = anm_hdl.get_sqn_size(action, facing);
 
@@ -97,14 +101,22 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 				play_seq = num_sequences - 1;
 		}
 	
-
+		// when run in release it crashes, in debug is fine = without this piece of code, it would crash
+		if (action == 8)
+			facing = 0;
 
 	requested_sqn = anm_hdl.get_coords(action, facing, int(play_seq));
+
 	//cout << play_seq << endl;
 	// maybe we shouldn't try to draw if off the screen
 	draw_centered((location.x - off_set.x) * 128, (location.y - off_set.y) * 128, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 2, mirror);
 //	pge->DrawPartialSprite_BottomUp( (location.x - off_set.x) * 128, (location.y - off_set.y) * 128, spr, requested_sqn.x, requested_sqn.y, requested_sqn.w, requested_sqn.h, 1);
 	//cout << play_seq << endl;
+}
+
+bool AnimationRenderer::get_task_status()
+{
+	return task_done;
 }
 
 
@@ -113,7 +125,20 @@ RenderRect AnimationRenderer::get_render_rect() const
 	return r_rect;
 }
 
+void AnimationRenderer::passMappingData(vector<string> in_map)
+{
+	anm_hdl.load_mapping_info(in_map);
+}
 
+
+
+int AnimationRenderer::get_animation_seqences_count(int act, int facing) const
+{
+
+	return anm_hdl.get_sqn_size(act, facing);
+
+	return 0;
+}
 
 int AnimationRenderer::get_current_anim() const
 {

@@ -18,10 +18,6 @@ class AnimationHandler {
 public:
 	AnimationHandler() = default;
 
-	AnimationHandler(vector<string>& paths)
-	{
-		load_mapping_info(paths);
-	}
 
 	const spr_sqn& get_coords(int anim, int face, int sqn) const;
 	const int get_sqn_size(int anim, int face) const;

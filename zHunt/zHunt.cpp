@@ -15,12 +15,17 @@
 // when pushing back
 // minimap ?
 // zombie rotate speed - move towards goal, only if facing is correct, takes time to turn around depending on their speed
+// civilians could easily be added choosing the closest threat and running in opposite direction
+// go to waypoints
 
-zHunt::zHunt(vector <vector<string>>& paths) :
+// animation sync so that when zombie finishes hitting , player plays hurt
+// get rid of silly cascading initializations ; if a zombie class will be a zombie, make asset specific stuff be part of the class
+
+zHunt::zHunt() :
 	winWidth { 768.0f},
 	winHeight{ 640.0f },
-	rifleman{ Vec2 {7.0f, 5.0f}, this, paths[0] },
-	zombie{ Vec2{ 5.0f, 5.0f }, this, paths[1] },
+	rifleman{ Vec2 {7.0f, 5.0f}, this},
+	zombie{ Vec2{ 5.0f, 5.0f }, this},
 	camera {this, &map, getWinWidth(), getWinHeight()}
 {
 	sAppName = "RustKnight";
@@ -30,44 +35,33 @@ zHunt::zHunt(vector <vector<string>>& paths) :
 
 bool zHunt::OnUserCreate() 
 {
-
-	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\aim\\r_aim.png");
-	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\climb\\r_climb.png");
-	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\idle\\r_idle.png");
-	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\pick\\r_pick.png");
-	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\run\\r_run.png");
-	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\walk\\r_walk.png");
-	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\fire\\r_fire.png");
-	rifleman.load_spr_sheet("sprites\\rifleman\\NEW\\reload\\r_reload.png");
-
-											 
-	zombie.load_spr_sheet("sprites\\zombie\\attack\\z_attack.png");
-	zombie.load_spr_sheet("sprites\\zombie\\die\\z_die.png");
-	zombie.load_spr_sheet("sprites\\zombie\\hit\\z_hit.png");
-	zombie.load_spr_sheet("sprites\\zombie\\idle\\z_idle.png");
-	zombie.load_spr_sheet("sprites\\zombie\\walk\\z_walk.png");
-	effect.splat_effects = new olc::Sprite("sprites\\effects\\splat.png");
-
-
-	effect.effect_handler.load_mapping_info_string("sprites\\effects\\splat.txt");
+	//effect.splat_effects = new olc::Sprite("sprites\\effects\\splat_darker.png");
+	//effect.effect_handler.load_mapping_info_string("sprites\\effects\\splat.txt");
 
 	unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
 	std::default_random_engine e(seed);
 	std::uniform_real_distribution <float> distR(0.1f, 0.4f);
 
+	rifleman.load_assets();
+								 
 
-	for (int i = 0; i < 25; i++) {
-		vZombies.push_back(zombie);
-		vZombies[i].randomize_stats(distR(e) );
+	for (int i = 0; i < 3; i++) {
+
+		Zombie* zom = new Zombie(Vec2{ 0,0 }, this);			// we should handle proper destruction of zombie
+		zom->load_assets();
+		zom->randomize_stats(distR(e));
+
+		vZombies.push_back(zom);
 	}
+
 
 	camera.load_fields("sprites\\terrain\\green.png");
 	rifleman.become_player(1);
 	
 
 	vActors.push_back(&rifleman);
-	for (Zombie& z : vZombies)
-		vActors.push_back(&z);
+	for (Zombie* z : vZombies)
+		vActors.push_back(z);
 
 	return true;
 }
@@ -83,6 +77,14 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	camera.screen_in_view();
 	
 
+	Vec2 screen_vec{ (float)GetMouseX(), (float)GetMouseY() };
+	Vec2 screen_to_tile = Vec2{ screen_vec.x / 128.0f, screen_vec.y / 128.0f };
+	Vec2 map_vec = camera.get_offset() + screen_to_tile;
+	Vec2 temp_go_to = map_vec;
+		 temp_go_to.x = (int)temp_go_to.x;
+		 temp_go_to.y = (int)temp_go_to.y;
+
+
 	if (GetKey(olc::Q).bPressed)
 		toggle_camera = !toggle_camera;
 	if (GetKey(olc::G).bPressed)
@@ -92,20 +94,31 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	if (rifleman.update(fElapsedTime, camera.get_offset()))
 		vBullets.push_back( Projectile{ rifleman.get_location(), rifleman.get_fire_angle() });
 
+	
 
-	for (Zombie& z : vZombies) {
-		z.update(fElapsedTime, camera.get_offset());
-		z.move_towards_vec (rifleman.get_location());
-		if (toggle_hunger) z.stay();
+	for (Zombie* z : vZombies) {
+		z->update(fElapsedTime, camera.get_offset());
+		
+		if (!z->in_range(rifleman.get_location()))
+			z->move_towards_vec(rifleman.get_location());
+
+		else if (z->attack_cooldown_over() && z->alive)
+			z->attack_target(rifleman);
+		else
+			z->stay();
+
+		if (toggle_hunger) z->stay();
+
+
 
 		for (Projectile& p : vBullets)
-			if (z.check_collision(p)) {
-				z.is_hit();
+			if (z->check_collision(p.location)) {
+				z->is_hit();
 
-				if (z.shot == false && z.alive) {
-					EffectOnActorPointer ac{ &z };
+				if (z->shot == false && z->alive) {
+					EffectOnActorPointer ac{ z };
 					effect.vEff_struct.push_back(ac);
-					z.shot = true;
+					z->shot = true;
 					p.body_hit_times++;
 				}
 			}
@@ -113,11 +126,11 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 
 	for (int i = 0; i < vBullets.size(); ++i) {
+		
 		if (vBullets[i].body_hit_times > 0 || vBullets[i].location.x > map.get_width() || vBullets[i].location.y > map.get_height()) {
 			vBullets.erase(vBullets.begin() + i);
 			continue;
 		}
-		// if (p.hit_body) {vBullets.erase(vec.begin() + indice); continue;}
 		vBullets[i].location = vBullets[i].location + (vBullets[i].direction * vBullets[i].speed * fElapsedTime);
 		FillCircle((vBullets[i].location.x - camera.get_offset().x) * 128, (vBullets[i].location.y - camera.get_offset().y) * 128, 1, olc::BLACK);
 	}
@@ -138,9 +151,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	}
 
 	// renders candidates for splat effect
-	effect.render_effect(this, fElapsedTime, camera.get_offset());
-
-
+	//effect.render_effect(this, fElapsedTime, camera.get_offset());
 
 	return true;
 }

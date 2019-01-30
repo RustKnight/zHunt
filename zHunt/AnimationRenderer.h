@@ -25,22 +25,21 @@ public:
 		task_done{ false }, loop{ true }, allow_interrupt{ true }
 	{}
 
-	AnimationRenderer (olc::PixelGameEngine* pge_in, std::vector<std::string>& paths)
-		:	pge {pge_in}, 
-			anm_hdl{ paths },
-			action{ -1 }, facing{ 0 }, play_seq {0}, eTime{0},
-			task_done{false}, loop {true}, allow_interrupt {true}
-	{}
+
 
 	void request_animation(int act, olc::Sprite* spr_in, bool interruptable, bool reversed, bool loop_in, bool back_and_forth, bool end_lock_in, float speed);
 	void update_and_play(float& elapT, const Vec2& loc, int face);
+	bool get_task_status();
 
+	int get_animation_seqences_count(int act, int facing) const;
 	int get_current_anim() const;
 	void get_spr_ptr(olc::Sprite* spr_in);
 	void update_offset(const Vec2& offset);
 	AnimationHandler effects_handler;
 	olc::Sprite* effects_sprite_sheet;
 	RenderRect get_render_rect() const;
+
+	void passMappingData(vector <string> in_map);
 
 
 private:
