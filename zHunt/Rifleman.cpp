@@ -5,7 +5,7 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off)
 	eTime = fElapTm;
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
-	facing = lookAtMouse();
+	look_at_vec(goal);
 
 
 
@@ -38,6 +38,7 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off)
 	else 
 		renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 0, 1.5f);
 		
+	
 	
 
 	old_location = location;			// needed for facing
@@ -75,6 +76,12 @@ void Rifleman::aim()
 void Rifleman::fire(bool b)
 {
 	fired = b;
+}
+
+void Rifleman::moveTowardsGoal()
+{
+	location += goal.GetNormalized() * eTime * speed;
+	moving = true;
 }
 
 

@@ -19,6 +19,7 @@ public:
 	void running();
 	void aim();
 	void fire(bool b);
+	void moveTowardsGoal();
 
 	void moveUp();
 	void moveDown();

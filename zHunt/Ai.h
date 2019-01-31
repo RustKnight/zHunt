@@ -2,17 +2,19 @@
 
 #include "Actor.h"
 #include "Rifleman.h"
+#include "Vec2.h"
 #include <vector>
 
 class Ai {
 
+public:
 	Ai() = default;
 
 	void think();
 	void loadRiflemen(Rifleman* rf);
-	void update(float playerLoc);
+	void update(Vec2 playerLoc);
 
 private:
 	std::vector <Rifleman*> vAllies;
-	float playerLocation = 0;
+	Vec2 playerLocation;
 };

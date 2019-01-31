@@ -49,13 +49,12 @@ public:
 	virtual bool update (float fElapTm, const Vec2& cam_off);
 	void draw();
 
-	facings lookAtMouse();
 	void changeFacing(facings face);
 	bool walking_backwards();
 	void take_damage(int damage);
 	void become_player(bool toggle);
-	void move_towards_vec(Vec2 goal);
-
+	void setGoal(Vec2 goal);
+	void look_at_vec(Vec2 pos);
 
 	bool shot = false;
 	bool moving = false;

@@ -44,6 +44,46 @@ void AnimationRenderer::request_animation(int act, olc::Sprite* spr_in, bool int
 	}
 }
 
+void AnimationRenderer::override(int act, olc::Sprite* spr_in, bool interruptable, bool reversed_in, bool loop_in, bool back_and_forth, bool end_lock_in, float speed)
+{
+
+	if (act == action && reversed != reversed_in) {
+
+		action = act;
+		spr = spr_in;
+		allow_interrupt = interruptable;
+		reversed = reversed_in;
+		loop = loop_in;
+		back_forth = back_and_forth;
+		anim_speed = speed;
+		end_lock = end_lock_in;
+
+		increasing = !increasing;
+	}
+
+	if (act != action) {
+
+		action = act;
+		spr = spr_in;
+		allow_interrupt = interruptable;
+		reversed = reversed_in;
+		loop = loop_in;
+		back_forth = back_and_forth;
+		anim_speed = speed;
+		end_lock = end_lock_in;
+
+		if (reversed) {
+			play_seq = float(anm_hdl.get_sqn_size(action, facing));
+			increasing = false;
+		}
+		else {
+			play_seq = 0;
+			increasing = true;
+		}
+	}
+
+}
+
 
 void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 {

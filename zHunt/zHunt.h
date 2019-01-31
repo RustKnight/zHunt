@@ -8,7 +8,7 @@
 #include "Vec2.h"
 #include "Value_checker.h"
 
-
+#include "Ai.h"
 #include "Actor.h"
 #include "Zombie.h"
 #include "Rifleman.h"
@@ -55,7 +55,7 @@ private:
 	vector<Zombie*> vZombies;
 	vector<Actor*> vActors;
 	Controller control;
-
+	Ai ai;
 	
 	vector<Projectile> vBullets;
 	Value_checker VC;

@@ -28,6 +28,7 @@ public:
 
 
 	void request_animation(int act, olc::Sprite* spr_in, bool interruptable, bool reversed, bool loop_in, bool back_and_forth, bool end_lock_in, float speed);
+	void override (int act, olc::Sprite* spr_in, bool interruptable, bool reversed, bool loop_in, bool back_and_forth, bool end_lock_in, float speed);
 	void update_and_play(float& elapT, const Vec2& loc, int face);
 	bool get_task_status();
 
@@ -63,6 +64,7 @@ private:
 	bool increasing;
 	bool reversed;
 	bool end_lock;
+
 
 	olc::PixelGameEngine* pge;
 	olc::Sprite* spr;

@@ -68,6 +68,8 @@ bool zHunt::OnUserCreate()
 	for (Zombie* z : vZombies)
 		vActors.push_back(z);
 
+	ai.loadRiflemen(rf);
+
 	return true;
 }
 
@@ -78,24 +80,10 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	Clear(olc::VERY_DARK_GREEN);
 	SetPixelMode(olc::Pixel::ALPHA);
 	
-
-	if (GetKey(olc::Q).bPressed)
-		toggle_camera = !toggle_camera;
-	if (GetKey(olc::G).bPressed)
-		toggle_hunger = !toggle_hunger;
-	(toggle_camera) ? camera.update(rifleman.get_location()) : camera.update(zombie.get_location());
 	
 	camera.screen_in_view();
-
-
-	Vec2 screen_vec{ (float)GetMouseX(), (float)GetMouseY() };
-	Vec2 screen_to_tile = Vec2{ screen_vec.x / 128.0f, screen_vec.y / 128.0f };
-	Vec2 map_vec = camera.get_offset() + screen_to_tile;
-	Vec2 temp_go_to = map_vec;
-		 temp_go_to.x = (int)temp_go_to.x;
-		 temp_go_to.y = (int)temp_go_to.y;
-
-
+	ai.update(rifleman.get_location());
+	ai.think();
 	control.control(rifleman);
 
 	
@@ -110,7 +98,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 		z->update(fElapsedTime, camera.get_offset());
 		
 		if (!z->in_range(rifleman.get_location()))
-			z->move_towards_vec(rifleman.get_location());
+			z->setGoal(rifleman.get_location());
 
 		else if (z->attack_cooldown_over() && z->alive)
 			z->attack_target(rifleman);
@@ -166,6 +154,13 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	// renders candidates for splat effect
 	//effect.render_effect(this, fElapsedTime, camera.get_offset());
 
+
+	if (GetKey(olc::Q).bPressed)
+		toggle_camera = !toggle_camera;
+	if (GetKey(olc::G).bPressed)
+		toggle_hunger = !toggle_hunger;
+	(toggle_camera) ? camera.update(rifleman.get_location()) : camera.update(zombie.get_location());
+
 	return true;
 }
 
@@ -206,3 +201,18 @@ float zHunt::getWinHeight() const
 	return winHeight;
 }
 
+
+
+/*
+piece of code to make zombies follow mouse cursor
+
+
+Vec2 screen_vec{ (float)GetMouseX(), (float)GetMouseY() };
+Vec2 screen_to_tile = Vec2{ screen_vec.x / 128.0f, screen_vec.y / 128.0f };
+Vec2 map_vec = camera.get_offset() + screen_to_tile;
+Vec2 temp_go_to = map_vec;
+temp_go_to.x = (int)temp_go_to.x;
+temp_go_to.y = (int)temp_go_to.y;
+
+
+*/

@@ -11,53 +11,6 @@ void Zombie::randomize_stats(float speed_in)
 	random_death_anim = rand() % 8;
 }
 
-void Zombie::look_at_vec(Vec2 pos)
-{
-
-#define PI 3.14159265
-
-		// we determine the vector between the mouse position and the location of the character
-		float dx = (pos.x - location.x) * 128;
-		float dy = (pos.y - location.y) * 128;
-		//	pge->DrawLine(pge->GetMouseX(), pge->GetMouseY(), (location.x - camera_offset.x) * 128, (location.y - camera_offset.y) * 128, olc::RED);
-
-
-		float angle = atan2(dy, dx);
-		angle = (roundf(angle / ((2 * PI) / 8) + 4));
-		if (angle == 8)
-			angle = 0;
-
-		switch (int(angle)) {
-			//N = 2, NE = 3, E = 4, SE = 5, S = 6, SW = 7, W = 0, NW = 1,
-		case 0:
-			angle = W;
-			break;
-		case 1:
-			angle = NW;
-			break;
-		case 2:
-			angle = N;
-			break;
-		case 3:
-			angle = NE;
-			break;
-		case 4:
-			angle = E;
-			break;
-		case 5:
-			angle = SE;
-			break;
-		case 6:
-			angle = S;
-			break;
-		case 7:
-			angle = SW;
-			break;
-		}
-
-		facing = facings (int (angle));
-
-}
 
 
 void Zombie::is_hit()
@@ -155,14 +108,15 @@ bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 	if (renderer.get_current_anim() != HIT)
 		hit = false;
 
+
 	if (alive && !hit) {
 
-		location += goal * eTime * speed;
+		location += goal.GetNormalized() * eTime * speed;
 
 		if (old_location != location)
 			renderer.request_animation(WALK, vSpriteSheetPointers[WALK], 1, 0, 0, 0, 0, speed * 30.0f);
 
-		look_at_vec(goal * 128);
+		look_at_vec(goal);
 
 		if (att_cooldown < 200.0f)
 			att_cooldown += eTime * 4.0f;
@@ -190,7 +144,7 @@ bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 
 	if (!alive) {
 		facing = facings(random_death_anim);
-		renderer.request_animation(DIE, vSpriteSheetPointers[DIE], 0, 0, 0, 0, 1, 13.5f);
+		renderer.override (DIE, vSpriteSheetPointers[DIE], 0, 0, 0, 0, 1, 13.5f);
 	}
 
 	return 0;
