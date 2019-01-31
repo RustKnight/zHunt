@@ -24,7 +24,7 @@
 zHunt::zHunt() :
 	winWidth { 768.0f},
 	winHeight{ 640.0f },
-	rifleman{ Vec2 {10.0f, 0.0f}, this},
+	rifleman{ Vec2 {10.0f, 9.0f}, this},
 	zombie{ Vec2{ 5.0f, 5.0f }, this},
 	camera {this, &map, getWinWidth(), getWinHeight()},
 	control {this}
@@ -104,7 +104,6 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	if (rifleman.update(fElapsedTime, camera.get_offset()))
 		vBullets.push_back( Projectile{ rifleman.get_location(), rifleman.get_fire_angle() });
 
-	
 
 
 	for (Zombie* z : vZombies) {

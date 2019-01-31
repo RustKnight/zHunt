@@ -59,37 +59,17 @@ void Zombie::look_at_vec(Vec2 pos)
 
 }
 
-void Zombie::move_towards_vec(Vec2 goal)
-{
-
-	if (alive && renderer.get_current_anim() != HIT) {
-		Vec2 go_to = (goal - location).Normalize();
-		location += go_to * eTime * speed;
-
-
-		if (old_location != location)
-			renderer.request_animation(WALK, vSpriteSheetPointers[WALK], 1, 0, 0, 0, 0, speed * 30.0f);
-		else
-			renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 0, speed * 5.0f);
-
-		look_at_vec(goal);
-	}
-
-	else {
-		facing = facings (random_death_anim);
-		renderer.request_animation(DIE, vSpriteSheetPointers[DIE], 0, 0, 0, 0, 1, 13.5f);
-	}
-}
 
 void Zombie::is_hit()
 {	
+	hit = true;
 	hp -= 5 + rand() % 5;
 
 	if (hp < 0)
 		alive = false;
 
 	if (alive)
-		renderer.request_animation(HIT, vSpriteSheetPointers[HIT], 0, 0, 0, 0, 0, 11.5f);
+		renderer.request_animation(HIT, vSpriteSheetPointers[HIT], 0, 0, 0, 0, 0, 5.5f);
 }
 
 void Zombie::attack_target(Actor& target)
@@ -165,33 +145,53 @@ void Zombie::stay()
 
 
 bool Zombie::update(float fElapTm, const Vec2 & cam_off)
-{	
-	
+{
 	eTime = fElapTm;
-	old_location = location;
-
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
-
-	if (att_cooldown < 200.0f)
-		att_cooldown += eTime * 4.0f;
-
-	if (isPlayer) {
-
-		if (pge->GetKey(olc::W).bHeld)
-			location.y -= eTime * speed;
-		if (pge->GetKey(olc::S).bHeld)
-			location.y += eTime * speed;
-		if (pge->GetKey(olc::A).bHeld)
-			location.x -= eTime * speed;
-		if (pge->GetKey(olc::D).bHeld)
-			location.x += eTime * speed;
+	old_location = location;
 
 
-		if (pge->GetKey(olc::I).bPressed)
-			renderer.request_animation(DIE, vSpriteSheetPointers[DIE], 0, 0, 0, 0, 0, 13.5f);
+	if (renderer.get_current_anim() != HIT)
+		hit = false;
+
+	if (alive && !hit) {
+
+		location += goal * eTime * speed;
+
+		if (old_location != location)
+			renderer.request_animation(WALK, vSpriteSheetPointers[WALK], 1, 0, 0, 0, 0, speed * 30.0f);
+
+		look_at_vec(goal * 128);
+
+		if (att_cooldown < 200.0f)
+			att_cooldown += eTime * 4.0f;
+
+		if (isPlayer) {
+
+			if (pge->GetKey(olc::W).bHeld)
+				location.y -= eTime * speed;
+			if (pge->GetKey(olc::S).bHeld)
+				location.y += eTime * speed;
+			if (pge->GetKey(olc::A).bHeld)
+				location.x -= eTime * speed;
+			if (pge->GetKey(olc::D).bHeld)
+				location.x += eTime * speed;
+
+
+			if (pge->GetKey(olc::I).bPressed)
+				renderer.request_animation(DIE, vSpriteSheetPointers[DIE], 0, 0, 0, 0, 0, 13.5f);
+		}
 	}
 
+
+	else if (alive)
+		renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 0, speed * 5.0f);
+
+	if (!alive) {
+		facing = facings(random_death_anim);
+		renderer.request_animation(DIE, vSpriteSheetPointers[DIE], 0, 0, 0, 0, 1, 13.5f);
+	}
 
 	return 0;
 }

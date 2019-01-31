@@ -54,6 +54,9 @@ public:
 	bool walking_backwards();
 	void take_damage(int damage);
 	void become_player(bool toggle);
+	void move_towards_vec(Vec2 goal);
+
+
 	bool shot = false;
 	bool moving = false;
 	bool running = false;
@@ -67,12 +70,13 @@ public:
 	AnimationRenderer renderer;
 	int hp;
 	bool alive;
+	bool hit;
 	
 	
 protected:
 	bool isPlayer;
 	
-
+	Vec2 goal;
 	Vec2 location;
 	Vec2 old_location;
 

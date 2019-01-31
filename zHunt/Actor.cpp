@@ -90,6 +90,13 @@ void Actor::become_player(bool toggle)
 	isPlayer = toggle;
 }
 
+
+void Actor::move_towards_vec(Vec2 in_goal)
+{
+	if (alive && !hit) 
+		goal = (in_goal - location).Normalize();
+}
+
 void Actor::load_assets(vector<string> in_mappings)
 {
 	renderer.passMappingData(in_mappings);
