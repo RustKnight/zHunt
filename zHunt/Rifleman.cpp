@@ -80,8 +80,10 @@ void Rifleman::fire(bool b)
 
 void Rifleman::moveTowardsGoal()
 {
-	location += goal.GetNormalized() * eTime * speed;
-	moving = true;
+	if (!withinOwnRect(goal)) {
+		location += goal.GetNormalized() * eTime * speed;
+		moving = true;
+	}
 }
 
 

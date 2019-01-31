@@ -18,7 +18,6 @@ public:
 
 public:
 	void randomize_stats(float speed_in);
-	bool check_collision(Vec2 location) const;
 	void stay();
 	bool update(float fElapTm, const Vec2& cam_off) override;
 	void is_hit();

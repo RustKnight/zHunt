@@ -110,7 +110,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 
 		for (Projectile& p : vBullets)
-			if (z->check_collision(p.location)) {
+			if (z->withinOwnRect(p.location)) {
 				z->is_hit();
 
 				if (z->shot == false && z->alive) {

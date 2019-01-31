@@ -55,6 +55,7 @@ public:
 	void become_player(bool toggle);
 	void setGoal(Vec2 goal);
 	void look_at_vec(Vec2 pos);
+	bool withinOwnRect(Vec2 location) const;
 
 	bool shot = false;
 	bool moving = false;

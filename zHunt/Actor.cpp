@@ -104,6 +104,19 @@ void Actor::look_at_vec(Vec2 pos)
 	facing = facings(int(angle));
 }
 
+bool Actor::withinOwnRect(Vec2 location) const
+{
+	int x = (location.x - camera_offset.x) * 128;
+	int y = (location.y - camera_offset.y) * 128;
+
+	RenderRect r_rect = renderer.get_render_rect();
+
+	if ((y > r_rect.top && y < r_rect.bottom) && (x > r_rect.left && x < r_rect.right))
+		return true;
+	else
+		return false;
+}
+
 
 void Actor::load_assets(vector<string> in_mappings)
 {
