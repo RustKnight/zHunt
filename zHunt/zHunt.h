@@ -51,6 +51,7 @@ private:
 	bool toggle_camera = true;
 	bool toggle_hunger = true;
 
+	vector<Rifleman*> vRifles;
 	vector<Zombie*> vZombies;
 	vector<Actor*> vActors;
 	Controller control;

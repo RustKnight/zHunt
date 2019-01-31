@@ -20,6 +20,11 @@ public:
 	void aim();
 	void fire(bool b);
 
+	void moveUp();
+	void moveDown();
+	void moveLeft();
+	void moveRight();
+
 	void load_assets();
 
 private:

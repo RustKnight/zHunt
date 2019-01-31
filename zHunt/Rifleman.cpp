@@ -79,6 +79,33 @@ void Rifleman::fire(bool b)
 	fired = b;
 }
 
+
+void Rifleman::moveUp()
+{
+	moving = true;
+	location.y -= eTime * speed;
+}
+
+void Rifleman::moveDown()
+{
+	moving = true;
+	location.y += eTime * speed;
+}
+
+void Rifleman::moveLeft()
+{
+	moving = true;
+	location.x -= eTime * speed;
+}
+
+void Rifleman::moveRight()
+{
+	moving = true;
+	location.x += eTime * speed;
+}
+
+
+
 void Rifleman::load_assets()
 {
 

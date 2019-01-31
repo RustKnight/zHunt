@@ -47,12 +47,13 @@ bool zHunt::OnUserCreate()
 	rifleman.load_assets();
 	Rifleman* rf = new Rifleman{ Vec2{ 10.0f, 4.0f }, this };
 	rf->load_assets();
+	vRifles.push_back(rf);
 
 	for (int i = 0; i < 3; i++) {
 
 		Zombie* zom = new Zombie(Vec2{ 0,0 }, this);			// we should handle proper destruction of zombie
 		zom->load_assets();
-		zom->randomize_stats(distR(e));
+		zom->randomize_stats(distR(e));		
 
 		vZombies.push_back(zom);
 	}
@@ -97,7 +98,8 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 	control.control(rifleman);
 
-//	vActors[0]->update(fElapsedTime, camera.get_offset());
+	
+	vRifles[0]->update(fElapsedTime, camera.get_offset());
 
 	if (rifleman.update(fElapsedTime, camera.get_offset()))
 		vBullets.push_back( Projectile{ rifleman.get_location(), rifleman.get_fire_angle() });
@@ -158,7 +160,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 
 	//	cout << vActors[0]->get_location().y << endl;
-		cout << "Player " << vActors[1]->get_location().y << endl;
+		cout << "Player " << rifleman.get_location().y << endl;
 		//FillCircle( (a->get_location().x - camera.get_offset().x)  * 128, (a->get_location().y - camera.get_offset().y) * 128, 3, olc::RED);
 	}
 

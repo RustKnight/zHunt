@@ -90,30 +90,6 @@ void Actor::become_player(bool toggle)
 	isPlayer = toggle;
 }
 
-void Actor::moveUp()
-{
-	moving = true;
-	location.y -= eTime * speed;	
-}
-
-void Actor::moveDown()
-{
-	moving = true;
-	location.y += eTime * speed;
-}
-
-void Actor::moveLeft()
-{
-	moving = true;
-	location.x -= eTime * speed;
-}
-
-void Actor::moveRight()
-{
-	moving = true;
-	location.x += eTime * speed;
-}
-
 void Actor::load_assets(vector<string> in_mappings)
 {
 	renderer.passMappingData(in_mappings);

@@ -58,10 +58,7 @@ public:
 	bool moving = false;
 	bool running = false;
 
-	void moveUp();
-	void moveDown();
-	void moveLeft();
-	void moveRight();
+	
 
 	void load_assets(vector<string> in_mappings);
 	Vec2 get_location() const;
