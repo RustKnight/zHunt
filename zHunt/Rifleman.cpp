@@ -11,7 +11,7 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off)
 
 	if (moving) {
 
-		cout << "Moved\n";
+		//cout << "Moved\n";
 
 		if (walking_backwards()) {
 			renderer.request_animation(WALK, vSpriteSheetPointers[WALK], INTERRUPTABLE, REVERSED, NOT_LOOPED, NOT_BACK_FORTH, 0, 4.0f);
@@ -39,7 +39,7 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off)
 
 	else {
 		renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 0, 1.5f);
-		cout << "STILL\n";
+		//cout << "STILL\n";
 	}
 
 	old_location = location;			// needed for facing

@@ -24,7 +24,7 @@
 zHunt::zHunt() :
 	winWidth { 768.0f},
 	winHeight{ 640.0f },
-	rifleman{ Vec2 {7.0f, 5.0f}, this},
+	rifleman{ Vec2 {10.0f, 0.0f}, this},
 	zombie{ Vec2{ 5.0f, 5.0f }, this},
 	camera {this, &map, getWinWidth(), getWinHeight()},
 	control {this}
@@ -45,7 +45,7 @@ bool zHunt::OnUserCreate()
 
 
 	rifleman.load_assets();
-	Rifleman* rf = new Rifleman{ Vec2{ 7.0f, 4.0f }, this };
+	Rifleman* rf = new Rifleman{ Vec2{ 10.0f, 4.0f }, this };
 	rf->load_assets();
 
 	for (int i = 0; i < 3; i++) {
@@ -77,9 +77,15 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	Clear(olc::VERY_DARK_GREEN);
 	SetPixelMode(olc::Pixel::ALPHA);
 	
+
+	if (GetKey(olc::Q).bPressed)
+		toggle_camera = !toggle_camera;
+	if (GetKey(olc::G).bPressed)
+		toggle_hunger = !toggle_hunger;
 	(toggle_camera) ? camera.update(rifleman.get_location()) : camera.update(zombie.get_location());
-	camera.screen_in_view();
 	
+	camera.screen_in_view();
+
 
 	Vec2 screen_vec{ (float)GetMouseX(), (float)GetMouseY() };
 	Vec2 screen_to_tile = Vec2{ screen_vec.x / 128.0f, screen_vec.y / 128.0f };
@@ -89,17 +95,15 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 		 temp_go_to.y = (int)temp_go_to.y;
 
 
-	if (GetKey(olc::Q).bPressed)
-		toggle_camera = !toggle_camera;
-	if (GetKey(olc::G).bPressed)
-		toggle_hunger = !toggle_hunger;
-	
 	control.control(rifleman);
+
+//	vActors[0]->update(fElapsedTime, camera.get_offset());
 
 	if (rifleman.update(fElapsedTime, camera.get_offset()))
 		vBullets.push_back( Projectile{ rifleman.get_location(), rifleman.get_fire_angle() });
-	vActors[0]->update(fElapsedTime, camera.get_offset());
+
 	
+
 
 	for (Zombie* z : vZombies) {
 		z->update(fElapsedTime, camera.get_offset());
@@ -152,6 +156,9 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 		if (a->alive)
 			a->draw();
 
+
+	//	cout << vActors[0]->get_location().y << endl;
+		cout << "Player " << vActors[1]->get_location().y << endl;
 		//FillCircle( (a->get_location().x - camera.get_offset().x)  * 128, (a->get_location().y - camera.get_offset().y) * 128, 3, olc::RED);
 	}
 
