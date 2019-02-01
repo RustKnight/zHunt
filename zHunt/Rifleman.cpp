@@ -3,15 +3,15 @@
 
 void Rifleman::moveTowardsGoal()
 {
-	if (!withinDistance(goal, 4000)) {
+	if (withinDistance(goal, 4000)) 
+			standGround();
+		
 
+	else {
 		Vec2 coord = goal - location;
 		location += coord.GetNormalized() * eTime * speed;
 		moving = true;
 	}
-
-	else
-		standGround();
 }
 
 

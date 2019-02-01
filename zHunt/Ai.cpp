@@ -6,6 +6,8 @@
 //
 //cand iti spun sa stai, stai pe pozitie si tragi in cel mai apropiat zumba care intra in raza ta de actiune
 
+/// maybe make AI rotate smoothly and also make him slightly aim before firing
+
 void Ai::think()
 {
 	for (Rifleman* rf : vAllies) {
