@@ -107,7 +107,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 		z->update(fElapsedTime, camera.get_offset());
 
-		if (z->alive) {
+		if (z->alive && !z->hit) {
 			z->setGoal(vRifles[0]->get_location());
 
 			if (toggle_hunger) {

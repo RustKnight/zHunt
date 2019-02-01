@@ -17,12 +17,13 @@ void Rifleman::moveTowardsGoal()
 
 void Rifleman::standGround()
 {
-	//searchThreat 
-	vector <Zombie*> vTargets = actorsOnScreen(vpZom);
+	vector <Zombie*> vTargets;
+	vTargets = actorsOnScreen(vpZom);
 
-	if (!vTargets.empty())
-		shootAtTarget(closest(vTargets));
-	
+	if (!vTargets.empty()) {
+		Zombie* z = closest(vTargets);
+		shootAtTarget(z);
+	}
 }
 
 void Rifleman::shootAtTarget(Zombie* target_in)
@@ -39,14 +40,20 @@ Vec2 Rifleman::getFireAngle()
 
 Zombie* Rifleman::closest(vector<Zombie*> vec)
 {
+	float smallest = 9999999.0f;
+	int closeset_index;
 
-	auto min = std::min_element(vec.begin(), vec.end(),
-		[]( const Zombie* a, const  Zombie* b){
+	for (int i = 0; i < vec.size(); ++i) {
+		Vec2 distance = location - vec[i]->get_location();
 
-		return a->get_location().GetLengthSq() < b->get_location().GetLengthSq();
-	});
+		if (distance.GetLengthSq() < smallest) {
+			smallest = distance.GetLengthSq();
+			closeset_index = i;
+		}
+	}
 
-	return *min;
+
+	return vec[closeset_index];
 }
 
 
@@ -62,7 +69,7 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off, vector<Zombie*> vpZom
 
 	if (moving) {
 
-		if (walking_backwards()) {
+		if (walking_backwards() && isPlayer) {
 			renderer.request_animation(WALK, vSpriteSheetPointers[WALK], INTERRUPTABLE, REVERSED, NOT_LOOPED, NOT_BACK_FORTH, 0, 4.0f);
 			speed = 0.32f;
 		}
@@ -150,8 +157,8 @@ void Rifleman::fire(bool b, Vec2 fireAt)
 			fired = false;
 			if (kar.checkRounds() <= 0)
 				kar.doReload();
-			}
 		}
+	}
 }
 
 
