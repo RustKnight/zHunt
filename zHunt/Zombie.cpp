@@ -46,6 +46,8 @@ bool Zombie::attack_cooldown_over()
 	return false;
 }
 
+
+
 void Zombie::load_assets()
 {
 
@@ -67,30 +69,37 @@ void Zombie::load_assets()
 	Actor::load_assets(map);
 }
 
-bool Zombie::in_range(Vec2 target) const
+bool Zombie::in_range(Vec2 target)
 {
-	if (withinOwnRect(target))
+	
+	if (distanceCheck.inRange(target, location, 1000))
 		return true;
 
 	return false;
 }
 
 
+
 void Zombie::stay()
 {
-	location = old_location;
+	//location = old_location;
 	renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 0, speed * 5.0f);
 }
 
+void Zombie::moveTowardsGoal()
+{
+	Vec2 vec = goal - location;
 
+	location += vec.GetNormalized() * eTime * speed;
+	moving = true;
+}
 
 bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 {
 	eTime = fElapTm;
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
-	old_location = location;
-
+	
 
 	if (renderer.get_current_anim() != HIT)
 		hit = false;
@@ -98,10 +107,11 @@ bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 
 	if (alive && !hit) {
 
-		location += goal.GetNormalized() * eTime * speed;
-
-		if (old_location != location)
+		if (moving)
 			renderer.request_animation(WALK, vSpriteSheetPointers[WALK], 1, 0, 0, 0, 0, speed * 30.0f);
+		else
+			renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 0, speed * 5.0f);
+
 
 		look_at_vec(goal);
 
@@ -134,6 +144,7 @@ bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 		renderer.override (DIE, vSpriteSheetPointers[DIE], 0, 0, 0, 0, 1, 13.5f);
 	}
 
+	moving = false;
 	return 0;
 }
 

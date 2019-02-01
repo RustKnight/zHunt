@@ -21,9 +21,10 @@ public:
 	void stay();
 	bool update(float fElapTm, const Vec2& cam_off) override;
 	void is_hit();
-	bool in_range(Vec2 location) const;
+	bool in_range(Vec2 location);
 	void attack_target(Actor& target);
 	bool attack_cooldown_over();
+	void moveTowardsGoal();
 
 	void load_assets();
 

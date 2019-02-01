@@ -49,7 +49,7 @@ bool zHunt::OnUserCreate()
 	rf->load_assets();
 	vRifles.push_back(rf);
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 1; i++) {
 
 		Zombie* zom = new Zombie(Vec2{ 0,0 }, this);			// we should handle proper destruction of zombie
 		zom->load_assets();
@@ -80,7 +80,8 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	Clear(olc::VERY_DARK_GREEN);
 	SetPixelMode(olc::Pixel::ALPHA);
 	
-	
+	cout << rifleman.get_location().x << "   " << rifleman.get_location().y << endl;
+
 	camera.screen_in_view();
 	ai.update(rifleman.get_location());
 	ai.think();
@@ -96,17 +97,16 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 	for (Zombie* z : vZombies) {
 		z->update(fElapsedTime, camera.get_offset());
-		
-		if (!z->in_range(rifleman.get_location()))
-			z->setGoal(rifleman.get_location());
+		z->setGoal(rifleman.get_location());
 
-		else if (z->attack_cooldown_over() && z->alive)
-			z->attack_target(rifleman);
-		else
-			z->stay();
+		if (toggle_hunger) {
 
-		if (toggle_hunger) z->stay();
+			if (!z->in_range(rifleman.get_location() ) )
+				z->moveTowardsGoal();
 
+			else if (z->attack_cooldown_over() && z->alive)
+				z->attack_target(rifleman);
+		}
 
 
 		for (Projectile& p : vBullets)
@@ -146,8 +146,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 			a->draw();
 
 
-	//	cout << vActors[0]->get_location().y << endl;
-		cout << "Player " << rifleman.get_location().y << endl;
+	
 		//FillCircle( (a->get_location().x - camera.get_offset().x)  * 128, (a->get_location().y - camera.get_offset().y) * 128, 3, olc::RED);
 	}
 

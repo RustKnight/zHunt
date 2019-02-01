@@ -11,7 +11,50 @@
 #include "RectF.h"
 
 
+
+
 class Actor {
+
+	class DistanceCheck {
+	public:
+
+		bool inRange(Vec2 goal_in, Vec2 location_in, int range_in) {
+
+			innerCircle = range_in;
+			outerCircle = innerCircle * 1.40;
+
+			float x = (goal_in.x) * 128;
+			float y = (goal_in.y) * 128;
+
+			Vec2 distance = Vec2{ x, y } - location_in * 128;
+
+
+			if (!inInnerCircle) {
+				if (distance.GetLengthSq() < innerCircle) {
+					inInnerCircle = true;
+					return true;	//stop moving
+				}
+				else
+					return false;
+			}
+
+			else {
+				if (distance.GetLengthSq() < outerCircle) {
+					return true;	//stop moving
+				}
+			}
+
+
+			inInnerCircle = false;
+			return false;	// need to move
+		}
+
+	private:
+		int innerCircle;
+		int outerCircle; 
+		bool inInnerCircle = false;
+	};
+
 
 	
 	// WARNING temp swap AIM with IDLE
@@ -56,6 +99,7 @@ public:
 	void setGoal(Vec2 goal);
 	void look_at_vec(Vec2 pos);
 	bool withinOwnRect(Vec2 location) const;
+	bool withinDistance(Vec2 location, int dist_radius);
 
 	bool shot = false;
 	bool moving = false;
@@ -86,6 +130,7 @@ protected:
 	float speed;
 	float eTime = 0.0f;
 
+	DistanceCheck distanceCheck;
 	Value_checker vc;
 	vector <olc::Sprite*> vSpriteSheetPointers;
 	olc::PixelGameEngine* pge;

@@ -1,5 +1,17 @@
 #include "Rifleman.h"
 
+
+void Rifleman::moveTowardsGoal()
+{
+	if (!withinDistance(goal, 4000)) {
+
+		Vec2 coord = goal - location;
+		location += coord.GetNormalized() * eTime * speed;
+		moving = true;
+	}
+}
+
+
 bool Rifleman::update(float fElapTm, const Vec2 & cam_off)
 {
 	eTime = fElapTm;
@@ -78,13 +90,6 @@ void Rifleman::fire(bool b)
 	fired = b;
 }
 
-void Rifleman::moveTowardsGoal()
-{
-	if (!withinOwnRect(goal)) {
-		location += goal.GetNormalized() * eTime * speed;
-		moving = true;
-	}
-}
 
 
 void Rifleman::moveUp()

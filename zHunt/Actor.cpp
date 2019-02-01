@@ -45,11 +45,6 @@ void Actor::become_player(bool toggle)
 }
 
 
-void Actor::setGoal(Vec2 in_goal)
-{
-	if (alive && !hit)
-		goal = (in_goal - location);
-}
 
 void Actor::look_at_vec(Vec2 pos)
 {
@@ -58,8 +53,8 @@ void Actor::look_at_vec(Vec2 pos)
 	// for debug, line can be drawn
 
 
-	float dx = pos.x * 128;
-	float dy = pos.y * 128;
+	float dx = (pos.x - location.x) * 128;
+	float dy = (pos.y - location.y) * 128;
 	
 	
 	if (isPlayer) {
@@ -104,10 +99,18 @@ void Actor::look_at_vec(Vec2 pos)
 	facing = facings(int(angle));
 }
 
-bool Actor::withinOwnRect(Vec2 location) const
+void Actor::setGoal(Vec2 in_goal)
 {
-	int x = (location.x - camera_offset.x) * 128;
-	int y = (location.y - camera_offset.y) * 128;
+	if (alive && !hit)
+		goal = in_goal;
+}
+
+
+
+bool Actor::withinOwnRect(Vec2 location_in) const
+{
+	int x = (location_in.x - camera_offset.x) * 128;
+	int y = (location_in.y - camera_offset.y) * 128;
 
 	RenderRect r_rect = renderer.get_render_rect();
 
@@ -115,6 +118,11 @@ bool Actor::withinOwnRect(Vec2 location) const
 		return true;
 	else
 		return false;
+}
+
+bool Actor::withinDistance(Vec2 goal, int dist_radius)
+{
+	return distanceCheck.inRange(goal, location, dist_radius);
 }
 
 

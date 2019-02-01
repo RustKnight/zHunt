@@ -49,7 +49,7 @@ private:
 	olc::Sprite* fields;
 	Camera camera;
 	bool toggle_camera = true;
-	bool toggle_hunger = true;
+	bool toggle_hunger = false;
 
 	vector<Rifleman*> vRifles;
 	vector<Zombie*> vZombies;
