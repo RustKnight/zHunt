@@ -30,7 +30,9 @@ void Controller::control(Rifleman& rifle)
 	if (pge->GetMouse(1).bHeld) {
 		rifle.aim();
 
-		rifle.fire(pge->GetMouse(0).bPressed);	
+		Vec2 fireAngle{ (float)pge->GetMouseX(), (float)pge->GetMouseY() };
+
+		rifle.fire(pge->GetMouse(0).bPressed, fireAngle);
 	}
 }
 

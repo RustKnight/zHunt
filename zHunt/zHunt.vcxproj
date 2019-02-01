@@ -154,6 +154,7 @@
     <ClCompile Include="RectF.cpp" />
     <ClCompile Include="Rifleman.cpp" />
     <ClCompile Include="Vec2.cpp" />
+    <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="zHunt.cpp" />
     <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
@@ -175,6 +176,7 @@
     <ClInclude Include="spr_sqn.h" />
     <ClInclude Include="Value_checker.h" />
     <ClInclude Include="Vec2.h" />
+    <ClInclude Include="Weapon.h" />
     <ClInclude Include="zHunt.h" />
     <ClInclude Include="Zombie.h" />
   </ItemGroup>

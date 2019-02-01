@@ -126,6 +126,7 @@ bool Actor::withinDistance(Vec2 goal, int dist_radius)
 }
 
 
+
 void Actor::load_assets(vector<string> in_mappings)
 {
 	renderer.passMappingData(in_mappings);

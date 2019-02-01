@@ -9,17 +9,56 @@ void Rifleman::moveTowardsGoal()
 		location += coord.GetNormalized() * eTime * speed;
 		moving = true;
 	}
+
+	else
+		standGround();
 }
 
 
-bool Rifleman::update(float fElapTm, const Vec2 & cam_off)
+void Rifleman::standGround()
+{
+	//searchThreat 
+	vector <Zombie*> vTargets = actorsOnScreen(vpZom);
+
+	if (!vTargets.empty())
+		shootAtTarget(closest(vTargets));
+	
+}
+
+void Rifleman::shootAtTarget(Zombie* target_in)
+{
+	goal = target_in->get_location();
+	fire (true, target_in->get_location() * 128);
+}
+
+Vec2 Rifleman::getFireAngle()
+{
+	return fireAngle;
+}
+
+
+Zombie* Rifleman::closest(vector<Zombie*> vec)
+{
+
+	auto min = std::min_element(vec.begin(), vec.end(),
+		[]( const Zombie* a, const  Zombie* b){
+
+		return a->get_location().GetLengthSq() < b->get_location().GetLengthSq();
+	});
+
+	return *min;
+}
+
+
+
+bool Rifleman::update(float fElapTm, const Vec2 & cam_off, vector<Zombie*> vpZom_in)
 {
 	eTime = fElapTm;
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
 	look_at_vec(goal);
-
-
+	vpZom = vpZom_in;
+	kar.update(fElapTm);
 
 	if (moving) {
 
@@ -44,8 +83,11 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off)
 	else if (fired)
 		renderer.request_animation(FIRE, vSpriteSheetPointers[FIRE], 0, 0, 0, 0, 0, 15.5f);
 
+	else if (kar.bolting() && renderer.get_current_anim() != FIRE)
+		renderer.request_animation(RELOAD, vSpriteSheetPointers[RELOAD], 0, 0, 0, 0, 0, 1.0f);
+
 	else if (aiming) 
-		renderer.request_animation(AIM, vSpriteSheetPointers[AIM], 1, 0, 1, 0, 0, 3.0f);
+		renderer.request_animation(AIM, vSpriteSheetPointers[AIM], 1, 0, 0, 0, 0, 3.0f);
 
 	else 
 		renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 0, 1.5f);
@@ -62,12 +104,23 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off)
 	return fired;
 }
 
-Vec2 Rifleman::get_fire_angle() const
+void Rifleman::updateFireAngle(Vec2 fireAt)
 {
-	float dx = pge->GetMouseX() - ((location.x - camera_offset.x) * 128);
-	float dy = pge->GetMouseY() - ((location.y - camera_offset.y) * 128);
+	float dx;
+	float dy;
 
-	return Vec2{ dx, dy }.Normalize();
+	if (isPlayer) {
+		dx = fireAt.x - ( (location.x - camera_offset.x) * 128);
+		dy = fireAt.y - ( (location.y - camera_offset.y) * 128);
+	}
+
+	else {
+		dx = fireAt.x - (location.x * 128);
+		dy = fireAt.y - (location.y * 128);
+	}
+
+	Vec2 vec{ dx, dy };
+	fireAngle = vec.GetNormalized();
 }
 
 void Rifleman::reload()
@@ -85,9 +138,20 @@ void Rifleman::aim()
 	aiming = true;
 }
 
-void Rifleman::fire(bool b)
+void Rifleman::fire(bool b, Vec2 fireAt)
 {
 	fired = b;
+
+	if (fired){
+		if (kar.fire()) 
+			updateFireAngle(fireAt);
+		
+		else {
+			fired = false;
+			if (kar.checkRounds() <= 0)
+				kar.doReload();
+			}
+		}
 }
 
 
@@ -115,6 +179,30 @@ void Rifleman::moveRight()
 	moving = true;
 	location.x += eTime * speed;
 }
+
+vector<Zombie*> Rifleman::actorsOnScreen(vector<Zombie*> vec)
+{
+	vector<Zombie*> vOnScreen;
+
+	float x = location.x * 128;
+	float y = location.y * 128;
+
+	int halfScreenX = 768 / 2;
+	int halfScreenY = 640 / 2;
+
+	for (Zombie* ac : vec) {
+		float ZlocX = ac->get_location().x * 128;
+		float ZlocY = ac->get_location().y * 128;
+
+		if ((ZlocX > x - halfScreenX && ZlocX < x + halfScreenX) && (ZlocY > y - halfScreenY && ZlocY < y + halfScreenY))
+			if (ac->alive)
+				vOnScreen.push_back(ac);
+	}
+
+
+	return vOnScreen;
+}
+
 
 
 

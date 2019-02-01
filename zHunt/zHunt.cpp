@@ -42,14 +42,23 @@ bool zHunt::OnUserCreate()
 	unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
 	std::default_random_engine e(seed);
 	std::uniform_real_distribution <float> distR(0.1f, 0.4f);
-
-
-	rifleman.load_assets();
-	Rifleman* rf = new Rifleman{ Vec2{ 10.0f, 4.0f }, this };
-	rf->load_assets();
-	vRifles.push_back(rf);
+	
+	
 
 	for (int i = 0; i < 1; i++) {
+		Rifleman* rf = new Rifleman{ Vec2{ 10.0f + i, 4.0f }, this };
+		rf->load_assets();
+		vRifles.push_back(rf);
+		vActors.push_back(rf);
+		ai.loadRiflemen(rf);
+	}
+
+	rifleman.load_assets();
+	vRifles.push_back(&rifleman);
+	// 
+	// PUSH ZOMBIES
+	// 
+	for (int i = 0; i < 23; i++) {
 
 		Zombie* zom = new Zombie(Vec2{ 0,0 }, this);			// we should handle proper destruction of zombie
 		zom->load_assets();
@@ -63,12 +72,12 @@ bool zHunt::OnUserCreate()
 	rifleman.become_player(1);
 	
 
-	vActors.push_back(rf);
+	
 	vActors.push_back(&rifleman);
 	for (Zombie* z : vZombies)
 		vActors.push_back(z);
 
-	ai.loadRiflemen(rf);
+
 
 	return true;
 }
@@ -80,7 +89,6 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	Clear(olc::VERY_DARK_GREEN);
 	SetPixelMode(olc::Pixel::ALPHA);
 	
-	cout << rifleman.get_location().x << "   " << rifleman.get_location().y << endl;
 
 	camera.screen_in_view();
 	ai.update(rifleman.get_location());
@@ -88,24 +96,28 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	control.control(rifleman);
 
 	
-	vRifles[0]->update(fElapsedTime, camera.get_offset());
+	for (Rifleman* rf: vRifles) {
 
-	if (rifleman.update(fElapsedTime, camera.get_offset()))
-		vBullets.push_back( Projectile{ rifleman.get_location(), rifleman.get_fire_angle() });
-
+		if (rf->update(fElapsedTime, camera.get_offset(), vZombies))
+			vBullets.push_back(Projectile{ rf->get_location(), rf->getFireAngle() });
+	}
 
 
 	for (Zombie* z : vZombies) {
+
 		z->update(fElapsedTime, camera.get_offset());
-		z->setGoal(rifleman.get_location());
 
-		if (toggle_hunger) {
+		if (z->alive) {
+			z->setGoal(vRifles[0]->get_location());
 
-			if (!z->in_range(rifleman.get_location() ) )
-				z->moveTowardsGoal();
+			if (toggle_hunger) {
 
-			else if (z->attack_cooldown_over() && z->alive)
-				z->attack_target(rifleman);
+				if (!z->in_range(vRifles[0]->get_location()))
+					z->moveTowardsGoal();
+
+				else if (z->attack_cooldown_over())
+					z->attack_target(*vRifles[0]);
+			}
 		}
 
 
@@ -158,7 +170,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 		toggle_camera = !toggle_camera;
 	if (GetKey(olc::G).bPressed)
 		toggle_hunger = !toggle_hunger;
-	(toggle_camera) ? camera.update(rifleman.get_location()) : camera.update(zombie.get_location());
+	(toggle_camera) ? camera.update(rifleman.get_location()) : camera.update(vRifles[0]->get_location());
 
 	return true;
 }

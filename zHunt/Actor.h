@@ -21,7 +21,7 @@ class Actor {
 		bool inRange(Vec2 goal_in, Vec2 location_in, int range_in) {
 
 			innerCircle = range_in;
-			outerCircle = innerCircle * 1.40;
+			outerCircle = innerCircle * 1.60;
 
 			float x = (goal_in.x) * 128;
 			float y = (goal_in.y) * 128;

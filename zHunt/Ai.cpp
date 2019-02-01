@@ -18,9 +18,11 @@ void Ai::think()
 		// else
 		//		guard position
 
-		rf->setGoal(playerLocation);
-		rf->moveTowardsGoal();
 
+		rf->setGoal(playerLocation);
+
+		rf->moveTowardsGoal();
+		
 	}
 }
 
