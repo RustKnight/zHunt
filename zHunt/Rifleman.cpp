@@ -6,7 +6,8 @@ void Rifleman::follow()
 		standGround();
 
 	else
-		moveTowardsGoal();
+		if (turn.complete())
+			moveTowardsGoal();
 }
 
 
@@ -31,8 +32,7 @@ void Rifleman::standGround()
 
 void Rifleman::shootAtTarget(Zombie* target_in)
 {
-	if (renderer.get_current_anim() != FIRE || renderer.get_current_anim() != RELOAD) {
-
+	if ( (renderer.get_current_anim() != FIRE || renderer.get_current_anim() != RELOAD) && turn.complete() ) {
 		goal = target_in->get_location();
 		fire(true, target_in->get_location() * 128);
 	}
@@ -70,7 +70,9 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off, vector<Zombie*> vpZom
 	eTime = fElapTm;
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
-	look_at_vec(goal);
+	if (turn.complete())
+		turn.setCurrent(get_facing(goal), fElapTm);
+	facing = facings(turn.getFacing());
 	vpZom = vpZom_in;
 	kar.update(fElapTm);
 

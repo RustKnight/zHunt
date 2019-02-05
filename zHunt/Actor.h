@@ -93,6 +93,7 @@ public:
 	void draw();
 
 	void changeFacing(facings face);
+	int get_facing(Vec2 pos);
 	bool walking_backwards();
 	void take_damage(int damage);
 	void become_player(bool toggle);

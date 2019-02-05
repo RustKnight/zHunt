@@ -1,6 +1,7 @@
 #include "Actor.h"
 
-
+#define PI 3.14159265
+enum facings;
 
 void Actor::load_spr_sheet(std::string adrs)
 {
@@ -45,13 +46,60 @@ void Actor::become_player(bool toggle)
 }
 
 
+int Actor::get_facing(Vec2 pos)
+{
+
+	// for debug, line can be drawn
+
+	float dx = (pos.x - location.x) * 128;
+	float dy = (pos.y - location.y) * 128;
+
+
+	if (isPlayer) {
+		dx = pge->GetMouseX() - ((location.x - camera_offset.x) * 128);
+		dy = pge->GetMouseY() - ((location.y - camera_offset.y) * 128);
+	}
+
+	float angle = atan2(dy, dx);
+	angle = (roundf(angle / ((2 * PI) / 8) + 4));
+	if (angle == 8)
+		angle = 0;
+
+	switch (int(angle)) {
+		//N = 2, NE = 3, E = 4, SE = 5, S = 6, SW = 7, W = 0, NW = 1,
+	case 0:
+		angle = W;
+		break;
+	case 1:
+		angle = NW;
+		break;
+	case 2:
+		angle = N;
+		break;
+	case 3:
+		angle = NE;
+		break;
+	case 4:
+		angle = E;
+		break;
+	case 5:
+		angle = SE;
+		break;
+	case 6:
+		angle = S;
+		break;
+	case 7:
+		angle = SW;
+		break;
+	}
+
+	return int(angle);
+}
 
 void Actor::look_at_vec(Vec2 pos)
 {
 
-#define PI 3.14159265
 	// for debug, line can be drawn
-
 
 	float dx = (pos.x - location.x) * 128;
 	float dy = (pos.y - location.y) * 128;
@@ -61,7 +109,6 @@ void Actor::look_at_vec(Vec2 pos)
 		dx = pge->GetMouseX() - ((location.x - camera_offset.x) * 128);
 		dy = pge->GetMouseY() - ((location.y - camera_offset.y) * 128);
 	}
-
 
 	float angle = atan2(dy, dx);
 	angle = (roundf(angle / ((2 * PI) / 8) + 4));
