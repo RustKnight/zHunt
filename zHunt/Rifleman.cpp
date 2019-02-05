@@ -2,12 +2,7 @@
 
 void Rifleman::follow()
 {
-	if (withinDistance(goal, 4000))
-		standGround();
-
-	else
-		if (turn.complete())
-			moveTowardsGoal();
+		moveTowardsGoal();
 }
 
 
@@ -26,16 +21,22 @@ void Rifleman::standGround()
 
 	if (!vTargetsOnScreen.empty()) {
 		Zombie* z = closestTarget(vTargetsOnScreen);
+		goal = z->get_location();
+		if (turn.complete())
+			turn.setCurrent(get_facing(goal));
 		shootAtTarget(z);
 	}
 }
 
+
 void Rifleman::shootAtTarget(Zombie* target_in)
 {
-	if ( (renderer.get_current_anim() != FIRE || renderer.get_current_anim() != RELOAD) && turn.complete() ) {
-		goal = target_in->get_location();
-		fire(true, target_in->get_location() * 128);
+	if (turn.complete() ) {
+		if (renderer.get_current_anim() != FIRE || renderer.get_current_anim() != RELOAD) 
+			fire(true, target_in->get_location() * 128);
 	}
+	else
+		fired = false;
 }
 
 
@@ -70,9 +71,18 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off, vector<Zombie*> vpZom
 	eTime = fElapTm;
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
-	if (turn.complete())
-		turn.setCurrent(get_facing(goal), fElapTm);
-	facing = facings(turn.getFacing());
+
+	if (!isPlayer) {
+		int a = renderer.get_current_anim() != FIRE; // compress after check
+		turn.update(fElapTm, a);
+		if (turn.complete())
+			turn.setCurrent(get_facing(goal));
+		cout << facing << endl;
+		facing = facings(turn.getFacing());
+	}
+	else
+		look_at_vec(goal);
+
 	vpZom = vpZom_in;
 	kar.update(fElapTm);
 

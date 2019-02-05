@@ -24,7 +24,7 @@
 zHunt::zHunt() :
 	winWidth { 768.0f},
 	winHeight{ 640.0f },
-	rifleman{ Vec2 {10.0f, 9.0f}, this},
+	rifleman{ Vec2 {10.0f, 7.0f}, this},
 	zombie{ Vec2{ 5.0f, 5.0f }, this},
 	camera {this, &map, getWinWidth(), getWinHeight()},
 	control {this}
@@ -41,7 +41,7 @@ bool zHunt::OnUserCreate()
 
 	unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
 	std::default_random_engine e(seed);
-	std::uniform_real_distribution <float> distR(0.1f, 0.4f);
+	std::uniform_real_distribution <float> distR(0.1f, 0.25f);
 	
 	
 
