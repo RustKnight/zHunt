@@ -26,6 +26,7 @@ public:
 	void moveTowardsGoal();
 	void standGround();
 	void shootAtTarget(Zombie* target);
+	void follow();
 	Vec2 getFireAngle();
 
 	void moveUp();
@@ -34,7 +35,7 @@ public:
 	void moveRight();
 
 	vector<Zombie*> actorsOnScreen(vector<Zombie*> vec);
-	Zombie* closest(vector<Zombie*> vec);
+	Zombie* closestTarget(vector<Zombie*> vec);
 
 	void load_assets();
 

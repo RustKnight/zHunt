@@ -21,9 +21,9 @@ void Ai::think()
 		//		guard position
 
 
-		rf->setGoal(playerLocation);
 
-		rf->moveTowardsGoal();
+		rf->setGoal(playerLocation);
+		rf->follow();
 		
 	}
 }

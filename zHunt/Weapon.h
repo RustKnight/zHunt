@@ -13,11 +13,14 @@ public:
 	void doReload();
 	void update(float eTime);
 	bool getReloadState() const;
+	
+
+protected:
+	bool fireCoolDown();
 
 private:
 	bool clipEmpty();
-	bool fireCoolDown();
-
+	
 
 private:
 	int clipMax;

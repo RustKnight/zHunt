@@ -1,36 +1,43 @@
 #include "Rifleman.h"
 
+void Rifleman::follow()
+{
+	if (withinDistance(goal, 4000))
+		standGround();
+
+	else
+		moveTowardsGoal();
+}
+
 
 void Rifleman::moveTowardsGoal()
 {
-	if (withinDistance(goal, 4000)) 
-			standGround();
-		
-
-	else {
 		Vec2 coord = goal - location;
 		location += coord.GetNormalized() * eTime * speed;
 		moving = true;
-	}
 }
 
 
 void Rifleman::standGround()
 {
-	vector <Zombie*> vTargets;
-	vTargets = actorsOnScreen(vpZom);
+	vector <Zombie*> vTargetsOnScreen;
+	vTargetsOnScreen = actorsOnScreen(vpZom);
 
-	if (!vTargets.empty()) {
-		Zombie* z = closest(vTargets);
+	if (!vTargetsOnScreen.empty()) {
+		Zombie* z = closestTarget(vTargetsOnScreen);
 		shootAtTarget(z);
 	}
 }
 
 void Rifleman::shootAtTarget(Zombie* target_in)
 {
-	goal = target_in->get_location();
-	fire (true, target_in->get_location() * 128);
+	if (renderer.get_current_anim() != FIRE || renderer.get_current_anim() != RELOAD) {
+
+		goal = target_in->get_location();
+		fire(true, target_in->get_location() * 128);
+	}
 }
+
 
 Vec2 Rifleman::getFireAngle()
 {
@@ -38,7 +45,7 @@ Vec2 Rifleman::getFireAngle()
 }
 
 
-Zombie* Rifleman::closest(vector<Zombie*> vec)
+Zombie* Rifleman::closestTarget(vector<Zombie*> vec)
 {
 	float smallest = 9999999.0f;
 	int closeset_index;
@@ -90,8 +97,8 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off, vector<Zombie*> vpZom
 	else if (fired)
 		renderer.request_animation(FIRE, vSpriteSheetPointers[FIRE], 0, 0, 0, 0, 0, 15.5f);
 
-	else if (kar.bolting() && renderer.get_current_anim() != FIRE)
-		renderer.request_animation(RELOAD, vSpriteSheetPointers[RELOAD], 0, 0, 0, 0, 0, 1.0f);
+	else if (kar.bolting() || kar.getReloadState())
+		renderer.request_animation(RELOAD, vSpriteSheetPointers[RELOAD], 1, 0, 0, 0, 0, 1.0f);
 
 	else if (aiming) 
 		renderer.request_animation(AIM, vSpriteSheetPointers[AIM], 1, 0, 0, 0, 0, 3.0f);

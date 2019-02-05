@@ -27,7 +27,6 @@ void Weapon::update(float in_eTime)
 	if (fireCD > 0)
 		fireCD -= in_eTime * 1;
 
-	std::cout << fireCD << std::endl;
 
 	if (reloading)
 		if (reload < reloadTime)
@@ -64,5 +63,5 @@ bool Weapon::fireCoolDown()
 
 bool Carabine::bolting()
 {
-	return getReloadState();
+	return fireCoolDown();	
 }
