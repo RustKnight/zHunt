@@ -2,6 +2,7 @@
 #include "RectF.h"
 #include "Vec2.h"
 #include "olcPixelGameEngine.h"
+#include "olcPGEX_Sound.h"
 #include <math.h>
 
 #include "AnimationRenderer.h"

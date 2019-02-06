@@ -20,6 +20,7 @@
 #include "Controller.h"
 
 
+#include "olcPGEX_Sound.h"
 
 class zHunt : public olc::PixelGameEngine
 {
@@ -60,4 +61,12 @@ private:
 	vector<Projectile> vBullets;
 	Value_checker VC;
 	Effect effect;
+
+	int snd_fire1;
+	int snd_fire2;
+	int snd_reload;
+
+	int snd_zom1_hit;
+	int snd_zom2_hit;
+	int snd_zom3_hit;
 };

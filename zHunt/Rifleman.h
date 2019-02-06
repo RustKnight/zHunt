@@ -29,6 +29,7 @@ public:
 	void shootAtTarget(Zombie* target);
 	void follow();
 	Vec2 getFireAngle();
+	void getSounds(int f1, int f2, int r);
 
 	void moveUp();
 	void moveDown();
@@ -47,4 +48,8 @@ private:
 	bool fired = false;
 	bool aiming = false;
 	vector<Zombie*> vpZom;
+
+	int snd_reload;
+	int snd_fire1;
+	int snd_fire2;
 };

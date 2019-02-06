@@ -22,6 +22,7 @@ void Rifleman::standGround()
 	if (!vTargetsOnScreen.empty()) {
 		Zombie* z = closestTarget(vTargetsOnScreen);
 		goal = z->get_location();
+
 		if (turn.complete())
 			turn.setCurrent(get_facing(goal));
 		shootAtTarget(z);
@@ -43,6 +44,14 @@ void Rifleman::shootAtTarget(Zombie* target_in)
 Vec2 Rifleman::getFireAngle()
 {
 	return fireAngle;
+}
+
+void Rifleman::getSounds(int f1, int f2, int r)
+{
+	snd_fire1 = f1;
+	snd_fire2 = f2;
+	snd_reload = r;
+
 }
 
 
@@ -106,11 +115,12 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off, vector<Zombie*> vpZom
 		}
 	}
 
-	else if (fired)
+	else if (fired) 
 		renderer.request_animation(FIRE, vSpriteSheetPointers[FIRE], 0, 0, 0, 0, 0, 15.5f);
-
-	else if (kar.bolting() || kar.getReloadState())
+	
+	else if (kar.bolting() || kar.getReloadState()) {
 		renderer.request_animation(RELOAD, vSpriteSheetPointers[RELOAD], 1, 0, 0, 0, 0, 1.0f);
+	}
 
 	else if (aiming) 
 		renderer.request_animation(AIM, vSpriteSheetPointers[AIM], 1, 0, 0, 0, 0, 3.0f);

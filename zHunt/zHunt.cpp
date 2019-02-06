@@ -39,6 +39,18 @@ bool zHunt::OnUserCreate()
 	//effect.splat_effects = new olc::Sprite("sprites\\effects\\splat_darker.png");
 	//effect.effect_handler.load_mapping_info_string("sprites\\effects\\splat.txt");
 
+	olc::SOUND::InitialiseAudio(44100, 1, 8, 512);
+
+	snd_fire1 = olc::SOUND::LoadAudioSample("sounds\\f-r.wav");
+	snd_fire2 = olc::SOUND::LoadAudioSample("sounds\\fire2.wav");
+	snd_reload = olc::SOUND::LoadAudioSample("sounds\\reload.wav");
+	snd_zom1_hit = olc::SOUND::LoadAudioSample("sounds\\zombie_hit1.wav");
+	snd_zom2_hit = olc::SOUND::LoadAudioSample("sounds\\zombie_hit2.wav");
+	snd_zom3_hit = olc::SOUND::LoadAudioSample("sounds\\zombie_hit3.wav");
+	
+
+	
+
 	unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
 	std::default_random_engine e(seed);
 	std::uniform_real_distribution <float> distR(0.1f, 0.25f);
@@ -71,7 +83,7 @@ bool zHunt::OnUserCreate()
 	camera.load_fields("sprites\\terrain\\green.png");
 	rifleman.become_player(1);
 	
-
+	rifleman.getSounds(snd_fire1, snd_fire2, snd_reload);
 	
 	vActors.push_back(&rifleman);
 	for (Zombie* z : vZombies)
@@ -86,6 +98,7 @@ bool zHunt::OnUserCreate()
 
 bool zHunt::OnUserUpdate(float fElapsedTime) 
 {
+
 	Clear(olc::VERY_DARK_GREEN);
 	SetPixelMode(olc::Pixel::ALPHA);
 	
@@ -98,8 +111,10 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	
 	for (Rifleman* rf: vRifles) {
 
-		if (rf->update(fElapsedTime, camera.get_offset(), vZombies))
+		if (rf->update(fElapsedTime, camera.get_offset(), vZombies)) {
+			olc::SOUND::PlaySample(snd_fire1);
 			vBullets.push_back(Projectile{ rf->get_location(), rf->getFireAngle() });
+		}
 	}
 
 
@@ -130,6 +145,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 					effect.vEff_struct.push_back(ac);
 					z->shot = true;
 					p.body_hit_times++;
+					olc::SOUND::PlaySample(rand() % 4 + 4);
 				}
 			}
 	}
