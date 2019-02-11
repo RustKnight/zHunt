@@ -5,6 +5,10 @@
 #include <algorithm>
 #include "TurnAround.h"
 
+
+// Diagonal move of AI 50 % more ?
+// stop beserk fire - ai cannot toggle the not firing flag on
+
 class Rifleman : public Actor {
 
 	enum actions { AIM, CLIMB, IDLE, PICK, RUN, WALK, FIRE, RELOAD, HURT, DIE };
@@ -30,6 +34,7 @@ public:
 	void follow();
 	Vec2 getFireAngle();
 	void getSounds(int f1, int f2, int r);
+	void die();
 
 	void moveUp();
 	void moveDown();

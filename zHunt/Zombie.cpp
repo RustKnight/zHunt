@@ -29,7 +29,7 @@ void Zombie::attack_target(Actor& target)
 {
 	renderer.request_animation(ATTACK, vSpriteSheetPointers[ATTACK], 0, 0, 0, 0, 0, 8.0f);
 	
-	target.take_damage(rand() % 5);
+	target.take_damage(5 + rand() % 16);
 }
 
 bool Zombie::attack_cooldown_over()

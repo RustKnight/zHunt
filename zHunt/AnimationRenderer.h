@@ -21,7 +21,7 @@ public:
 
 	AnimationRenderer(olc::PixelGameEngine* pge_in)
 		: pge{ pge_in },
-		action{ 0 }, facing{ 0 }, play_seq{ 0 }, eTime{ 0 },
+		action{ 1 }, facing{ 0 }, play_seq{ 0 }, eTime{ 0 },
 		task_done{ false }, loop{ true }, allow_interrupt{ true }
 	{}
 
@@ -39,6 +39,7 @@ public:
 	AnimationHandler effects_handler;
 	olc::Sprite* effects_sprite_sheet;
 	RenderRect get_render_rect() const;
+	void portalToggle();
 
 	void passMappingData(vector <string> in_map);
 
@@ -75,4 +76,5 @@ private:
 
 	RenderRect r_rect;
 	bool colliding = false;
+	bool isPortal = false;
 };

@@ -18,6 +18,7 @@
 // civilians could easily be added choosing the closest threat and running in opposite direction
 // go to waypoints
 
+
 // animation sync so that when zombie finishes hitting , player plays hurt
 // get rid of silly cascading initializations ; if a zombie class will be a zombie, make asset specific stuff be part of the class
 
@@ -27,9 +28,10 @@ zHunt::zHunt() :
 	rifleman{ Vec2 {10.0f, 7.0f}, this},
 	zombie{ Vec2{ 5.0f, 5.0f }, this},
 	camera {this, &map, getWinWidth(), getWinHeight()},
-	control {this}
+	control {this},
+	portal{ Vec2 {9.0f, 8.0f}, this }
 {
-	sAppName = "RustKnight";
+	sAppName = "zHunt";
 }
 
 
@@ -65,12 +67,16 @@ bool zHunt::OnUserCreate()
 		ai.loadRiflemen(rf);
 	}
 
+	portal.load_assets();
+	portal.renderer.portalToggle();	
+	
+
 	rifleman.load_assets();
 	vRifles.push_back(&rifleman);
 	// 
 	// PUSH ZOMBIES
 	// 
-	for (int i = 0; i < 23; i++) {
+	for (int i = 0; i < 3; i++) {
 
 		Zombie* zom = new Zombie(Vec2{ 0,0 }, this);			// we should handle proper destruction of zombie
 		zom->load_assets();
@@ -85,6 +91,7 @@ bool zHunt::OnUserCreate()
 	
 	rifleman.getSounds(snd_fire1, snd_fire2, snd_reload);
 	
+	vActors.push_back(&portal);
 	vActors.push_back(&rifleman);
 	for (Zombie* z : vZombies)
 		vActors.push_back(z);
@@ -108,32 +115,56 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	ai.think();
 	control.control(rifleman);
 
-	
+	if (!vZombies[0]->alive)
+	portal.update(fElapsedTime, camera.get_offset(), 1);
+
 	for (Rifleman* rf: vRifles) {
 
 		if (rf->update(fElapsedTime, camera.get_offset(), vZombies)) {
 			olc::SOUND::PlaySample(snd_fire1);
 			vBullets.push_back(Projectile{ rf->get_location(), rf->getFireAngle() });
 		}
+
+		if (rf->alive && rf->hp < 0)
+			rf->die();
 	}
 
+	int zombiesFeedingOnDead = 0;
 
 	for (Zombie* z : vZombies) {
 
 		z->update(fElapsedTime, camera.get_offset());
 
 		if (z->alive && !z->hit) {
-			z->setGoal(vRifles[0]->get_location());
+
+			int closestFlesh;
+			float choice0;
+			float choice1;
+			
+			choice0 = ( vRifles[0]->get_location() - z->get_location() ).GetLengthSq();
+			choice1 = (vRifles[1]->get_location() - z->get_location()).GetLengthSq();
+
+			(choice0 <= choice1) ? closestFlesh = 0 : closestFlesh = 1;
+
+			if (!vRifles[0]->alive && closestFlesh == 0)
+				zombiesFeedingOnDead++;
+			if (zombiesFeedingOnDead > 6)
+				closestFlesh = 1;
+
+			z->setGoal(vRifles[closestFlesh]->get_location());
 
 			if (toggle_hunger) {
 
-				if (!z->in_range(vRifles[0]->get_location()))
+				if (!z->in_range(vRifles[closestFlesh]->get_location()))
 					z->moveTowardsGoal();
 
 				else if (z->attack_cooldown_over())
-					z->attack_target(*vRifles[0]);
+					z->attack_target(*vRifles[closestFlesh]);
 			}
 		}
+
+	
+
 
 
 		for (Projectile& p : vBullets)
@@ -172,11 +203,9 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	for (Actor* a : vActors) {
 		if (a->alive)
 			a->draw();
-
-
-	
-		//FillCircle( (a->get_location().x - camera.get_offset().x)  * 128, (a->get_location().y - camera.get_offset().y) * 128, 3, olc::RED);
 	}
+
+	portal.draw();
 
 	// renders candidates for splat effect
 	//effect.render_effect(this, fElapsedTime, camera.get_offset());

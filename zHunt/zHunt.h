@@ -12,6 +12,7 @@
 #include "Actor.h"
 #include "Zombie.h"
 #include "Rifleman.h"
+#include "Portal.h"
 #include "Projectile.h"
 #include "Map.h"
 #include "Camera.h"
@@ -47,6 +48,7 @@ private:
 	Map map;
 	Rifleman rifleman;
 	Zombie zombie;
+	Portal portal;
 	olc::Sprite* fields;
 	Camera camera;
 	bool toggle_camera = true;

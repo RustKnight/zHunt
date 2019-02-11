@@ -97,17 +97,20 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 
 	// code that handles mirroring in case of non indexed facing
 	// N-0, NE-1, E-2, SE-3, S-4, SW-5, W-6, NW-7.
-	if (facing == 5 || facing == 6 || facing == 7) {
-		switch (facing) {
-		case 5: facing = 3; break;
-		case 6: facing = 2; break;
-		case 7: facing = 1; break;
+	if (!isPortal) {
+		if (facing == 5 || facing == 6 || facing == 7) {
+			switch (facing) {
+			case 5: facing = 3; break;
+			case 6: facing = 2; break;
+			case 7: facing = 1; break;
+			}
+			mirror = true;
 		}
-		mirror = true;
 	}
 
-	//if (action == 8)
-	//	facing = 0;
+	if (action == 8 || action == 9) {
+		facing = 0;
+	}
 
 	int num_sequences = anm_hdl.get_sqn_size(action, facing);
 
@@ -142,10 +145,12 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 		}
 	
 		// when run in release it crashes, in debug is fine = without this piece of code, it would crash
-		if (action == 8)
-			facing = 0;
+		
 
+	
+		
 	requested_sqn = anm_hdl.get_coords(action, facing, int(play_seq));
+	//cout << play_seq << endl;
 
 	//cout << play_seq << endl;
 	// maybe we shouldn't try to draw if off the screen
@@ -163,6 +168,11 @@ bool AnimationRenderer::get_task_status()
 RenderRect AnimationRenderer::get_render_rect() const
 {
 	return r_rect;
+}
+
+void AnimationRenderer::portalToggle()
+{
+	isPortal = true;
 }
 
 void AnimationRenderer::passMappingData(vector<string> in_map)

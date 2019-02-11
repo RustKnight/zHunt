@@ -151,6 +151,7 @@
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Portal.cpp" />
     <ClCompile Include="RectF.cpp" />
     <ClCompile Include="Rifleman.cpp" />
     <ClCompile Include="Vec2.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="olcPGEX_Sound.h" />
     <ClInclude Include="olcPixelGameEngine.h" />
+    <ClInclude Include="Portal.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="RectF.h" />
     <ClInclude Include="RenderRect.h" />

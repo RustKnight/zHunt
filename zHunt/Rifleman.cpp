@@ -54,6 +54,11 @@ void Rifleman::getSounds(int f1, int f2, int r)
 
 }
 
+void Rifleman::die()
+{
+	alive = false;
+}
+
 
 Zombie* Rifleman::closestTarget(vector<Zombie*> vec)
 {
@@ -86,7 +91,6 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off, vector<Zombie*> vpZom
 		turn.update(fElapTm, a);
 		if (turn.complete())
 			turn.setCurrent(get_facing(goal));
-		cout << facing << endl;
 		facing = facings(turn.getFacing());
 	}
 	else
@@ -125,6 +129,9 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off, vector<Zombie*> vpZom
 	else if (aiming) 
 		renderer.request_animation(AIM, vSpriteSheetPointers[AIM], 1, 0, 0, 0, 0, 3.0f);
 
+	else if (!alive)
+		renderer.request_animation(9, vSpriteSheetPointers[9], 0, 0, 0, 0, 1, 7.5f);
+
 	else 
 		renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 0, 1.5f);
 		
@@ -136,6 +143,7 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off, vector<Zombie*> vpZom
 	Actor::running = false;
 	aiming = false;
 
+	
 
 	return fired;
 }
