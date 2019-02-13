@@ -9,6 +9,7 @@
 // Diagonal move of AI 50 % more ?
 // stop beserk fire - ai cannot toggle the not firing flag on
 // bullets sometimes pass target?
+// maybe make player turn as AI as well, so running and turning around is costs a bit of time and is not abused
 
 class Rifleman : public Actor {
 
@@ -45,7 +46,7 @@ public:
 	vector<Zombie*> actorsOnScreen(vector<Zombie*> vec);
 	Zombie* closestTarget(vector<Zombie*> vec);
 
-	void load_assets();
+	void load_assets(vector <olc::Sprite*>* vpRfl);
 
 private:
 	Carabine kar;

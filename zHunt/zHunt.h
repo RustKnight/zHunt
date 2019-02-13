@@ -31,6 +31,7 @@ public:
 
 	bool OnUserCreate() override;
 	bool OnUserUpdate(float fElapsedTime) override;
+	void loadResources();
 
 	//tool functions
 	Vec2 placeInCenter() const;
@@ -54,6 +55,10 @@ private:
 	Camera camera;
 	bool toggle_camera = true;
 	bool toggle_hunger = false;
+
+	vector <olc::Sprite*> vZomSprites;
+	vector <olc::Sprite*> vRflSprites;
+	vector <olc::Sprite*> vPrtSprites;
 
 	vector<Rifleman*> vRifles;
 	vector<Zombie*> vZombies;

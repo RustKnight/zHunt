@@ -19,7 +19,7 @@ public:
 	}
 
 	
-	void load_assets();
+	void load_assets(vector <olc::Sprite*>* vpPrt);
 	void becomeSpawner(Vec2 spw_loc);
 	void update(float eTime, const Vec2 & cam_off, bool start);
 	bool getStatus() const;
@@ -40,7 +40,6 @@ private:
 	int opened = false;
 
 	bool transitionDone;	
-	bool isTeleporter = true;
 
 	phase color_idle = RED_IDLE;
 	phase color_open = RED_OPEN;

@@ -1,7 +1,8 @@
 #include "zSpawner.h"
 
-void zSpawner::load(vector<Zombie*>* vZ, vector<Portal*>* vP, vector <Actor*>* vA, olc::PixelGameEngine* pge_in)
+void zSpawner::load(vector<Zombie*>* vZ, vector<Portal*>* vP, vector <Actor*>* vA, olc::PixelGameEngine* pge_in, vector <olc::Sprite*>* vZomSprites_in)
 {
+	vZomSprites = vZomSprites_in;
 	vZom = vZ;
 	vPrt = vP;
 	vAct = vA;
@@ -34,7 +35,7 @@ void zSpawner::spawnZ()
 		if (canSpawn && prt->getStatus() && prt->isSpawner) {
 
 			Zombie* zom = new Zombie(prt->get_location(), pge);			// we should handle proper destruction of zombie
-			zom->load_assets();
+			zom->load_assets(vZomSprites);
 			zom->randomize_stats(distR(e));
 			vZom->push_back(zom);
 			(*vAct).push_back(zom);

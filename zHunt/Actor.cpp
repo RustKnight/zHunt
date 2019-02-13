@@ -3,11 +3,6 @@
 #define PI 3.14159265
 enum facings;
 
-void Actor::load_spr_sheet(std::string adrs)
-{
-	olc::Sprite* spr = new olc::Sprite{ adrs };
-	vSpriteSheetPointers.push_back(spr);
-}
 
 
 
@@ -31,7 +26,7 @@ void Actor::take_damage(int damage)
 	hp -= damage;
 	facing = N;
 
-	renderer.request_animation (8, vSpriteSheetPointers[8], 0, 0, 0, 0, 0, 10.0f);
+	renderer.request_animation (8, (*vSpriteSheetPointers)[8], 0, 0, 0, 0, 0, 10.0f);
 }
 
 void Actor::become_player(bool toggle)

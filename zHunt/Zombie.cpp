@@ -26,12 +26,12 @@ void Zombie::is_hit()
 		alive = false;
 
 	if (alive)
-		renderer.request_animation(HIT, vSpriteSheetPointers[HIT], 0, 0, 0, 0, 0, 5.5f);
+		renderer.request_animation(HIT, (*vSpriteSheetPointers)[HIT], 0, 0, 0, 0, 0, 5.5f);
 }
 
 void Zombie::attack_target(Actor& target)
 {
-	renderer.request_animation(ATTACK, vSpriteSheetPointers[ATTACK], 0, 0, 0, 0, 0, 8.0f);
+	renderer.request_animation(ATTACK, (*vSpriteSheetPointers)[ATTACK], 0, 0, 0, 0, 0, 8.0f);
 	
 	target.take_damage(5 + rand() % 16);
 }
@@ -52,14 +52,10 @@ bool Zombie::attack_cooldown_over()
 
 
 
-void Zombie::load_assets()
+void Zombie::load_assets(vector <olc::Sprite*>* vpZomSpr)
 {
 
-	load_spr_sheet("sprites\\zombie\\attack\\z_attack.png");
-	load_spr_sheet("sprites\\zombie\\die\\z_die.png");
-	load_spr_sheet("sprites\\zombie\\hit\\z_hit.png");
-	load_spr_sheet("sprites\\zombie\\idle\\z_idle.png");
-	load_spr_sheet("sprites\\zombie\\walk\\z_walk.png");
+	vSpriteSheetPointers = vpZomSpr;
 
 
 	vector <string> map;
@@ -72,6 +68,8 @@ void Zombie::load_assets()
 
 	Actor::load_assets(map);
 }
+
+
 
 bool Zombie::in_range(Vec2 target)
 {
@@ -87,7 +85,7 @@ bool Zombie::in_range(Vec2 target)
 void Zombie::stay()
 {
 	//location = old_location;
-	renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 0, speed * 5.0f);
+	renderer.request_animation(IDLE, (*vSpriteSheetPointers)[IDLE], 1, 0, 1, 1, 0, speed * 5.0f);
 }
 
 void Zombie::moveTowardsGoal()
@@ -112,9 +110,9 @@ bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 	if (alive && !hit) {
 
 		if (moving)
-			renderer.request_animation(WALK, vSpriteSheetPointers[WALK], 1, 0, 0, 0, 0, speed * 30.0f);
+			renderer.request_animation(WALK, (*vSpriteSheetPointers)[WALK], 1, 0, 0, 0, 0, speed * 30.0f);
 		else
-			renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 0, speed * 5.0f);
+			renderer.request_animation(IDLE, (*vSpriteSheetPointers)[IDLE], 1, 0, 1, 1, 0, speed * 5.0f);
 
 
 		look_at_vec(goal);
@@ -135,17 +133,17 @@ bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 
 
 			if (pge->GetKey(olc::I).bPressed)
-				renderer.request_animation(DIE, vSpriteSheetPointers[DIE], 0, 0, 0, 0, 0, 13.5f);
+				renderer.request_animation(DIE, (*vSpriteSheetPointers)[DIE], 0, 0, 0, 0, 0, 13.5f);
 		}
 	}
 
 
 	else if (alive)
-		renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 0, speed * 5.0f);
+		renderer.request_animation(IDLE, (*vSpriteSheetPointers)[IDLE], 1, 0, 1, 1, 0, speed * 5.0f);
 
 	if (!alive) {
 		facing = facings(random_death_anim);
-		renderer.override (DIE, vSpriteSheetPointers[DIE], 0, 0, 0, 0, 1, 13.5f);
+		renderer.override (DIE, (*vSpriteSheetPointers)[DIE], 0, 0, 0, 0, 1, 13.5f);
 	}
 
 	moving = false;

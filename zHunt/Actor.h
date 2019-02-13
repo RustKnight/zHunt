@@ -89,7 +89,6 @@ public:
 
 
 public:
-	void load_spr_sheet(std::string adrs);
 	
 	virtual bool update (float fElapTm, const Vec2& cam_off);
 	void draw();
@@ -128,7 +127,7 @@ protected:
 	Vec2 goal;
 	Vec2 location;
 	Vec2 old_location;
-	vector <olc::Sprite*> vSpriteSheetPointers;
+	vector <olc::Sprite*>* vSpriteSheetPointers;
 
 	Vec2 camera_offset;
 	Vec2 mouse_to_player_distance;

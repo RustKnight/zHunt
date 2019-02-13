@@ -50,7 +50,7 @@ bool zHunt::OnUserCreate()
 	snd_zom2_hit = olc::SOUND::LoadAudioSample("sounds\\zombie_hit2.wav");
 	snd_zom3_hit = olc::SOUND::LoadAudioSample("sounds\\zombie_hit3.wav");
 	
-
+	loadResources();
 	
 
 	unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
@@ -61,7 +61,7 @@ bool zHunt::OnUserCreate()
 
 	for (int i = 0; i < 1; i++) {
 		Rifleman* rf = new Rifleman{ Vec2{ 10.0f + i, 4.0f }, this };
-		rf->load_assets();
+		rf->load_assets(&vRflSprites);
 		vRifles.push_back(rf);
 		vActors.push_back(rf);
 		ai.loadRiflemen(rf);
@@ -70,7 +70,7 @@ bool zHunt::OnUserCreate()
 
 	for (int i = 0; i < 4; i++) {
 		Portal* prt = new Portal{ Vec2{ 3,3 }, this };
-		prt->load_assets();
+		prt->load_assets(&vPrtSprites);
 		
 		if (i < 3)
 		prt->becomeSpawner(Vec2{ float(rand() % 16), float(rand() % 10) });
@@ -82,14 +82,14 @@ bool zHunt::OnUserCreate()
 	
 	
 
-	rifleman.load_assets();
+	rifleman.load_assets(&vRflSprites);
 	vRifles.push_back(&rifleman);
 
 
 
 	for (int i = 0; i < 3; i++) {
 		Zombie* zom = new Zombie(Vec2{ 0,0 }, this);			// we should handle proper destruction of zombie
-		zom->load_assets();
+		zom->load_assets(&vZomSprites);
 		zom->randomize_stats(distR(e));	
 		zom->randomizeStartLocation();
 		vZombies.push_back(zom);
@@ -104,7 +104,7 @@ bool zHunt::OnUserCreate()
 	
 	vActors.push_back(&rifleman);
 
-	zSpawn.load(&vZombies, &vPortals, &vActors, this);
+	zSpawn.load(&vZombies, &vPortals, &vActors, this, &vZomSprites);
 
 	return true;
 }
@@ -113,17 +113,17 @@ bool zHunt::OnUserCreate()
 
 bool zHunt::OnUserUpdate(float fElapsedTime) 
 {
+	{
+		Clear(olc::VERY_DARK_GREEN);
+		SetPixelMode(olc::Pixel::ALPHA);
 
-	Clear(olc::VERY_DARK_GREEN);
-	SetPixelMode(olc::Pixel::ALPHA);
-	
 
-	camera.screen_in_view();
-	ai.update(rifleman.get_location());
-	ai.think();
-	control.control(rifleman);
-	zSpawn.update(fElapsedTime);
-
+		camera.screen_in_view();
+		ai.update(rifleman.get_location());
+		ai.think();
+		control.control(rifleman);
+		zSpawn.update(fElapsedTime);
+	}
 	
 	for (Portal* prt : vPortals) {
 		prt->update(fElapsedTime, camera.get_offset(), 1);
@@ -158,6 +158,9 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 			(choice0 <= choice1) ? closestFlesh = 0 : closestFlesh = 1;
 
+
+
+
 			if (!vRifles[0]->alive && closestFlesh == 0)
 				zombiesFeedingOnDead++;
 			if (zombiesFeedingOnDead > 6)
@@ -176,8 +179,6 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 		}
 
 	
-
-
 
 		for (Projectile& p : vBullets)
 			if (z->withinOwnRect(p.location)) {
@@ -229,6 +230,55 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	(toggle_camera) ? camera.update(rifleman.get_location()) : camera.update(vRifles[0]->get_location());
 
 	return true;
+}
+
+void zHunt::loadResources()
+{
+	
+	olc::Sprite* spr = new olc::Sprite{ "sprites\\zombie\\attack\\z_attack.png" };
+	vZomSprites.push_back(spr);
+
+	 spr = new olc::Sprite{ "sprites\\zombie\\die\\z_die.png" };
+	vZomSprites.push_back(spr);
+	 spr = new olc::Sprite{ "sprites\\zombie\\hit\\z_hit.png" };
+	vZomSprites.push_back(spr);
+	 spr = new olc::Sprite{ "sprites\\zombie\\idle\\z_idle.png" };
+	vZomSprites.push_back(spr);
+	 spr = new olc::Sprite{ "sprites\\zombie\\walk\\z_walk.png" };
+	vZomSprites.push_back(spr);	
+
+
+	 spr = new olc::Sprite{ "sprites\\rifleman\\NEW\\aim\\r_aim.png" };
+	vRflSprites.push_back(spr);
+	 spr = new olc::Sprite{ "sprites\\rifleman\\NEW\\climb\\r_climb.png" };
+	vRflSprites.push_back(spr);
+	 spr = new olc::Sprite{ "sprites\\rifleman\\NEW\\idle\\r_idle.png" };
+	vRflSprites.push_back(spr);
+	 spr = new olc::Sprite{ "sprites\\rifleman\\NEW\\pick\\r_pick.png" };
+	vRflSprites.push_back(spr);
+	 spr = new olc::Sprite{ "sprites\\rifleman\\NEW\\run\\r_run.png" };
+	vRflSprites.push_back(spr);
+	 spr = new olc::Sprite{ "sprites\\rifleman\\NEW\\walk\\r_walk.png" };
+	vRflSprites.push_back(spr);
+	 spr = new olc::Sprite{ "sprites\\rifleman\\NEW\\fire\\r_fire.png" };
+	vRflSprites.push_back(spr);
+	 spr = new olc::Sprite{ "sprites\\rifleman\\NEW\\reload\\r_reload.png" };
+	vRflSprites.push_back(spr);
+	 spr = new olc::Sprite{ "sprites\\rifleman\\NEW\\hurt\\r_hurt.png" };
+	vRflSprites.push_back(spr);
+	 spr = new olc::Sprite{ "sprites\\rifleman\\NEW\\die\\r_die.png" };
+	vRflSprites.push_back(spr);
+
+
+	spr = new olc::Sprite{ "sprites\\portals\\brown_idle\\idle.png" };
+	vPrtSprites.push_back(spr);
+	spr = new olc::Sprite{ "sprites\\portals\\red_idle\\idle.png" };
+	vPrtSprites.push_back(spr);
+	spr = new olc::Sprite{ "sprites\\portals\\brown_open\\open.png" };
+	vPrtSprites.push_back(spr);
+	spr = new olc::Sprite{ "sprites\\portals\\red_open\\open.png" };
+	vPrtSprites.push_back(spr);
+
 }
 
 

@@ -1,11 +1,8 @@
 #include "Portal.h"
 
-void Portal::load_assets()
+void Portal::load_assets(vector <olc::Sprite*>* vpPrt)
 {
-		load_spr_sheet("sprites\\portals\\brown_idle\\idle.png");
-		load_spr_sheet("sprites\\portals\\red_idle\\idle.png");
-		load_spr_sheet("sprites\\portals\\brown_open\\open.png");
-		load_spr_sheet("sprites\\portals\\red_open\\open.png");
+	vSpriteSheetPointers = vpPrt;
 
 		vector <string> mappingData;
 		mappingData.push_back({ "sprites\\portals\\brown_idle\\idle.txt" });
@@ -64,10 +61,10 @@ void Portal::openPortal()
 		transitionDone = renderer.animationCount;
 
 		if (!transitionDone && !opened)
-			renderer.request_animation(color_open, vSpriteSheetPointers[color_open], 0, 0, 0, 0, 1, speed * 15.0f);
+			renderer.request_animation(color_open, (*vSpriteSheetPointers)[color_open], 0, 0, 0, 0, 1, speed * 15.0f);
 
 		else {
-			renderer.override(color_idle, vSpriteSheetPointers[color_idle], 1, 0, 1, 1, 0, speed * 15.0f);
+			renderer.override(color_idle, (*vSpriteSheetPointers)[color_idle], 1, 0, 1, 1, 0, speed * 15.0f);
 			opened = true;
 		}
 
@@ -82,7 +79,7 @@ bool Portal::closePortal()
 {
 	if (opened) {
 		
-		renderer.request_animation(color_open, vSpriteSheetPointers[color_open], 1, 1, 0, 0, 1, speed * 15.0f);
+		renderer.request_animation(color_open, (*vSpriteSheetPointers)[color_open], 1, 1, 0, 0, 1, speed * 15.0f);
 
 		transitionDone = renderer.animationCount;
 
@@ -111,7 +108,6 @@ void Portal::becomeSpawner(Vec2 spw_loc)
 
 	location = spw_loc;
 	isSpawner = true;
-	isTeleporter = false;
 }
 
 Vec2 Portal::getPosition() const

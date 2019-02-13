@@ -103,38 +103,38 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off, vector<Zombie*> vpZom
 	if (moving) {
 
 		if (walking_backwards() && isPlayer) {
-			renderer.request_animation(WALK, vSpriteSheetPointers[WALK], INTERRUPTABLE, REVERSED, NOT_LOOPED, NOT_BACK_FORTH, 0, 4.0f);
+			renderer.request_animation(WALK, (*vSpriteSheetPointers)[WALK], INTERRUPTABLE, REVERSED, NOT_LOOPED, NOT_BACK_FORTH, 0, 4.0f);
 			speed = 0.32f;
 		}
 
 		else {
 			if (!Actor::running) {
-				renderer.request_animation(WALK, vSpriteSheetPointers[WALK], 1, 0, 0, 0, 0, 6.5f);
+				renderer.request_animation(WALK, (*vSpriteSheetPointers)[WALK], 1, 0, 0, 0, 0, 6.5f);
 				speed = 0.8f;
 			}
 
 			else {
-				renderer.request_animation(RUN, vSpriteSheetPointers[RUN], 1, 0, 0, 0, 0, 9.5f);
+				renderer.request_animation(RUN, (*vSpriteSheetPointers)[RUN], 1, 0, 0, 0, 0, 9.5f);
 				speed = 1.300f;
 			}
 		}
 	}
 
 	else if (fired) 
-		renderer.request_animation(FIRE, vSpriteSheetPointers[FIRE], 0, 0, 0, 0, 0, 15.5f);
+		renderer.request_animation(FIRE, (*vSpriteSheetPointers)[FIRE], 0, 0, 0, 0, 0, 15.5f);
 	
 	else if (kar.bolting() || kar.getReloadState()) {
-		renderer.request_animation(RELOAD, vSpriteSheetPointers[RELOAD], 1, 0, 0, 0, 0, 1.0f);
+		renderer.request_animation(RELOAD, (*vSpriteSheetPointers)[RELOAD], 1, 0, 0, 0, 0, 1.0f);
 	}
 
 	else if (aiming) 
-		renderer.request_animation(AIM, vSpriteSheetPointers[AIM], 1, 0, 0, 0, 0, 3.0f);
+		renderer.request_animation(AIM, (*vSpriteSheetPointers)[AIM], 1, 0, 0, 0, 0, 3.0f);
 
 	else if (!alive)
-		renderer.request_animation(9, vSpriteSheetPointers[9], 0, 0, 0, 0, 1, 7.5f);
+		renderer.request_animation(9, (*vSpriteSheetPointers)[9], 0, 0, 0, 0, 1, 7.5f);
 
 	else 
-		renderer.request_animation(IDLE, vSpriteSheetPointers[IDLE], 1, 0, 1, 1, 0, 1.5f);
+		renderer.request_animation(IDLE, (*vSpriteSheetPointers)[IDLE], 1, 0, 1, 1, 0, 1.5f);
 		
 	
 	
@@ -170,7 +170,7 @@ void Rifleman::updateFireAngle(Vec2 fireAt)
 
 void Rifleman::reload()
 {
-	renderer.request_animation(RELOAD, vSpriteSheetPointers[RELOAD], 0, 0, 0, 0, 0, 2.0f);
+	renderer.request_animation(RELOAD, (*vSpriteSheetPointers)[RELOAD], 0, 0, 0, 0, 0, 2.0f);
 }
 
 void Rifleman::running()
@@ -251,20 +251,10 @@ vector<Zombie*> Rifleman::actorsOnScreen(vector<Zombie*> vec)
 
 
 
-void Rifleman::load_assets()
+void Rifleman::load_assets(vector <olc::Sprite*>* vpRfl)
 {
 
-	load_spr_sheet("sprites\\rifleman\\NEW\\aim\\r_aim.png");
-	load_spr_sheet("sprites\\rifleman\\NEW\\climb\\r_climb.png");
-	load_spr_sheet("sprites\\rifleman\\NEW\\idle\\r_idle.png");
-	load_spr_sheet("sprites\\rifleman\\NEW\\pick\\r_pick.png");
-	load_spr_sheet("sprites\\rifleman\\NEW\\run\\r_run.png");
-	load_spr_sheet("sprites\\rifleman\\NEW\\walk\\r_walk.png");
-	load_spr_sheet("sprites\\rifleman\\NEW\\fire\\r_fire.png");
-	load_spr_sheet("sprites\\rifleman\\NEW\\reload\\r_reload.png");
-	load_spr_sheet("sprites\\rifleman\\NEW\\hurt\\r_hurt.png");
-	load_spr_sheet("sprites\\rifleman\\NEW\\die\\r_die.png");
-
+	vSpriteSheetPointers = vpRfl;
 
 	vector <string> mappingData;
 

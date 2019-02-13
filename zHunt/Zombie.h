@@ -27,7 +27,7 @@ public:
 	bool attack_cooldown_over();
 	void moveTowardsGoal();
 
-	void load_assets();
+	void load_assets(vector <olc::Sprite*>* vpZomSpr);
 
 private:
 	float speed;	
