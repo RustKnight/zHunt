@@ -39,7 +39,6 @@ public:
 	AnimationHandler effects_handler;
 	olc::Sprite* effects_sprite_sheet;
 	RenderRect get_render_rect() const;
-	void portalToggle();
 	int getAnimCount() const;
 
 	void passMappingData(vector <string> in_map);
@@ -78,5 +77,5 @@ private:
 
 	RenderRect r_rect;
 	bool colliding = false;
-	bool isPortal = false;
+	
 };

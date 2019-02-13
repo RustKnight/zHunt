@@ -19,6 +19,7 @@
 #include "AnimationHandler.h"
 #include "Effect.h"
 #include "Controller.h"
+#include "zSpawner.h"
 
 
 #include "olcPGEX_Sound.h"
@@ -56,9 +57,11 @@ private:
 
 	vector<Rifleman*> vRifles;
 	vector<Zombie*> vZombies;
+	vector<Portal*> vPortals;
 	vector<Actor*> vActors;
 	Controller control;
 	Ai ai;
+	zSpawner zSpawn;
 	
 	vector<Projectile> vBullets;
 	Value_checker VC;

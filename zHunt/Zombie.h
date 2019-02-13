@@ -18,6 +18,7 @@ public:
 
 public:
 	void randomize_stats(float speed_in);
+	void randomizeStartLocation();
 	void stay();
 	bool update(float fElapTm, const Vec2& cam_off) override;
 	void is_hit();

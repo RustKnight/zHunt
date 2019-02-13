@@ -6,9 +6,13 @@
 void Zombie::randomize_stats(float speed_in)
 {
 	speed = speed_in;
+	random_death_anim = rand() % 8;
+}
+
+void Zombie::randomizeStartLocation()
+{
 	location.x = rand() % 16;
 	location.y = rand() % 10;
-	random_death_anim = rand() % 8;
 }
 
 

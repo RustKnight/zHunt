@@ -116,7 +116,7 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 
 	// code that handles mirroring in case of non indexed facing
 	// N-0, NE-1, E-2, SE-3, S-4, SW-5, W-6, NW-7.
-	if (!isPortal) {
+	
 		if (facing == 5 || facing == 6 || facing == 7) {
 			switch (facing) {
 			case 5: facing = 3; break;
@@ -125,7 +125,7 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 			}
 			mirror = true;
 		}
-	}
+	
 
 	if (action == 8 || action == 9) {
 		facing = 0;
@@ -197,10 +197,7 @@ RenderRect AnimationRenderer::get_render_rect() const
 	return r_rect;
 }
 
-void AnimationRenderer::portalToggle()
-{
-	isPortal = true;
-}
+
 
 int AnimationRenderer::getAnimCount() const
 {

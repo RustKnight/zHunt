@@ -67,22 +67,30 @@ bool zHunt::OnUserCreate()
 		ai.loadRiflemen(rf);
 	}
 
-	portal.load_assets();
-	portal.renderer.portalToggle();	
-	portal.becomeSpawner(Vec2{ 9.0f, 8.0f });
+
+	for (int i = 0; i < 10; i++) {
+		Portal* prt = new Portal{ Vec2{ float (rand() % 16), float (rand() % 10) }, this };
+		prt->load_assets();
+		prt->becomeSpawner(Vec2{ float(rand() % 16), float(rand() % 10) });
+		vPortals.push_back(prt);
+		vActors.push_back(prt);
+	}
+
+	
+	
 
 	rifleman.load_assets();
 	vRifles.push_back(&rifleman);
-	// 
-	// PUSH ZOMBIES
-	// 
-	for (int i = 0; i < 3; i++) {
 
+
+
+	for (int i = 0; i < 3; i++) {
 		Zombie* zom = new Zombie(Vec2{ 0,0 }, this);			// we should handle proper destruction of zombie
 		zom->load_assets();
-		zom->randomize_stats(distR(e));		
-
+		zom->randomize_stats(distR(e));	
+		zom->randomizeStartLocation();
 		vZombies.push_back(zom);
+		vActors.push_back(zom);
 	}
 
 
@@ -91,12 +99,9 @@ bool zHunt::OnUserCreate()
 	
 	rifleman.getSounds(snd_fire1, snd_fire2, snd_reload);
 	
-	vActors.push_back(&portal);
 	vActors.push_back(&rifleman);
-	for (Zombie* z : vZombies)
-		vActors.push_back(z);
 
-
+	zSpawn.load(&vZombies, &vPortals, &vActors, this);
 
 	return true;
 }
@@ -114,14 +119,13 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	ai.update(rifleman.get_location());
 	ai.think();
 	control.control(rifleman);
+	zSpawn.update(fElapsedTime);
 
-	portal.update(fElapsedTime, camera.get_offset(), 1);
 	
-
-	if (GetKey(olc::X).bHeld)
-		portal.openPortal();
-	else
-		portal.closePortal();
+	for (Portal* prt : vPortals) {
+		prt->update(fElapsedTime, camera.get_offset(), 1);
+		prt->openPortal();
+	}
 
 
 	for (Rifleman* rf: vRifles) {
@@ -211,7 +215,6 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 			a->draw();
 	}
 
-	//portal.draw();
 
 	// renders candidates for splat effect
 	//effect.render_effect(this, fElapsedTime, camera.get_offset());

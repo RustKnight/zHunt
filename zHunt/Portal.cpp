@@ -25,7 +25,6 @@ void Portal::update(float eTime_in, const Vec2 & cam_off, bool triggered)
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
 
-	
 }
 
 void Portal::openPortal()
@@ -80,5 +79,10 @@ void Portal::becomeSpawner(Vec2 spw_loc)
 	location = spw_loc;
 	isSpawner = true;
 	isTeleporter = false;
+}
+
+Vec2 Portal::getPosition() const
+{
+	return location;
 }
 

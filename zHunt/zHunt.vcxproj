@@ -158,6 +158,7 @@
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="zHunt.cpp" />
     <ClCompile Include="Zombie.cpp" />
+    <ClCompile Include="zSpawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="zHunt.h" />
     <ClInclude Include="Zombie.h" />
+    <ClInclude Include="zSpawner.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

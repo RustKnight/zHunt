@@ -27,6 +27,7 @@ public:
 	void closePortal();
 	
 	void becomeSpawner(Vec2 spw_loc);
+	Vec2 getPosition() const;
 
 
 
