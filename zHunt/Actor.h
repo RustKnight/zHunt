@@ -83,7 +83,8 @@ public:
 		pge		{in_pge},
 		speed	{0.8f},
 		facing	{N},
-		renderer{ in_pge}
+		renderer{ in_pge},
+		isActive {true}
 	{}
 
 
@@ -114,17 +115,20 @@ public:
 
 
 	AnimationRenderer renderer;
+	
 	int hp;
 	bool alive;
 	bool hit;
-	
+	bool isActive;
 	
 protected:
 	bool isPlayer;
 	
+	
 	Vec2 goal;
 	Vec2 location;
 	Vec2 old_location;
+	vector <olc::Sprite*> vSpriteSheetPointers;
 
 	Vec2 camera_offset;
 	Vec2 mouse_to_player_distance;
@@ -134,7 +138,7 @@ protected:
 
 	DistanceCheck distanceCheck;
 	Value_checker vc;
-	vector <olc::Sprite*> vSpriteSheetPointers;
+	
 	olc::PixelGameEngine* pge;
 
 	facings facing;

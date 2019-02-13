@@ -21,8 +21,8 @@ public:
 
 	AnimationRenderer(olc::PixelGameEngine* pge_in)
 		: pge{ pge_in },
-		action{ 1 }, facing{ 0 }, play_seq{ 0 }, eTime{ 0 },
-		task_done{ false }, loop{ true }, allow_interrupt{ true }
+		action{ -1 }, facing{ 0 }, play_seq{ 0 }, eTime{ 0 },
+		task_done{ false }, loop{ true }, allow_interrupt{ true }, animationCount {0}
 	{}
 
 
@@ -40,9 +40,11 @@ public:
 	olc::Sprite* effects_sprite_sheet;
 	RenderRect get_render_rect() const;
 	void portalToggle();
+	int getAnimCount() const;
 
 	void passMappingData(vector <string> in_map);
 
+	int animationCount;
 
 private:
 	void draw_centered(float x, float y, olc::Sprite* spr, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale, bool mirrored_x);	

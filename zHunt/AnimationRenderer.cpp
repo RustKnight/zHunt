@@ -18,7 +18,16 @@ void AnimationRenderer::request_animation(int act, olc::Sprite* spr_in, bool int
 			anim_speed = speed;
 			end_lock = end_lock_in;
 
-			increasing = !increasing;
+			//	increasing = !increasing; WARNING before it was just this line, code below should be deleted if revert is needed
+			// keep in mind for both functions (request, and override)
+			if (reversed) {
+				play_seq = float(anm_hdl.get_sqn_size(action, facing));
+				increasing = false;
+			}
+			else {
+				play_seq = 0;
+				increasing = true;
+			}
 		}
 
 		if (act != action) {
@@ -58,7 +67,14 @@ void AnimationRenderer::override(int act, olc::Sprite* spr_in, bool interruptabl
 		anim_speed = speed;
 		end_lock = end_lock_in;
 
-		increasing = !increasing;
+		if (reversed) {
+			play_seq = float(anm_hdl.get_sqn_size(action, facing));
+			increasing = false;
+		}
+		else {
+			play_seq = 0;
+			increasing = true;
+		}
 	}
 
 	if (act != action) {
@@ -87,12 +103,15 @@ void AnimationRenderer::override(int act, olc::Sprite* spr_in, bool interruptabl
 
 void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 {
+	//if (elapT < 0.051f)
 	eTime = elapT;
+
 	location = loc;
 	facing = face;
 	task_done = false;
 	// update carried out
 	bool mirror = false;
+
 	
 
 	// code that handles mirroring in case of non indexed facing
@@ -137,11 +156,19 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 			else if (reversed)
 				play_seq = num_sequences - 0.000001f;
 
-			if (!loop && !back_forth && !end_lock) //one time
-				task_done = true; 
+			if (!loop && !back_forth && !end_lock) {//one time
+				task_done = true;
+				
+			}
 
-			if (end_lock)
-				play_seq = num_sequences - 1;
+			if (end_lock) {
+				if (!reversed)
+					play_seq = num_sequences - 1;
+				else
+					play_seq = 0;	
+			}
+
+			animationCount++;
 		}
 	
 		// when run in release it crashes, in debug is fine = without this piece of code, it would crash
@@ -173,6 +200,11 @@ RenderRect AnimationRenderer::get_render_rect() const
 void AnimationRenderer::portalToggle()
 {
 	isPortal = true;
+}
+
+int AnimationRenderer::getAnimCount() const
+{
+	return animationCount;
 }
 
 void AnimationRenderer::passMappingData(vector<string> in_map)

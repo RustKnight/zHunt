@@ -69,7 +69,7 @@ bool zHunt::OnUserCreate()
 
 	portal.load_assets();
 	portal.renderer.portalToggle();	
-	
+	portal.becomeSpawner(Vec2{ 9.0f, 8.0f });
 
 	rifleman.load_assets();
 	vRifles.push_back(&rifleman);
@@ -115,8 +115,14 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	ai.think();
 	control.control(rifleman);
 
-	if (!vZombies[0]->alive)
 	portal.update(fElapsedTime, camera.get_offset(), 1);
+	
+
+	if (GetKey(olc::X).bHeld)
+		portal.openPortal();
+	else
+		portal.closePortal();
+
 
 	for (Rifleman* rf: vRifles) {
 
@@ -201,11 +207,11 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	// draw alive actors by height
 	sort_actors_by_height(); 
 	for (Actor* a : vActors) {
-		if (a->alive)
+		if (a->alive && a->isActive)
 			a->draw();
 	}
 
-	portal.draw();
+	//portal.draw();
 
 	// renders candidates for splat effect
 	//effect.render_effect(this, fElapsedTime, camera.get_offset());

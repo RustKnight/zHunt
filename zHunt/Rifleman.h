@@ -8,6 +8,7 @@
 
 // Diagonal move of AI 50 % more ?
 // stop beserk fire - ai cannot toggle the not firing flag on
+// bullets sometimes pass target?
 
 class Rifleman : public Actor {
 
