@@ -25,7 +25,35 @@ void Portal::update(float eTime_in, const Vec2 & cam_off, bool triggered)
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
 
+
+	if (!isSpawner) {
+
+		if (timeOpened > openTimeMax && opened) {
+			teleAway();
+		}
+		else
+			openPortal();
+	
+		timeOpened += eTime * 1.0f;
+	}
+
+	else
+		openPortal();
 }
+
+
+void Portal::teleAway()
+{
+	if (closePortal()) {
+
+		location.x = float (rand() % 3);
+		location.y = float (rand() % 3);
+		cout << "x: " << location.x << endl << "y: " << location.y << endl;
+		timeOpened = 0;
+	}
+
+}
+
 
 void Portal::openPortal()
 {
@@ -50,7 +78,7 @@ void Portal::openPortal()
 }
 
 
-void Portal::closePortal()
+bool Portal::closePortal()
 {
 	if (opened) {
 		
@@ -63,12 +91,17 @@ void Portal::closePortal()
 			isActive = false;
 			opened = false;
 			renderer.animationCount = 0;
+			return true;
 		}
 		
 	}
 
 }
 
+bool Portal::getStatus() const
+{
+	return opened;
+}
 
 
 void Portal::becomeSpawner(Vec2 spw_loc)

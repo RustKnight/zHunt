@@ -31,13 +31,14 @@ void zSpawner::spawnZ()
 	for (Portal* prt: *vPrt) {
 
 		bool canSpawn = rand() % 2;
-		if (canSpawn) {
+		if (canSpawn && prt->getStatus() && prt->isSpawner) {
 
 			Zombie* zom = new Zombie(prt->get_location(), pge);			// we should handle proper destruction of zombie
 			zom->load_assets();
 			zom->randomize_stats(distR(e));
 			vZom->push_back(zom);
 			(*vAct).push_back(zom);
+
 			spawnCount++;
 		}
 

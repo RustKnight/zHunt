@@ -19,25 +19,27 @@ public:
 	}
 
 	
-	
 	void load_assets();
-	void update(float eTime, const Vec2 & cam_off, bool start);
-	
-	void openPortal();
-	void closePortal();
-	
 	void becomeSpawner(Vec2 spw_loc);
+	void update(float eTime, const Vec2 & cam_off, bool start);
+	bool getStatus() const;
 	Vec2 getPosition() const;
 
+	bool isSpawner = false;
 
 
 private:
-	static constexpr int openTimeMax = 5;
-	int timeOpened = 0;
+	void openPortal();
+	bool closePortal();
+	void teleAway();
+
+	
+private:
+	static constexpr int openTimeMax = 4;
+	float timeOpened = 0;
 	int opened = false;
 
-	bool transitionDone;
-	bool isSpawner = false;
+	bool transitionDone;	
 	bool isTeleporter = true;
 
 	phase color_idle = RED_IDLE;

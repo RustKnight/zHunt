@@ -13,7 +13,7 @@ public:
 
 
 private:
-	int spawnReady = 2;
+	int spawnReady = 5;
 	float spawnTimer = 0.0f;
 
 	vector <Zombie*>* vZom;

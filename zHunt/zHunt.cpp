@@ -25,7 +25,7 @@
 zHunt::zHunt() :
 	winWidth { 768.0f},
 	winHeight{ 640.0f },
-	rifleman{ Vec2 {10.0f, 7.0f}, this},
+	rifleman{ Vec2 {3.0f, 3.0f}, this},
 	zombie{ Vec2{ 5.0f, 5.0f }, this},
 	camera {this, &map, getWinWidth(), getWinHeight()},
 	control {this},
@@ -68,10 +68,13 @@ bool zHunt::OnUserCreate()
 	}
 
 
-	for (int i = 0; i < 10; i++) {
-		Portal* prt = new Portal{ Vec2{ float (rand() % 16), float (rand() % 10) }, this };
+	for (int i = 0; i < 4; i++) {
+		Portal* prt = new Portal{ Vec2{ 3,3 }, this };
 		prt->load_assets();
+		
+		if (i < 3)
 		prt->becomeSpawner(Vec2{ float(rand() % 16), float(rand() % 10) });
+		
 		vPortals.push_back(prt);
 		vActors.push_back(prt);
 	}
@@ -124,7 +127,6 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	
 	for (Portal* prt : vPortals) {
 		prt->update(fElapsedTime, camera.get_offset(), 1);
-		prt->openPortal();
 	}
 
 
