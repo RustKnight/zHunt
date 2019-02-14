@@ -59,6 +59,11 @@ void Rifleman::die()
 	alive = false;
 }
 
+void Rifleman::loadPortalsPointer(vector<Portal*>* vpP)
+{
+	vpPrt = vpP;
+}
+
 
 Zombie* Rifleman::closestTarget(vector<Zombie*> vec)
 {
@@ -85,7 +90,11 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off, vector<Zombie*> vpZom
 	eTime = fElapTm;
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
+	timeSinceLastTele += fElapTm * 1.0f;
 	
+	for (Portal* p : *vpPrt) {
+		p->tryTeleport(*this);
+	}
 
 	if (!isPlayer) {
 		int a = renderer.get_current_anim() != FIRE; // compress after check

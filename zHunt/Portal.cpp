@@ -120,7 +120,7 @@ void Portal::becomeSpawner(Vec2 spw_loc)
 
 void Portal::tryTeleport(Actor& act)
 {
-	if (withinDistance(act.get_location(), 2000) && act.timeSinceLastTele > teleCooldown && opened) {
+	if (withinDistance(act.get_location(), 2000) && act.timeSinceLastTele > teleCooldown && opened && act.alive) {
 		act.timeSinceLastTele = 0;
 		teleport(act);
 	}

@@ -40,7 +40,7 @@ private:
 	
 private:
 	static constexpr int openTimeMax = 4;
-	static constexpr int teleCooldown = 3;
+	static constexpr int teleCooldown = 5;
 	float timeOpened = 0;
 	int opened = false;
 	int index = 0;

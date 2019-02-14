@@ -60,13 +60,14 @@ bool zHunt::OnUserCreate()
 	for (int i = 0; i < 1; i++) {
 		Rifleman* rf = new Rifleman{ Vec2{ 10.0f + i, 4.0f }, this };
 		rf->load_assets(&vRflSprites);
+		rf->loadPortalsPointer(&vPortals);		//CAN REMOVE IF RIFLE SHOULD NOT TELEPORT
 		vRifles.push_back(rf);
 		vActors.push_back(rf);
 		ai.loadRiflemen(rf);
 	}
 
 
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 6; i++) {
 		Portal* prt = new Portal{ Vec2{ 5,0 }, this, &vPortals };
 		prt->load_assets(&vPrtSprites);
 		
@@ -80,9 +81,13 @@ bool zHunt::OnUserCreate()
 
 	vPortals[2]->set_location(Vec2{ 1, 3 });
 	vPortals[3]->set_location(Vec2{ 4, 3 });
+
+	vPortals[4]->set_location(Vec2{ 2, 5 });
+	vPortals[5]->set_location(Vec2{ 9, 10 });
 	
 
 	rifleman.load_assets(&vRflSprites);
+	rifleman.loadPortalsPointer(&vPortals);
 	vRifles.push_back(&rifleman);
 
 

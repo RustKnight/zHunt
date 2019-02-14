@@ -31,9 +31,9 @@ public:
 
 	void load_assets(vector <olc::Sprite*>* vpZomSpr);
 private:
-	vector<Portal*>* vpPrt;
 	float speed;	
 	int random_death_anim;
 	float att_cooldown = 100.0f;
+	vector<Portal*>* vpPrt;
 	vector<Rifleman*>* vpRfl;
 };

@@ -37,6 +37,7 @@ public:
 	Vec2 getFireAngle();
 	void getSounds(int f1, int f2, int r);
 	void die();
+	void loadPortalsPointer(vector<Portal*>* vpP);
 
 	void moveUp();
 	void moveDown();
@@ -45,6 +46,8 @@ public:
 
 	vector<Zombie*> actorsOnScreen(vector<Zombie*> vec);
 	Zombie* closestTarget(vector<Zombie*> vec);
+
+
 
 	void load_assets(vector <olc::Sprite*>* vpRfl);
 
@@ -55,6 +58,7 @@ private:
 	bool fired = false;
 	bool aiming = false;
 	vector<Zombie*> vpZom;
+	vector<Portal*>* vpPrt;
 
 	int snd_reload;
 	int snd_fire1;
