@@ -20,15 +20,15 @@ void Ai::think()
 		// else
 		//		guard position
 
-		if (rf->alive) {
-
-			if (rf->withinDistance(playerLocation, 4000))
-				rf->standGround();
-			else {
-				rf->setGoal(playerLocation);
-				rf->follow();
-			}
-		}
+		//if (rf->alive) {
+		//
+		//	if (rf->withinDistance(playerLocation, 4000))
+		//		rf->standGround();
+		//	else {
+		//		rf->setGoal(playerLocation);
+		//		rf->follow();
+		//	}
+		//}
 	}
 }
 

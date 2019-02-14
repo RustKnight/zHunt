@@ -49,7 +49,6 @@ private:
 
 	Map map;
 	Rifleman rifleman;
-	Portal portal;
 	olc::Sprite* fields;
 	Camera camera;
 	bool toggle_camera = true;
@@ -60,8 +59,8 @@ private:
 	vector <olc::Sprite*> vPrtSprites;
 
 	vector<Rifleman*> vRifles;
-	vector<Zombie*> vZombies;
 	vector<Portal*> vPortals;
+	vector<Zombie*> vZombies;
 	vector<Actor*> vActors;
 	Controller control;
 	Ai ai;

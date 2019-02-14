@@ -27,8 +27,7 @@ zHunt::zHunt() :
 	winHeight{ 640.0f },
 	rifleman{ Vec2 {3.8f, 4.0f}, this},
 	camera {this, &map, getWinWidth(), getWinHeight()},
-	control {this},
-	portal{ Vec2 {9.0f, 8.0f}, this }
+	control {this}
 {
 	sAppName = "zHunt";
 }
@@ -68,17 +67,18 @@ bool zHunt::OnUserCreate()
 
 
 	for (int i = 0; i < 4; i++) {
-		Portal* prt = new Portal{ Vec2{ 1,3 }, this };
+		Portal* prt = new Portal{ Vec2{ 5,0 }, this, &vPortals };
 		prt->load_assets(&vPrtSprites);
 		
 		if (i < 2)
-		prt->becomeSpawner(Vec2{ float(rand() % 16), float(rand() % 10) });
+			prt->becomeSpawner(Vec2{ float(rand() % 16), float(rand() % 10) });
 		
+		prt->setIndex(i);
 		vPortals.push_back(prt);
 		vActors.push_back(prt);
 	}
 
-	
+	vPortals[2]->set_location(Vec2{ 1, 3 });
 	vPortals[3]->set_location(Vec2{ 4, 3 });
 	
 
@@ -96,7 +96,7 @@ bool zHunt::OnUserCreate()
 		vActors.push_back(zom);
 	}
 
-	vZombies[0]->set_location(Vec2{ 0.8f, 3.4f });
+	vZombies[0]->set_location(Vec2{ 1.0f, 3.0f });
 
 
 	camera.load_fields("sprites\\terrain\\green.png");

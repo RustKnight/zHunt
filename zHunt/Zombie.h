@@ -12,7 +12,7 @@ class Zombie : public Actor {
 
 public:
 	Zombie(Vec2 loc, olc::PixelGameEngine* in_pge, vector<Rifleman*>* vpR, vector<Portal*>* vpP) :
-		Actor{ loc, in_pge }
+		Actor{ loc, in_pge }, vpRfl {vpR}, vpPrt {vpP}
 	{
 		hp = 10;
 		alive = true;
@@ -30,11 +30,10 @@ public:
 	void moveTowardsGoal();
 
 	void load_assets(vector <olc::Sprite*>* vpZomSpr);
-
 private:
+	vector<Portal*>* vpPrt;
 	float speed;	
 	int random_death_anim;
 	float att_cooldown = 100.0f;
 	vector<Rifleman*>* vpRfl;
-	vector<Portal*>* vpPrt;
 };

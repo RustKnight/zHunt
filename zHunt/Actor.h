@@ -112,7 +112,7 @@ public:
 	void load_assets(vector<string> in_mappings);
 	Vec2 get_location() const;
 	void set_location(Vec2 loc);
-
+	float timeSinceLastTele = 1000;
 	AnimationRenderer renderer;
 	
 	int hp;

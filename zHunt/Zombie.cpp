@@ -101,7 +101,11 @@ bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 	eTime = fElapTm;
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
+	timeSinceLastTele += fElapTm * 1.0f;
 	
+	for (Portal* p : *vpPrt) {
+		p->tryTeleport(*this);
+	}
 
 	if (renderer.get_current_anim() != HIT)
 		hit = false;
@@ -147,6 +151,8 @@ bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 	}
 
 	moving = false;
+
+
 	return 0;
 }
 

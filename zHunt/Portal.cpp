@@ -1,5 +1,10 @@
 #include "Portal.h"
 
+void Portal::setIndex(int i)
+{
+	index = i;
+}
+
 void Portal::load_assets(vector <olc::Sprite*>* vpPrt)
 {
 	vSpriteSheetPointers = vpPrt;
@@ -51,6 +56,8 @@ void Portal::teleAway()
 	}
 
 }
+
+
 
 
 void Portal::openPortal()
@@ -110,6 +117,28 @@ void Portal::becomeSpawner(Vec2 spw_loc)
 	location = spw_loc;
 	isSpawner = true;
 }
+
+void Portal::tryTeleport(Actor& act)
+{
+	if (withinDistance(act.get_location(), 2000) && act.timeSinceLastTele > teleCooldown && opened) {
+		act.timeSinceLastTele = 0;
+		teleport(act);
+	}
+}
+
+void Portal::teleport(Actor& act)
+{
+	// algo for twin portals
+	int i;
+
+	if (index % 2 == 0)
+		i = index + 1;	
+	else
+		i = index - 1;
+
+	act.set_location((*vpPrt)[i]->getPosition());
+}
+
 
 Vec2 Portal::getPosition() const
 {
