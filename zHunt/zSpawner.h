@@ -7,7 +7,7 @@ class zSpawner {
 
 public:
 	
-	void load(vector <Zombie*>* vZ, vector <Portal*>* vP, vector <Actor*>* vA, olc::PixelGameEngine* pge_in, vector <olc::Sprite*>* vZomSprites_in);
+	void load(vector <Zombie*>* vZ, vector <Portal*>* vP, vector <Actor*>* vA, olc::PixelGameEngine* pge_in, vector <olc::Sprite*>* vZomSprites_in, vector<Rifleman*>* vR);
 	void update(float eTime);
 	void spawnZ();
 
@@ -18,6 +18,7 @@ private:
 
 	vector <olc::Sprite*>* vZomSprites;
 	vector <Zombie*>* vZom;
+	vector<Rifleman*>* vRfl;
 	vector <Portal*>* vPrt;
 	vector <Actor*>* vAct;
 	float fElapsedTime;

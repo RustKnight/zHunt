@@ -26,7 +26,6 @@ zHunt::zHunt() :
 	winWidth { 768.0f},
 	winHeight{ 640.0f },
 	rifleman{ Vec2 {3.0f, 3.0f}, this},
-	zombie{ Vec2{ 5.0f, 5.0f }, this},
 	camera {this, &map, getWinWidth(), getWinHeight()},
 	control {this},
 	portal{ Vec2 {9.0f, 8.0f}, this }
@@ -88,7 +87,7 @@ bool zHunt::OnUserCreate()
 
 
 	for (int i = 0; i < 3; i++) {
-		Zombie* zom = new Zombie(Vec2{ 0,0 }, this);			// we should handle proper destruction of zombie
+		Zombie* zom = new Zombie(Vec2{ 0,0 }, this, &vRifles, &vPortals);			// we should handle proper destruction of zombie
 		zom->load_assets(&vZomSprites);
 		zom->randomize_stats(distR(e));	
 		zom->randomizeStartLocation();
@@ -104,7 +103,7 @@ bool zHunt::OnUserCreate()
 	
 	vActors.push_back(&rifleman);
 
-	zSpawn.load(&vZombies, &vPortals, &vActors, this, &vZomSprites);
+	zSpawn.load(&vZombies, &vPortals, &vActors, this, &vZomSprites, &vRifles);
 
 	return true;
 }

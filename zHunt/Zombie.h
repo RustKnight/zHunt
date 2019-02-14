@@ -1,15 +1,17 @@
 #pragma once
 #include "Actor.h"
 #include "Projectile.h"
+#include "Portal.h"
 
 // move speed should modulate animation speed
 
+class Rifleman;
 
 class Zombie : public Actor {
 	enum actions { ATTACK, DIE, HIT, IDLE, WALK };
 
 public:
-	Zombie(Vec2 loc, olc::PixelGameEngine* in_pge) :
+	Zombie(Vec2 loc, olc::PixelGameEngine* in_pge, vector<Rifleman*>* vpR, vector<Portal*>* vpP) :
 		Actor{ loc, in_pge }
 	{
 		hp = 10;
@@ -33,4 +35,6 @@ private:
 	float speed;	
 	int random_death_anim;
 	float att_cooldown = 100.0f;
+	vector<Rifleman*>* vpRfl;
+	vector<Portal*>* vpPrt;
 };

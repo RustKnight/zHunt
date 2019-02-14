@@ -27,6 +27,7 @@ void Portal::update(float eTime_in, const Vec2 & cam_off, bool triggered)
 
 		if (timeOpened > openTimeMax && opened) {
 			teleAway();
+
 		}
 		else
 			openPortal();

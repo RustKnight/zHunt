@@ -49,7 +49,6 @@ private:
 
 	Map map;
 	Rifleman rifleman;
-	Zombie zombie;
 	Portal portal;
 	olc::Sprite* fields;
 	Camera camera;
