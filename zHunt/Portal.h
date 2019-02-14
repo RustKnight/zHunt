@@ -45,7 +45,8 @@ private:
 	int opened = false;
 	int index = 0;
 
-	bool transitionDone;	
+	bool transitionDone;
+	bool pairing = false;
 
 	phase color_idle = RED_IDLE;
 	phase color_open = RED_OPEN;

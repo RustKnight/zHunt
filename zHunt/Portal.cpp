@@ -128,15 +128,20 @@ void Portal::tryTeleport(Actor& act)
 
 void Portal::teleport(Actor& act)
 {
-	// algo for twin portals
-	int i;
+	if (pairing) {
+		int i;
 
-	if (index % 2 == 0)
-		i = index + 1;	
-	else
-		i = index - 1;
+		if (index % 2 == 0)
+			i = index + 1;
+		else
+			i = index - 1;
 
-	act.set_location((*vpPrt)[i]->getPosition());
+		act.set_location((*vpPrt)[i]->getPosition());
+	}
+
+	else 		
+		act.set_location((*vpPrt)[act.desiredPrtIndex]->getPosition());
+	
 }
 
 

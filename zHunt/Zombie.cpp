@@ -102,7 +102,7 @@ bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
 	timeSinceLastTele += fElapTm * 1.0f;
-	
+
 	for (Portal* p : *vpPrt) {
 		p->tryTeleport(*this);
 	}
