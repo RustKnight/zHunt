@@ -26,7 +26,7 @@ void Portal::update(float eTime_in, const Vec2 & cam_off, bool triggered)
 	if (!isSpawner) {
 
 		if (timeOpened > openTimeMax && opened) {
-			teleAway();
+			//teleAway();
 
 		}
 		else

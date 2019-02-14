@@ -25,7 +25,7 @@
 zHunt::zHunt() :
 	winWidth { 768.0f},
 	winHeight{ 640.0f },
-	rifleman{ Vec2 {3.0f, 3.0f}, this},
+	rifleman{ Vec2 {3.8f, 4.0f}, this},
 	camera {this, &map, getWinWidth(), getWinHeight()},
 	control {this},
 	portal{ Vec2 {9.0f, 8.0f}, this }
@@ -68,10 +68,10 @@ bool zHunt::OnUserCreate()
 
 
 	for (int i = 0; i < 4; i++) {
-		Portal* prt = new Portal{ Vec2{ 3,3 }, this };
+		Portal* prt = new Portal{ Vec2{ 1,3 }, this };
 		prt->load_assets(&vPrtSprites);
 		
-		if (i < 3)
+		if (i < 2)
 		prt->becomeSpawner(Vec2{ float(rand() % 16), float(rand() % 10) });
 		
 		vPortals.push_back(prt);
@@ -79,6 +79,7 @@ bool zHunt::OnUserCreate()
 	}
 
 	
+	vPortals[3]->set_location(Vec2{ 4, 3 });
 	
 
 	rifleman.load_assets(&vRflSprites);
@@ -86,7 +87,7 @@ bool zHunt::OnUserCreate()
 
 
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 1; i++) {
 		Zombie* zom = new Zombie(Vec2{ 0,0 }, this, &vRifles, &vPortals);			// we should handle proper destruction of zombie
 		zom->load_assets(&vZomSprites);
 		zom->randomize_stats(distR(e));	
@@ -94,6 +95,8 @@ bool zHunt::OnUserCreate()
 		vZombies.push_back(zom);
 		vActors.push_back(zom);
 	}
+
+	vZombies[0]->set_location(Vec2{ 0.8f, 3.4f });
 
 
 	camera.load_fields("sprites\\terrain\\green.png");

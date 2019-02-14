@@ -174,6 +174,11 @@ Vec2 Actor::get_location() const
 	return location;
 }
 
+void Actor::set_location(Vec2 loc)
+{
+	location = loc;
+}
+
 
 
 bool Actor::update(float fElapTm, const Vec2& cam_off)
