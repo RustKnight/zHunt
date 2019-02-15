@@ -166,9 +166,11 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 					play_seq = num_sequences - 1;
 				else
 					play_seq = 0;	
+
+				animationCount++;
 			}
 
-			animationCount++;
+			
 		}
 	
 		// when run in release it crashes, in debug is fine = without this piece of code, it would crash

@@ -23,7 +23,7 @@ void Portal::load_assets(vector <olc::Sprite*>* vpPrt)
 
 
 
-//bool interruptable, bool reversed_in, bool loop_in, bool back_and_forth, bool end_lock_in, float speed
+
 
 void Portal::update(float eTime_in, const Vec2 & cam_off, bool triggered)
 {
@@ -34,17 +34,13 @@ void Portal::update(float eTime_in, const Vec2 & cam_off, bool triggered)
 	if (actorsTeleported > 4)
 		readyTimer += eTime * 1.0f;
 
-	if (index == 0) {
-		cout << actorsTeleported << endl;
-		cout << "Timer: " << readyTimer << endl;
-	}
 
 	if (!isSpawner) {
 
-		if (timeOpened > openTimeMax && opened) {
-			//teleAway();
-
+		if (timeOpened > openTimeMax) {
+			teleAway();
 		}
+
 		else
 			openPortal();
 	
@@ -84,21 +80,16 @@ void Portal::openPortal()
 		else {
 			renderer.override(color_idle, (*vSpriteSheetPointers)[color_idle], 1, 0, 1, 1, 0, speed * 15.0f);
 			opened = true;
+			renderer.animationCount = 0;
 		}
 
 	}
-
-	else
-		renderer.animationCount = 0;
 }
-
+//bool interruptable, bool reversed_in, bool loop_in, bool back_and_forth, bool end_lock_in, float speed
 
 bool Portal::closePortal()
 {
-	if (opened) {
 		
-		renderer.request_animation(color_open, (*vSpriteSheetPointers)[color_open], 1, 1, 0, 0, 1, speed * 15.0f);
-
 		transitionDone = renderer.animationCount;
 
 
@@ -108,9 +99,11 @@ bool Portal::closePortal()
 			renderer.animationCount = 0;
 			return true;
 		}
-		
-	}
 
+		renderer.override(color_open, (*vSpriteSheetPointers)[color_open], 1, 1, 0, 0, 1, speed * 15.0f);
+
+		return false;
+		
 }
 
 bool Portal::getStatus() const
@@ -149,7 +142,7 @@ void Portal::becomeSpawner(Vec2 spw_loc)
 void Portal::tryTeleport(Actor& act)
 {
 							// in range						//waited enough since last
-	if (withinDistance(act.get_location(), 2000) && (act.timeSinceLastTele > teleCooldown) && opened && act.alive && !isSpawner && act.desiredPrtIndex != -1) {
+	if (withinDistance(act.get_location(), 2000) && (act.timeSinceLastTele > teleCooldownOfActor) && opened && act.alive && !isSpawner && act.desiredPrtIndex != -1) {
 		
 		if (isReady()) {
 			act.timeSinceLastTele = 0;

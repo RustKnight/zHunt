@@ -53,7 +53,7 @@ bool zHunt::OnUserCreate()
 
 	unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
 	std::default_random_engine e(seed);
-	std::uniform_real_distribution <float> distR(0.2f, 0.4f);  // (0.1f, 0.25f);
+	std::uniform_real_distribution <float> distR(0.1f, 0.30f);  // (0.1f, 0.25f);
 	
 	
 
@@ -67,12 +67,12 @@ bool zHunt::OnUserCreate()
 	}
 
 
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 10; i++) {
 		Portal* prt = new Portal{ Vec2{ 5,0 }, this, &vPortals };
 		prt->load_assets(&vPrtSprites);
 		
-		//if (i < 3)
-		//	prt->becomeSpawner(Vec2{ float(rand() % 16), float(rand() % 10) });
+		if (i > 7)
+			prt->becomeSpawner(Vec2{ float(rand() % 16), float(rand() % 10) });
 		
 		prt->setIndex(i);
 		vPortals.push_back(prt);
@@ -96,7 +96,7 @@ bool zHunt::OnUserCreate()
 		Zombie* zom = new Zombie(Vec2{ 0,0 }, this, &vPortals);			// we should handle proper destruction of zombie
 		zom->load_assets(&vZomSprites);
 		zom->randomize_stats(distR(e));	
-	//	zom->randomizeStartLocation();
+		zom->randomizeStartLocation();
 		vZombies.push_back(zom);
 		vActors.push_back(zom);
 	}

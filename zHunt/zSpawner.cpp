@@ -25,7 +25,7 @@ void zSpawner::spawnZ()
 {
 	unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
 	std::default_random_engine e(seed);
-	std::uniform_real_distribution <float> distR(0.2f, 0.4f);
+	std::uniform_real_distribution <float> distR(0.1f, 0.30f);
 
 	int spawnCount = 0;
 

@@ -38,15 +38,15 @@ private:
 	
 	
 private:
-	static constexpr int openTimeMax = 6;
-	static constexpr int teleCooldown = 3;
+	static constexpr int openTimeMax = 10;
+	static constexpr int teleCooldownOfActor = 3;
 	float timeOpened = 0;
 	float readyTimer;
 	int opened = false;
 	int index = 0;
 	int actorsTeleported = 0;
 
-	bool transitionDone;
+	bool transitionDone = 0;
 	
 
 	phase color_idle = RED_IDLE;
