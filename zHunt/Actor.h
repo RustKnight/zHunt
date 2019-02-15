@@ -102,13 +102,15 @@ public:
 	void look_at_vec(Vec2 pos);
 	bool withinOwnRect(Vec2 location) const;
 	bool withinDistance(Vec2 location, int dist_radius);
+	float LengthSq2Vec(Vec2* a, Vec2* b);
+
 
 	bool shot = false;
 	bool moving = false;
 	bool running = false;
 
 	
-
+	int desiredPrtIndex = 0;
 	void load_assets(vector<string> in_mappings);
 	Vec2 get_location() const;
 	void set_location(Vec2 loc);

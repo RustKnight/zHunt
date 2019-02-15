@@ -3,6 +3,7 @@
 #include "Projectile.h"
 #include "Portal.h"
 
+
 // move speed should modulate animation speed
 
 class Rifleman;
@@ -11,8 +12,8 @@ class Zombie : public Actor {
 	enum actions { ATTACK, DIE, HIT, IDLE, WALK };
 
 public:
-	Zombie(Vec2 loc, olc::PixelGameEngine* in_pge, vector<Rifleman*>* vpR, vector<Portal*>* vpP) :
-		Actor{ loc, in_pge }, vpRfl {vpR}, vpPrt {vpP}
+	Zombie(Vec2 loc, olc::PixelGameEngine* in_pge, vector<Portal*>* vpP) :
+		Actor{ loc, in_pge }, vpPrt {vpP}
 	{
 		hp = 10;
 		alive = true;
@@ -28,6 +29,11 @@ public:
 	void attack_target(Actor& target);
 	bool attack_cooldown_over();
 	void moveTowardsGoal();
+	void loadZfeed(int* x);
+	int closestFlesh(vector<Vec2>* locs, bool rfA, bool rfB);
+	float calculatePath(const Vec2& PathRifle, bool& teleporting, int& InIndexPortal, int& OutIndexPortal) const;
+	float closestToActor(const Vec2& Actor, int& portalIndex) const;
+
 
 	void load_assets(vector <olc::Sprite*>* vpZomSpr);
 private:
@@ -35,5 +41,6 @@ private:
 	int random_death_anim;
 	float att_cooldown = 100.0f;
 	vector<Portal*>* vpPrt;
-	vector<Rifleman*>* vpRfl;
+	int* ZomFeedOnDead;
+	
 };

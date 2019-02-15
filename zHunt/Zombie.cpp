@@ -96,12 +96,128 @@ void Zombie::moveTowardsGoal()
 	moving = true;
 }
 
+
+void Zombie::loadZfeed(int* x)
+{
+	ZomFeedOnDead = x;
+}
+
+int Zombie::closestFlesh(vector<Vec2>* vRflPosition, bool rf0, bool rf1)
+{
+	int closestFleshIndex;
+	Vec2 rifle0 = (*vRflPosition)[0];
+	Vec2 rifle1 = (*vRflPosition)[1];
+	
+	bool teleporting0;
+	bool teleporting1;
+
+	int portalEntryIndex0;
+	int portalExitIndex0;
+	int portalEntryIndex1;
+	int portalExitIndex1;
+
+	float distToRifle0 = calculatePath(rifle0, teleporting0, portalEntryIndex0, portalExitIndex0);
+	float distToRifle1 = calculatePath(rifle1, teleporting1, portalEntryIndex1, portalExitIndex1);
+
+
+	if (distToRifle0 < distToRifle1) {
+
+		if (teleporting0) {
+			desiredPrtIndex = portalExitIndex0;
+			setGoal((*vpPrt)[portalEntryIndex0]->get_location());
+			closestFleshIndex = 0;
+		}
+		else {
+			setGoal(rifle0);
+			closestFleshIndex = 0;
+			desiredPrtIndex = -1;
+		}
+	}
+
+	else {
+		if (teleporting1) {
+			desiredPrtIndex = portalExitIndex1;
+			setGoal((*vpPrt)[portalEntryIndex1]->get_location());
+			closestFleshIndex = 1;
+		}
+		else {
+			setGoal(rifle1);
+			closestFleshIndex = 1;
+			desiredPrtIndex = -1;
+		}
+	}
+
+
+
+
+	if (!rf0 && closestFleshIndex == 0)
+		(*ZomFeedOnDead)++;
+	if ((*ZomFeedOnDead) > 6) {
+		setGoal(rifle1);
+		closestFleshIndex = 1;
+	}
+
+
+
+	return closestFleshIndex;
+}
+
+float Zombie::calculatePath(const Vec2& PathRifle, bool& teleporting, int& InIndexPortal, int& OutIndexPortal) const
+{
+	teleporting = false;
+
+	float walkingDistance = (PathRifle - location).GetLengthSq();
+	float closestToZom = closestToActor(location, InIndexPortal);
+	float closestToRifle = closestToActor(PathRifle, OutIndexPortal);
+
+	if (InIndexPortal == OutIndexPortal)
+		return walkingDistance;
+
+	float totalPortals = closestToZom + closestToRifle;
+
+	if (walkingDistance < totalPortals)
+		return walkingDistance;
+	else {
+		teleporting = true;
+		return totalPortals;
+	}
+}
+
+float Zombie::closestToActor(const Vec2& Actor, int& portalIndex) const
+{
+	// non pair teleport (closest to rifle)
+	if (!(*vpPrt)[0]->pairing) {
+
+		float closest = 9999999;
+
+		for (size_t i = 0; i < (*vpPrt).size(); i++) {
+
+			if ((*vpPrt)[i]->getStatus() && !(*vpPrt)[i]->isSpawner && (*vpPrt)[i]->isReady()) {
+
+				float distToPortal_i = ((*vpPrt)[i]->get_location() - Actor).GetLengthSq();
+
+				if (closest > distToPortal_i) {
+					closest = distToPortal_i;
+					portalIndex = i;
+				}
+
+			}
+		}
+
+		return closest;
+	}
+
+
+	return 0.0f;
+}
+
 bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 {
 	eTime = fElapTm;
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
 	timeSinceLastTele += fElapTm * 1.0f;
+
 
 	for (Portal* p : *vpPrt) {
 		p->tryTeleport(*this);

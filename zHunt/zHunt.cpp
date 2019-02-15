@@ -25,7 +25,7 @@
 zHunt::zHunt() :
 	winWidth { 768.0f},
 	winHeight{ 640.0f },
-	rifleman{ Vec2 {3.8f, 4.0f}, this},
+	rifleman{ Vec2 {4.0f, 3.7f}, this},
 	camera {this, &map, getWinWidth(), getWinHeight()},
 	control {this}
 {
@@ -53,7 +53,7 @@ bool zHunt::OnUserCreate()
 
 	unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
 	std::default_random_engine e(seed);
-	std::uniform_real_distribution <float> distR(0.1f, 0.25f);
+	std::uniform_real_distribution <float> distR(0.2f, 0.4f);  // (0.1f, 0.25f);
 	
 	
 
@@ -67,23 +67,23 @@ bool zHunt::OnUserCreate()
 	}
 
 
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < 4; i++) {
 		Portal* prt = new Portal{ Vec2{ 5,0 }, this, &vPortals };
 		prt->load_assets(&vPrtSprites);
 		
-		if (i < 2)
-			prt->becomeSpawner(Vec2{ float(rand() % 16), float(rand() % 10) });
+		//if (i < 3)
+		//	prt->becomeSpawner(Vec2{ float(rand() % 16), float(rand() % 10) });
 		
 		prt->setIndex(i);
 		vPortals.push_back(prt);
 		vActors.push_back(prt);
 	}
 
-	vPortals[2]->set_location(Vec2{ 1, 3 });
-	vPortals[3]->set_location(Vec2{ 4, 3 });
+	vPortals[0]->set_location(Vec2{ 1, 3 });
+	vPortals[1]->set_location(Vec2{ 4, 3 });
 
-	vPortals[4]->set_location(Vec2{ 2, 5 });
-	vPortals[5]->set_location(Vec2{ 9, 10 });
+	vPortals[2]->set_location(Vec2{ 1, 6 });
+	vPortals[3]->set_location(Vec2{ 4, 6 });
 	
 
 	rifleman.load_assets(&vRflSprites);
@@ -92,16 +92,16 @@ bool zHunt::OnUserCreate()
 
 
 
-	for (int i = 0; i < 1; i++) {
-		Zombie* zom = new Zombie(Vec2{ 0,0 }, this, &vRifles, &vPortals);			// we should handle proper destruction of zombie
+	for (int i = 0; i < 8; i++) {
+		Zombie* zom = new Zombie(Vec2{ 0,0 }, this, &vPortals);			// we should handle proper destruction of zombie
 		zom->load_assets(&vZomSprites);
 		zom->randomize_stats(distR(e));	
-		zom->randomizeStartLocation();
+	//	zom->randomizeStartLocation();
 		vZombies.push_back(zom);
 		vActors.push_back(zom);
 	}
 
-	vZombies[0]->set_location(Vec2{ 1.0f, 3.0f });
+	vZombies[0]->set_location(Vec2{ 1.0f, 3.7f });
 
 
 	camera.load_fields("sprites\\terrain\\green.png");
@@ -111,7 +111,7 @@ bool zHunt::OnUserCreate()
 	
 	vActors.push_back(&rifleman);
 
-	zSpawn.load(&vZombies, &vPortals, &vActors, this, &vZomSprites, &vRifles);
+	zSpawn.load(&vZombies, &vPortals, &vActors, this, &vZomSprites);
 
 	return true;
 }
@@ -153,35 +153,28 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	for (Zombie* z : vZombies) {
 
 		z->update(fElapsedTime, camera.get_offset());
+		z->loadZfeed(&zombiesFeedingOnDead);
+
 
 		if (z->alive && !z->hit) {
 
-			int closestFlesh;
-			float choice0;
-			float choice1;
-			
-			choice0 = ( vRifles[0]->get_location() - z->get_location() ).GetLengthSq();
-			choice1 = (vRifles[1]->get_location() - z->get_location()).GetLengthSq();
+			// create vector with RFL locations for Zombie to process
+			vector<Vec2> vRflLocations;
+			for (Rifleman* rf : vRifles)
+				vRflLocations.push_back(rf->get_location());
 
-			(choice0 <= choice1) ? closestFlesh = 0 : closestFlesh = 1;
+			// evaluate and get index
+			int closestFleshIndex = z->closestFlesh(&vRflLocations, vRifles[0]->alive, vRifles[1]->alive);
 
-
-
-
-			if (!vRifles[0]->alive && closestFlesh == 0)
-				zombiesFeedingOnDead++;
-			if (zombiesFeedingOnDead > 6)
-				closestFlesh = 1;
-
-			z->setGoal(vRifles[closestFlesh]->get_location());
 
 			if (toggle_hunger) {
 
-				if (!z->in_range(vRifles[closestFlesh]->get_location()))
+				if (!z->in_range(vRifles[closestFleshIndex]->get_location())) {
 					z->moveTowardsGoal();
+				}
 
 				else if (z->attack_cooldown_over())
-					z->attack_target(*vRifles[closestFlesh]);
+					z->attack_target(*vRifles[closestFleshIndex]);
 			}
 		}
 
@@ -196,7 +189,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 					effect.vEff_struct.push_back(ac);
 					z->shot = true;
 					p.body_hit_times++;
-					olc::SOUND::PlaySample(rand() % 4 + 4);
+					//olc::SOUND::PlaySample(rand() % 4 + 4);
 				}
 			}
 	}
@@ -234,7 +227,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 		toggle_camera = !toggle_camera;
 	if (GetKey(olc::G).bPressed)
 		toggle_hunger = !toggle_hunger;
-	(toggle_camera) ? camera.update(rifleman.get_location()) : camera.update(vRifles[0]->get_location());
+	(toggle_camera) ? camera.update(rifleman.get_location()) : camera.update(vZombies[0]->get_location());
 
 	return true;
 }
@@ -281,9 +274,13 @@ void zHunt::loadResources()
 	vPrtSprites.push_back(spr);
 	spr = new olc::Sprite{ "sprites\\portals\\red_idle\\idle.png" };
 	vPrtSprites.push_back(spr);
+	spr = new olc::Sprite{ "sprites\\portals\\blue_open\\idle.png" };
+	vPrtSprites.push_back(spr);
 	spr = new olc::Sprite{ "sprites\\portals\\brown_open\\open.png" };
 	vPrtSprites.push_back(spr);
 	spr = new olc::Sprite{ "sprites\\portals\\red_open\\open.png" };
+	vPrtSprites.push_back(spr);
+	spr = new olc::Sprite{ "sprites\\portals\\blue_open\\open.png" };
 	vPrtSprites.push_back(spr);
 
 }

@@ -12,8 +12,12 @@ void Portal::load_assets(vector <olc::Sprite*>* vpPrt)
 		vector <string> mappingData;
 		mappingData.push_back({ "sprites\\portals\\brown_idle\\idle.txt" });
 		mappingData.push_back({ "sprites\\portals\\red_idle\\idle.txt" });	
+		mappingData.push_back({ "sprites\\portals\\blue_idle\\idle.txt" });
+
 		mappingData.push_back({ "sprites\\portals\\brown_open\\open.txt" });
 		mappingData.push_back({ "sprites\\portals\\red_open\\open.txt" });
+		mappingData.push_back({ "sprites\\portals\\blue_open\\open.txt" });
+		
 		Actor::load_assets(mappingData);
 }
 
@@ -27,6 +31,13 @@ void Portal::update(float eTime_in, const Vec2 & cam_off, bool triggered)
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
 
+	if (actorsTeleported > 4)
+		readyTimer += eTime * 1.0f;
+
+	if (index == 0) {
+		cout << actorsTeleported << endl;
+		cout << "Timer: " << readyTimer << endl;
+	}
 
 	if (!isSpawner) {
 
@@ -49,9 +60,8 @@ void Portal::teleAway()
 {
 	if (closePortal()) {
 
-		location.x = float (rand() % 3);
-		location.y = float (rand() % 3);
-		cout << "x: " << location.x << endl << "y: " << location.y << endl;
+		location.x = 1 + rand() % 14;
+		location.y = 1 + rand() % 8;
 		timeOpened = 0;
 	}
 
@@ -108,6 +118,24 @@ bool Portal::getStatus() const
 	return opened;
 }
 
+bool Portal::isReady()
+{
+	static constexpr int resetReady = 5;
+
+	// if we teleported more than five start counting
+	
+	if (readyTimer > resetReady) {
+		actorsTeleported = 0;
+		readyTimer = 0.0f;
+		return true;
+	}
+
+	if (actorsTeleported < 5)
+		return true;
+
+	return false;
+}
+
 
 void Portal::becomeSpawner(Vec2 spw_loc)
 {
@@ -120,9 +148,14 @@ void Portal::becomeSpawner(Vec2 spw_loc)
 
 void Portal::tryTeleport(Actor& act)
 {
-	if (withinDistance(act.get_location(), 2000) && act.timeSinceLastTele > teleCooldown && opened && act.alive) {
-		act.timeSinceLastTele = 0;
-		teleport(act);
+							// in range						//waited enough since last
+	if (withinDistance(act.get_location(), 2000) && (act.timeSinceLastTele > teleCooldown) && opened && act.alive && !isSpawner && act.desiredPrtIndex != -1) {
+		
+		if (isReady()) {
+			act.timeSinceLastTele = 0;
+			actorsTeleported++;
+			teleport(act);
+		}
 	}
 }
 
@@ -136,17 +169,13 @@ void Portal::teleport(Actor& act)
 		else
 			i = index - 1;
 
-		act.set_location((*vpPrt)[i]->getPosition());
+		act.set_location((*vpPrt)[i]->get_location());
 	}
 
 	else 		
-		act.set_location((*vpPrt)[act.desiredPrtIndex]->getPosition());
+		act.set_location((*vpPrt)[act.desiredPrtIndex]->get_location());
 	
 }
 
 
-Vec2 Portal::getPosition() const
-{
-	return location;
-}
 

@@ -72,3 +72,5 @@ Vec2 Vec2::GetNormalized() const
 	}
 	return *this;
 }
+
+

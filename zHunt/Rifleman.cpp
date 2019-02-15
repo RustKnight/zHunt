@@ -16,6 +16,7 @@ void Rifleman::moveTowardsGoal()
 
 void Rifleman::standGround()
 {
+
 	vector <Zombie*> vTargetsOnScreen;
 	vTargetsOnScreen = actorsOnScreen(vpZom);
 

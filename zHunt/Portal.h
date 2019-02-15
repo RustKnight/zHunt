@@ -8,7 +8,7 @@
 
 class Portal : public Actor {
 
-	enum phase { BROWN_IDLE, RED_IDLE, BROWN_OPEN, RED_OPEN };
+	enum phase { BROWN_IDLE, RED_IDLE, BLUE_IDLE, BROWN_OPEN, RED_OPEN, BLUE_OPEN};
 
 public:
 	Portal(Vec2 loc, olc::PixelGameEngine* in_pge, vector <Portal*>* vpP) :
@@ -25,28 +25,29 @@ public:
 	void load_assets(vector <olc::Sprite*>* vpPrt);
 	void update(float eTime, const Vec2 & cam_off, bool start);
 	bool getStatus() const;
-	Vec2 getPosition() const;
-	
+	bool isReady();
 
 	bool isSpawner = false;
-
+	bool pairing = false;
 
 private:
 	void openPortal();
 	bool closePortal();
 	void teleAway();
 	void teleport(Actor& act);
-
+	
 	
 private:
-	static constexpr int openTimeMax = 4;
-	static constexpr int teleCooldown = 5;
+	static constexpr int openTimeMax = 6;
+	static constexpr int teleCooldown = 3;
 	float timeOpened = 0;
+	float readyTimer;
 	int opened = false;
 	int index = 0;
+	int actorsTeleported = 0;
 
 	bool transitionDone;
-	bool pairing = false;
+	
 
 	phase color_idle = RED_IDLE;
 	phase color_open = RED_OPEN;

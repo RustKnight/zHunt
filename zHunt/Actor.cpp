@@ -162,6 +162,11 @@ bool Actor::withinDistance(Vec2 goal, int dist_radius)
 	return distanceCheck.inRange(goal, location, dist_radius);
 }
 
+float Actor::LengthSq2Vec(Vec2* a, Vec2* b)
+{
+	return (*a - *b).GetLengthSq();
+}
+
 
 
 void Actor::load_assets(vector<string> in_mappings)
