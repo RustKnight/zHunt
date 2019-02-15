@@ -20,7 +20,9 @@
 
 
 // animation sync so that when zombie finishes hitting , player plays hurt
-// get rid of silly cascading initializations ; if a zombie class will be a zombie, make asset specific stuff be part of the class
+
+// stop changinge body position when dead on floor as player
+// draw dead zombies animation on top of portals
 
 zHunt::zHunt() :
 	winWidth { 768.0f},
@@ -208,13 +210,13 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 	// draw dead actors first
 	for (Actor* a : vActors)
-		if (!a->alive)
+		if (!a->alive && a->finishedDieing)
 			a->draw();
 
 	// draw alive actors by height
 	sort_actors_by_height(); 
 	for (Actor* a : vActors) {
-		if (a->alive && a->isActive)
+		if ( (a->alive && a->isActive) || (!a->finishedDieing && !a->alive) )
 			a->draw();
 	}
 

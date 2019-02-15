@@ -116,6 +116,7 @@ public:
 	void set_location(Vec2 loc);
 	float timeSinceLastTele = 1000;
 	AnimationRenderer renderer;
+	bool finishedDieing = true;
 	
 	int hp;
 	bool alive;

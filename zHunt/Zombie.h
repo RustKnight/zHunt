@@ -17,6 +17,7 @@ public:
 	{
 		hp = 10;
 		alive = true;
+		finishedDieing = false;
 	}
 
 public:
@@ -34,7 +35,7 @@ public:
 	float calculatePath(const Vec2& PathRifle, bool& teleporting, int& InIndexPortal, int& OutIndexPortal) const;
 	float closestToActor(const Vec2& Actor, int& portalIndex) const;
 
-
+	
 	void load_assets(vector <olc::Sprite*>* vpZomSpr);
 private:
 	float speed;	

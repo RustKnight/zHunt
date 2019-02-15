@@ -22,8 +22,10 @@ void Zombie::is_hit()
 	hit = true;
 	hp -= 5 + rand() % 5;
 
-	if (hp < 0)
+	if (hp < 0) {
 		alive = false;
+		renderer.animationCount = 0;
+	}
 
 	if (alive)
 		renderer.request_animation(HIT, (*vSpriteSheetPointers)[HIT], 0, 0, 0, 0, 0, 5.5f);
@@ -218,6 +220,8 @@ bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 	renderer.update_offset(camera_offset);
 	timeSinceLastTele += fElapTm * 1.0f;
 
+	if (!alive && renderer.animationCount > 0)
+		finishedDieing = true;
 
 	for (Portal* p : *vpPrt) {
 		p->tryTeleport(*this);
@@ -264,6 +268,7 @@ bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 	if (!alive) {
 		facing = facings(random_death_anim);
 		renderer.override (DIE, (*vSpriteSheetPointers)[DIE], 0, 0, 0, 0, 1, 13.5f);
+
 	}
 
 	moving = false;
