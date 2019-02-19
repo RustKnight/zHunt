@@ -148,6 +148,7 @@
     <ClCompile Include="AnimationHandler.cpp" />
     <ClCompile Include="AnimationRenderer.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CinematicEffect.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="AnimationHandler.h" />
     <ClInclude Include="AnimationRenderer.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CinematicEffect.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Map.h" />

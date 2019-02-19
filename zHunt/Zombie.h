@@ -4,7 +4,6 @@
 #include "Portal.h"
 
 
-// move speed should modulate animation speed
 
 class Rifleman;
 

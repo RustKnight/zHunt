@@ -8,8 +8,14 @@ void Rifleman::follow()
 
 void Rifleman::moveTowardsGoal()
 {
+		fired = false;
 		Vec2 coord = goal - location;
-		location += coord.GetNormalized() * eTime * speed;
+
+		if ( facing == SE || facing == NE || facing == NW || facing == SW ) 
+			location += (coord.GetNormalized() * eTime * speed) * 1.43f;
+		else
+			location += coord.GetNormalized() * eTime * speed;
+
 		moving = true;
 }
 
@@ -21,12 +27,13 @@ void Rifleman::standGround()
 	vTargetsOnScreen = actorsOnScreen(vpZom);
 
 	if (!vTargetsOnScreen.empty()) {
-		Zombie* z = closestTarget(vTargetsOnScreen);
-		goal = z->get_location();
+		Zombie* zombie = closestTarget(vTargetsOnScreen);
+		goal = zombie->get_location();
 
 		if (turn.complete())
 			turn.setCurrent(get_facing(goal));
-		shootAtTarget(z);
+
+		shootAtTarget(zombie);
 	}
 }
 
@@ -51,7 +58,7 @@ void Rifleman::getSounds(int f1, int f2, int r)
 {
 	snd_fire1 = f1;
 	snd_fire2 = f2;
-	snd_reload = r;
+	snd_empty = r;
 
 }
 
@@ -197,6 +204,9 @@ void Rifleman::fire(bool b, Vec2 fireAt)
 {
 	fired = b;
 
+	if (kar.getReloadState() && isPlayer && fired)
+		olc::SOUND::PlaySample(snd_empty);
+
 	if (fired){
 		if (kar.fire()) 
 			updateFireAngle(fireAt);
@@ -206,7 +216,7 @@ void Rifleman::fire(bool b, Vec2 fireAt)
 			if (kar.checkRounds() <= 0)
 				kar.doReload();
 		}
-	}
+	}	
 }
 
 

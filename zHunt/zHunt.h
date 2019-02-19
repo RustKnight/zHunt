@@ -20,12 +20,36 @@
 #include "Effect.h"
 #include "Controller.h"
 #include "zSpawner.h"
+#include "CinematicEffect.h"
 
 
 #include "olcPGEX_Sound.h"
 
 class zHunt : public olc::PixelGameEngine
 {
+
+	class Scripter {
+	public:
+		Scripter (zHunt* pZ): z{pZ}, scriptState {0}
+		{}
+
+		bool playScript() {
+
+			switch (scriptState) {
+			case 0:
+				break;
+
+			}
+
+		}
+
+	private:
+		zHunt* z;
+		int scriptState;
+	};
+
+
+
 public:
 	zHunt();
 
@@ -47,6 +71,7 @@ private:
 	float winWidth;
 	float winHeight;
 
+	CinematicEffect cinematicEffect;
 	Map map;
 	Rifleman rifleman;
 	olc::Sprite* fields;
@@ -77,4 +102,6 @@ private:
 	int snd_zom1_hit;
 	int snd_zom2_hit;
 	int snd_zom3_hit;
+
+	int snd_empty;
 };

@@ -16,6 +16,8 @@ public:
 	{
 		alive = true;
 		isActive = false;
+
+
 	}
 
 	void becomeSpawner(Vec2 spw_loc);

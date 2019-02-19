@@ -31,6 +31,7 @@ void Portal::update(float eTime_in, const Vec2 & cam_off, bool triggered)
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
 
+
 	if (actorsTeleported > 4)
 		readyTimer += eTime * 1.0f;
 

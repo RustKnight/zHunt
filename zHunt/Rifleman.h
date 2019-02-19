@@ -6,10 +6,10 @@
 #include "TurnAround.h"
 
 
-// Diagonal move of AI 50 % more ?
-// stop beserk fire - ai cannot toggle the not firing flag on
+//DONE stop beserk fire - ai cannot toggle the not firing flag on
+//DONE Diagonal move of AI 50 % more ?
+//DROPPED player turn as AI as well, so running and turning around is costs a bit of time and is not abused
 // bullets sometimes pass target?
-// maybe make player turn as AI as well, so running and turning around is costs a bit of time and is not abused
 
 class Rifleman : public Actor {
 
@@ -50,17 +50,17 @@ public:
 
 
 	void load_assets(vector <olc::Sprite*>* vpRfl);
-
+	TurnAround turn;
 private:
 	Carabine kar;
-	TurnAround turn;
+	
 	Vec2 fireAngle;
 	bool fired = false;
 	bool aiming = false;
 	vector<Zombie*> vpZom;
 	vector<Portal*>* vpPrt;
 
-	int snd_reload;
+	int snd_empty;
 	int snd_fire1;
 	int snd_fire2;
 };
