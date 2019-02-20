@@ -84,7 +84,7 @@ bool zHunt::OnUserCreate()
 	}
 
 
-	for (int i = 0; i < 1; i++) {
+	for (int i = 0; i < 10; i++) {
 		Portal* prt = new Portal{ Vec2{ 5,0 }, this, &vPortals };
 		prt->load_assets(&vPrtSprites);
 
@@ -96,16 +96,16 @@ bool zHunt::OnUserCreate()
 		vActors.push_back(prt);
 	}
 
-	//vPortals[0]->set_location(Vec2{ map.get_width() / 2.0f, 1.0f });
-	//vPortals[1]->set_location(Vec2{ map.get_width() / 2.0f, map.get_height() - 1.0f });
-	//vPortals[2]->set_location(Vec2{ 1, map.get_height() / 2.0f });
-	//vPortals[3]->set_location(Vec2{ map.get_width() - 1.0f, map.get_height() / 2.0f });
-	//
-	vPortals[0]->set_location(Vec2{ 7.5f, map.get_height() / 2.0f });
-	//vPortals[6]->set_location(Vec2{ 4, 3 });
-	//
-	//vPortals[7]->set_location(Vec2{ 1, 6 });
-	//vPortals[8]->set_location(Vec2{ 4, 6 });
+	vPortals[0]->set_location(Vec2{ map.get_width() / 2.0f, 1.0f });
+	vPortals[1]->set_location(Vec2{ map.get_width() / 2.0f, map.get_height() - 1.0f });
+	vPortals[2]->set_location(Vec2{ 1, map.get_height() / 2.0f });
+	vPortals[3]->set_location(Vec2{ map.get_width() - 1.0f, map.get_height() / 2.0f });
+	
+	vPortals[5]->set_location(Vec2{ 7.5f, map.get_height() / 2.0f });
+	vPortals[6]->set_location(Vec2{ 4, 3 });
+	
+	vPortals[7]->set_location(Vec2{ 1, 6 });
+	vPortals[8]->set_location(Vec2{ 4, 6 });
 
 
 	rifleman.load_assets(&vRflSprites);
@@ -175,10 +175,10 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 		
 	
 		for (Portal* prt : vPortals) {
-			//if (GetKey(olc::P).bHeld)
+			if (GetKey(olc::P).bHeld)
 				prt->visible = true;
-			//else
-			//	prt->visible = false;
+			else
+				prt->visible = false;
 
 			prt->update(fElapsedTime, camera.get_offset(), 1);
 		}

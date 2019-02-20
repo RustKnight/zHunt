@@ -61,7 +61,6 @@ void Portal::openPortal()
 	if (!opened) {
 
 		isActive = true;				//flag that it's safe to draw portal
-		visible = true;
 
 		transitionDone = renderer.animationCount;
 
