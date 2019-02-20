@@ -37,6 +37,7 @@ class zHunt : public olc::PixelGameEngine
 
 			switch (scriptState) {
 			case 0:
+
 				break;
 
 			}

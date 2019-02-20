@@ -32,7 +32,7 @@ void zSpawner::spawnZ()
 	for (Portal* prt: *vPrt) {
 
 		bool canSpawn = rand() % 2;
-		if (canSpawn && prt->getStatus() && prt->isSpawner) {
+		if (canSpawn && prt->getStatus() && prt->isSpawner && prt->visible) {
 
 			Zombie* zom = new Zombie(prt->get_location(), pge, vPrt);			// we should handle proper destruction of zombie
 			zom->load_assets(vZomSprites);

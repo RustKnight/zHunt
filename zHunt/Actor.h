@@ -122,7 +122,8 @@ public:
 	bool alive;
 	bool hit;
 	bool isActive;
-	
+	bool visible = true;
+
 protected:
 	bool isPlayer;
 	

@@ -28,7 +28,7 @@ zHunt::zHunt() :
 	winWidth{ 768.0f },
 	winHeight{ 640.0f },
 	rifleman{ Vec2 {4.0f, 3.7f}, this },
-	camera{ this, &map, getWinWidth(), getWinHeight() },
+	camera{ this, &map, getWinWidth(), getWinHeight(), rifleman.get_location() },
 	control{ this },
 	cinematicEffect{ getWinWidth() , getWinHeight(), 30.0f, this }
 {
@@ -101,7 +101,7 @@ bool zHunt::OnUserCreate()
 
 
 
-	for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < 0; i++) {
 		Zombie* zom = new Zombie(Vec2{ 0,0 }, this, &vPortals);			// we should handle proper destruction of zombie
 		zom->load_assets(&vZomSprites);
 		zom->randomize_stats(distR(e));
@@ -110,7 +110,7 @@ bool zHunt::OnUserCreate()
 		vActors.push_back(zom);
 	}
 
-	vZombies[0]->set_location(Vec2{ 1.0f, 3.7f });
+	//vZombies[0]->set_location(Vec2{ 1.0f, 3.7f });
 
 
 	camera.load_fields("sprites\\terrain\\green.png");
@@ -129,6 +129,15 @@ bool zHunt::OnUserCreate()
 
 bool zHunt::OnUserUpdate(float fElapsedTime)
 {
+
+
+	if (GetKey(olc::Q).bPressed)
+		toggle_camera = !toggle_camera;
+	if (GetKey(olc::G).bPressed)
+		toggle_hunger = !toggle_hunger;
+	(toggle_camera) ? camera.update(rifleman.get_location()) : camera.update(vZombies[0]->get_location());
+
+
 	{
 		Clear(olc::VERY_DARK_GREEN);
 		SetPixelMode(olc::Pixel::ALPHA);
@@ -142,17 +151,26 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	}
 
 
+
+
 	if (GetKey(olc::C).bHeld)
 		cinematicEffect.framing(true);
 	else
 		cinematicEffect.framing(false);
+	
 
+	
+		
+	
+		for (Portal* prt : vPortals) {
+			if (GetKey(olc::P).bHeld)
+				prt->visible = true;
+			else
+				prt->visible = false;
+			prt->update(fElapsedTime, camera.get_offset(), 1);
+		}
+	
 
-
-
-	for (Portal* prt : vPortals) {
-		prt->update(fElapsedTime, camera.get_offset(), 1);
-	}
 
 
 	for (Rifleman* rf : vRifles) {
@@ -232,7 +250,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	// draw alive actors by height
 	sort_actors_by_height();
 	for (Actor* a : vActors) {
-		if ((a->alive && a->isActive) || (!a->finishedDieing && !a->alive))
+		if ((a->alive && a->isActive && a->visible) || (!a->finishedDieing && !a->alive))
 			a->draw();
 	}
 
@@ -249,11 +267,6 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	//effect.render_effect(this, fElapsedTime, camera.get_offset());
 
 
-	if (GetKey(olc::Q).bPressed)
-		toggle_camera = !toggle_camera;
-	if (GetKey(olc::G).bPressed)
-		toggle_hunger = !toggle_hunger;
-	(toggle_camera) ? camera.update(rifleman.get_location()) : camera.update(vZombies[0]->get_location());
 
 
 	// updates last because function also writes to screen

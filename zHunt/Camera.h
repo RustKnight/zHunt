@@ -6,10 +6,8 @@
 
 class Camera {
 public:
-	Camera(olc::PixelGameEngine* pge_in, Map* map_in, int winW, int winH) :
-		pge{ pge_in }, map{ map_in }, window_width {
-		winW
-	}, window_height{ winH }
+	Camera(olc::PixelGameEngine* pge_in, Map* map_in, int winW, int winH, Vec2 subject_pos) :
+		pge{ pge_in }, map{ map_in }, window_width {winW}, window_height{ winH }, cameraPos_x{ subject_pos.x }, cameraPos_y{ subject_pos.y }
 	{}
 
 public:

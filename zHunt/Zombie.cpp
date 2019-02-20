@@ -224,7 +224,8 @@ bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 		finishedDieing = true;
 
 	for (Portal* p : *vpPrt) {
-		p->tryTeleport(*this);
+		if (p->visible)
+			p->tryTeleport(*this);
 	}
 
 	if (renderer.get_current_anim() != HIT)
