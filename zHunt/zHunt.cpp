@@ -27,12 +27,16 @@
 zHunt::zHunt() :
 	winWidth{ 768.0f },
 	winHeight{ 640.0f },
-	rifleman{ Vec2 {4.0f, 3.7f}, this },
+	rifleman{ Vec2 {8.5f, map.get_height() / 2.0f}, this },
 	camera{ this, &map, getWinWidth(), getWinHeight(), rifleman.get_location() },
 	control{ this },
-	cinematicEffect{ getWinWidth() , getWinHeight(), 30.0f, this }
+	cinematicEffect{ getWinWidth() , getWinHeight(), 30.0f, this },
+	cameraSight {Vec2 {8.5f, map.get_height() / 2.0f}, this},
+	script (this)
 {
+	cameraSight.alive = true;
 	sAppName = "zHunt";
+	cameraSight.visible = false;
 }
 
 
@@ -52,6 +56,13 @@ bool zHunt::OnUserCreate()
 	snd_zom3_hit = olc::SOUND::LoadAudioSample("sounds\\zombie_hit3.wav");
 	snd_empty = olc::SOUND::LoadAudioSample("sounds\\empty.wav");
 
+	snd_hans = olc::SOUND::LoadAudioSample("sounds\\dialogue\\hans.wav");
+	snd_heinrich = olc::SOUND::LoadAudioSample("sounds\\dialogue\\heinrich.wav");
+	snd_halt = olc::SOUND::LoadAudioSample("sounds\\dialogue\\halt.wav");
+	snd_hmm = olc::SOUND::LoadAudioSample("sounds\\dialogue\\hmm.wav");
+	snd_wasist = olc::SOUND::LoadAudioSample("sounds\\dialogue\\wasist.wav");
+	snd_tiere = olc::SOUND::LoadAudioSample("sounds\\dialogue\\tiere.wav");
+
 	loadResources();
 
 
@@ -62,7 +73,7 @@ bool zHunt::OnUserCreate()
 
 
 	for (int i = 0; i < 1; i++) {
-		Rifleman* rf = new Rifleman{ Vec2{ 10.0f + i, 4.0f }, this };
+		Rifleman* rf = new Rifleman{ Vec2{ 15.0f, 1.5f }, this };
 		rf->load_assets(&vRflSprites);
 		rf->loadPortalsPointer(&vPortals);		//CAN REMOVE IF RIFLE SHOULD NOT TELEPORT
 		vRifles.push_back(rf);
@@ -129,14 +140,20 @@ bool zHunt::OnUserCreate()
 
 bool zHunt::OnUserUpdate(float fElapsedTime)
 {
-
+	if (GetKey(olc::G).bPressed)
+		toggle_hunger = !toggle_hunger;
 
 	if (GetKey(olc::Q).bPressed)
 		toggle_camera = !toggle_camera;
-	if (GetKey(olc::G).bPressed)
-		toggle_hunger = !toggle_hunger;
-	(toggle_camera) ? camera.update(rifleman.get_location()) : camera.update(vZombies[0]->get_location());
+	
 
+
+	(toggle_camera) ? camera.update(cameraSight.get_location()) : camera.update(vZombies[0]->get_location());
+
+	
+		
+	if (script.playScript(fElapsedTime))
+		cinematicEffect.framing(true);
 
 	{
 		Clear(olc::VERY_DARK_GREEN);
@@ -150,16 +167,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 		zSpawn.update(fElapsedTime);
 	}
 
-
-
-
-	if (GetKey(olc::C).bHeld)
-		cinematicEffect.framing(true);
-	else
-		cinematicEffect.framing(false);
-	
-
-	
+		
 		
 	
 		for (Portal* prt : vPortals) {
@@ -170,7 +178,6 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 			prt->update(fElapsedTime, camera.get_offset(), 1);
 		}
 	
-
 
 
 	for (Rifleman* rf : vRifles) {
@@ -250,7 +257,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	// draw alive actors by height
 	sort_actors_by_height();
 	for (Actor* a : vActors) {
-		if ((a->alive && a->isActive && a->visible) || (!a->finishedDieing && !a->alive))
+		if ((a->alive && a->isActive && a->visible) || (!a->finishedDieing && !a->alive) || (a->alive && !a->isActive && a->visible)) // warning, last condition added as hack for scripter ((a->alive && !a->isActive && a->visible))
 			a->draw();
 	}
 
@@ -270,7 +277,11 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 
 	// updates last because function also writes to screen
+	
+
 	cinematicEffect.update(fElapsedTime);
+
+
 
 
 	return true;
@@ -311,6 +322,8 @@ void zHunt::loadResources()
 	spr = new olc::Sprite{ "sprites\\rifleman\\NEW\\hurt\\r_hurt.png" };
 	vRflSprites.push_back(spr);
 	spr = new olc::Sprite{ "sprites\\rifleman\\NEW\\die\\r_die.png" };
+	vRflSprites.push_back(spr);
+	spr = new olc::Sprite{ "sprites\\rifleman\\NEW\\smoke\\r_smoke.png" };
 	vRflSprites.push_back(spr);
 
 

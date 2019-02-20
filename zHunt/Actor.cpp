@@ -85,6 +85,11 @@ int Actor::get_facing(Vec2 pos)
 	return int(angle);
 }
 
+void Actor::set_facing(int face)
+{
+	facing = facings(face);
+}
+
 void Actor::look_at_vec(Vec2 pos)
 {
 
@@ -142,6 +147,29 @@ void Actor::setGoal(Vec2 in_goal)
 		goal = in_goal;
 }
 
+Vec2 Actor::getGoal() const
+{
+	return goal;
+}
+
+bool Actor::moveTowardsGoal(float speed_in)
+{
+
+	if (!withinDistance(goal, 20)) {
+
+		cout << location.x << endl;
+
+		Vec2 vec = goal - location;
+
+		location += vec.GetNormalized() * eTime * speed;
+	}
+
+	else
+		speed = speed_in;
+
+	return false;
+}
+
 
 
 bool Actor::withinOwnRect(Vec2 location_in) const
@@ -188,6 +216,7 @@ void Actor::set_location(Vec2 loc)
 
 bool Actor::update(float fElapTm, const Vec2& cam_off)
 {
+	eTime = fElapTm;
 	return 0;
 }
 

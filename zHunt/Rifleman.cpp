@@ -99,6 +99,8 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off, vector<Zombie*> vpZom
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
 	timeSinceLastTele += fElapTm * 1.0f;
+
+	
 	
 	for (Portal* p : *vpPrt) {
 		if (p->visible)
@@ -112,8 +114,11 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off, vector<Zombie*> vpZom
 			turn.setCurrent(get_facing(goal));
 		facing = facings(turn.getFacing());
 	}
-	else
-		look_at_vec(goal);
+	// control hack for scripter
+	else {
+		if (isActive) 
+			look_at_vec(goal);
+	}
 
 	vpZom = vpZom_in;
 	kar.update(fElapTm);
@@ -151,7 +156,7 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off, vector<Zombie*> vpZom
 	else if (!alive)
 		renderer.request_animation(9, (*vSpriteSheetPointers)[9], 0, 0, 0, 0, 1, 7.5f);
 
-	else 
+	else if (isActive || !isPlayer)
 		renderer.request_animation(IDLE, (*vSpriteSheetPointers)[IDLE], 1, 0, 1, 1, 0, 1.5f);
 		
 	
@@ -184,6 +189,16 @@ void Rifleman::updateFireAngle(Vec2 fireAt)
 
 	Vec2 vec{ dx, dy };
 	fireAngle = vec.GetNormalized();
+}
+
+void Rifleman::smoke()
+{
+	renderer.request_animation(SMOKE, (*vSpriteSheetPointers)[SMOKE], 1, 0, 1, 1, 0, 2.0f);
+}
+
+void Rifleman::idle()
+{
+	renderer.request_animation(IDLE, (*vSpriteSheetPointers)[IDLE], 1, 0, 1, 1, 0, 1.5f);
 }
 
 void Rifleman::reload()
@@ -289,6 +304,7 @@ void Rifleman::load_assets(vector <olc::Sprite*>* vpRfl)
 	mappingData.push_back({ "sprites\\rifleman\\NEW\\reload\\r_reload.txt" });
 	mappingData.push_back({ "sprites\\rifleman\\NEW\\hurt\\r_hurt.txt" });
 	mappingData.push_back({ "sprites\\rifleman\\NEW\\die\\r_die.txt" });
+	mappingData.push_back({ "sprites\\rifleman\\NEW\\smoke\\r_smoke.txt" });
 
 	Actor::load_assets(mappingData);
 

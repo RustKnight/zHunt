@@ -13,7 +13,7 @@
 
 class Rifleman : public Actor {
 
-	enum actions { AIM, CLIMB, IDLE, PICK, RUN, WALK, FIRE, RELOAD, HURT, DIE };
+	enum actions { AIM, CLIMB, IDLE, PICK, RUN, WALK, FIRE, RELOAD, HURT, DIE, SMOKE };
 
 public:
 	Rifleman (Vec2 loc, olc::PixelGameEngine* in_pge) :
@@ -22,10 +22,13 @@ public:
 	{
 		hp = 25;
 		alive = true;
+		isActive = false;
 	}
 
 	bool update(float fElapTm, const Vec2 & cam_off, std::vector<Zombie*> vpZom);
 	void updateFireAngle(Vec2 fireAt);
+	void smoke();
+	void idle();
 	void reload();
 	void running();
 	void aim();

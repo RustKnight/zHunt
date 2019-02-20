@@ -5,6 +5,7 @@
 void CinematicEffect::update(float eTime) {
 
 	eTime_ = eTime;
+	
 
 	if (active_) {
 		top.grow();
@@ -15,6 +16,8 @@ void CinematicEffect::update(float eTime) {
 		top.retract();
 		bottom.retract();
 	}
+
+	active_ = false;
 }
 
 

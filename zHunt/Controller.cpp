@@ -3,7 +3,7 @@
 void Controller::control(Rifleman& rifle)
 {
 
-	if (rifle.alive) {
+	if (rifle.alive && rifle.isActive) {
 
 
 		if (pge->GetKey(olc::W).bHeld)
@@ -18,22 +18,28 @@ void Controller::control(Rifleman& rifle)
 		if (pge->GetKey(olc::A).bHeld)
 			rifle.moveLeft();
 
+
+
+		if (pge->GetKey(olc::SHIFT).bHeld)
+			rifle.running();
+
+		if (pge->GetKey(olc::R).bPressed)
+			rifle.reload();
+
+		if (pge->GetKey(olc::Y).bPressed)
+			rifle.smoke();
+
+
+		if (pge->GetMouse(1).bHeld) {
+			rifle.aim();
+
+			Vec2 fireAngle{ (float)pge->GetMouseX(), (float)pge->GetMouseY() };
+
+			rifle.fire(pge->GetMouse(0).bPressed, fireAngle);
+		}
+
 	}
 
-	if (pge->GetKey(olc::SHIFT).bHeld)
-		rifle.running();
-
-	if (pge->GetKey(olc::R).bPressed)
-		rifle.reload();
-	
-
-	if (pge->GetMouse(1).bHeld) {
-		rifle.aim();
-
-		Vec2 fireAngle{ (float)pge->GetMouseX(), (float)pge->GetMouseY() };
-
-		rifle.fire(pge->GetMouse(0).bPressed, fireAngle);
-	}
 }
 
 

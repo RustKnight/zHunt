@@ -81,10 +81,10 @@ public:
 		isPlayer{false},
 		location{loc},
 		pge		{in_pge},
-		speed	{0.8f},
-		facing	{N},
+		speed	{1.3f},
+		facing	{S},
 		renderer{ in_pge},
-		isActive {true}
+		isActive {true}		
 	{}
 
 
@@ -95,10 +95,13 @@ public:
 
 	void changeFacing(facings face);
 	int get_facing(Vec2 pos);
+	void set_facing(int face);
 	bool walking_backwards();
 	void take_damage(int damage);
 	void become_player(bool toggle);
 	void setGoal(Vec2 goal);
+	Vec2 getGoal() const;
+	bool moveTowardsGoal(float speed);
 	void look_at_vec(Vec2 pos);
 	bool withinOwnRect(Vec2 location) const;
 	bool withinDistance(Vec2 location, int dist_radius);

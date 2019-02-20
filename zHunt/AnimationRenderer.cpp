@@ -144,7 +144,7 @@ void AnimationRenderer::update_and_play(float& elapT, const Vec2& loc, int face)
 
 			if (back_forth) {
 				if (increasing == false)  /// we finished decreasing and want to increase
-					play_seq = 1;		  /// set play_seq to 0 // or to 1 if we want small delay
+					play_seq = 0;		  /// set play_seq to 0 // or to 1 if we want small delay
 				else
 					play_seq = float (num_sequences - 1);
 				
