@@ -20,13 +20,13 @@ void Rifleman::moveTowardsGoal()
 }
 
 
-void Rifleman::standGround()
+void Rifleman::standGround(bool agr_on)
 {
 
 	vector <Zombie*> vTargetsOnScreen;
 	vTargetsOnScreen = actorsOnScreen(vpZom);
 
-	if (!vTargetsOnScreen.empty()) {
+	if (!vTargetsOnScreen.empty() && agr_on) {
 		Zombie* zombie = closestTarget(vTargetsOnScreen);
 		goal = zombie->get_location();
 

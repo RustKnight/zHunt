@@ -93,7 +93,6 @@ public:
 	virtual bool update (float fElapTm, const Vec2& cam_off);
 	void draw();
 
-	void changeFacing(facings face);
 	int get_facing(Vec2 pos);
 	void set_facing(int face);
 	bool walking_backwards();

@@ -34,24 +34,30 @@ class zHunt : public olc::PixelGameEngine
 	// both turn to west
 	// pan to West portal
 	// open portal
-	// - snap back to player, end cinematicEffect
-	// - fastMove back to player, end cinematicEffect
+	// pan to player and give control/get out of cinema mode
+	// let player get close to portal
+	// 
 	
-
+	
+	// stop randomizing zombie spawn
+	// maybe AI can look at the same point (mouse loc) as player if no target present
+	// if you run to portal - Hans doesn't face properly
+	// maybe Heinrich says "Ein Verletzter!" then Halt
 
 	class Scripter {
 	public:
-		Scripter (zHunt* pZ): z{pZ}, scriptState {0}
+		Scripter (zHunt* pZ): z{pZ}, scriptState { 0 }
 		{}
 
-		enum scriptStates {WALK_TO_HEINRICH, SND_HANS, SND_HEINRICH, LOOK_WEST, PAN_WEST_PORTAL, OPEN_WEST_PORTAL
-											};
+		enum scriptStates {WALK_TO_HEINRICH, SND_HANS, SND_HEINRICH, LOOK_WEST, PAN_WEST_PORTAL, OPEN_WEST_PORTAL,
+							PAN_BACK_FAST, GET_CLOSE, ASK_GET_ANSWER, HANS_ALLIGN, Z_APPROACH		};
 
 		bool playScript(float eTime) {
 
 			switch (scriptState) {
 
 			case WALK_TO_HEINRICH:
+
 
 				if (z->vRifles[0]->withinDistance(z->vRifles[1]->get_location(), 25000)) {
 					tick -= eTime * 6.5f;
@@ -66,8 +72,10 @@ class zHunt : public olc::PixelGameEngine
 					z->vRifles[1]->idle();
 				}
 
-				else
+				else {
 					z->vRifles[1]->smoke();
+					z->vRifles[1]->set_facing(4);
+				}
 				break;
 
 			case SND_HANS:
@@ -96,6 +104,7 @@ class zHunt : public olc::PixelGameEngine
 
 				if (tick < -3) {
 					resetSpecialStates();
+					playSound(eTime, z->snd_hmm);
 					scriptState++;
 					break;
 				}
@@ -120,11 +129,14 @@ class zHunt : public olc::PixelGameEngine
 
 			case PAN_WEST_PORTAL:
 
+				// clean up after previous sound call
+				resetSpecialStates();
+
 				if (!z->cameraSight.withinDistance(z->vPortals[2]->get_location(), 3500)) {
 
 					z->cameraSight.update(eTime, z->camera.get_offset());
 					z->cameraSight.setGoal(z->vPortals[2]->get_location());
-					z->cameraSight.moveTowardsGoal(0.8f); // 0.8 is the normal walking speed
+					z->cameraSight.moveTowardsGoal(1.5f); // 0.8 is the normal walking speed
 				}
 				else
 					scriptState++;
@@ -134,10 +146,93 @@ class zHunt : public olc::PixelGameEngine
 
 			case OPEN_WEST_PORTAL:
 
-				if (z->vPortals[2]->getStatus())
-					z->vPortals[2]->visible = true;
+				z->vPortals[2]->visible = true;
+				if (z->vPortals[2]->getStatus()) {
+					z->vPortals[2]->isActive = false;
+					scriptState++;
+				}
 
 				break;
+
+
+			case PAN_BACK_FAST:
+
+				if (!z->cameraSight.withinDistance(z->vRifles[1]->get_location(), 1050)) {
+
+					z->cameraSight.update(eTime, z->camera.get_offset());
+					z->cameraSight.setGoal(z->vRifles[1]->get_location());
+					z->cameraSight.moveTowardsGoal(2.5f); 
+				}
+
+				else {
+					isOn = false;
+					z->vRifles[1]->isActive = true;
+					scriptState++;
+				}
+
+				break;
+				
+			case GET_CLOSE:
+
+				if (z->vRifles[1]->withinDistance(z->vPortals[2]->get_location(), 105000)) {
+
+						z->cameraSight.set_location(z->vRifles[1]->get_location());
+						z->vRifles[1]->idle();
+						isOn = true;
+						z->vRifles[1]->isActive = false;
+
+						scriptState++;
+					
+				}
+				break;
+
+			case ASK_GET_ANSWER:
+
+
+				if (playSound(eTime, z->snd_wasist)) {
+					z->zSpawn.spawnZat(2); // 2 is our east spawn portal
+					resetSpecialStates();
+					z->ai.moveTo((z->vRifles[0]->get_location() + Vec2{ -0.6f, -0.4 }));
+					scriptState++;
+				}
+				
+				break;
+
+			case HANS_ALLIGN:
+							
+				if (z->ai.noMoveOrders()) {
+					z->vRifles[0]->setGoal(z->vZombies[0]->get_location());	// needed to make him face correctly
+					z->vRifles[0]->set_facing(6);
+					scriptState++;
+				}
+				break;
+
+			case Z_APPROACH: 
+
+				z->toggle_hunger = true; 
+
+				if (z->vZombies[0]->withinDistance(z->vRifles[1]->get_location(), 85000)) {
+					playSound(eTime, z->snd_halt);
+					z->vRifles[0]->aim();				
+				}
+
+				if (z->vZombies[0]->withinDistance(z->vRifles[1]->get_location(), 40000)) {
+					z->ai.toggleAggro();
+					resetSpecialStates();
+					scriptState++;
+				}
+
+
+				break;
+
+
+
+
+
+
+
+
+
 
 			default:
 				z->vRifles[1]->isActive = true;

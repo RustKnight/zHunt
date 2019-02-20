@@ -38,7 +38,7 @@ zHunt::zHunt() :
 	sAppName = "zHunt";
 	cameraSight.visible = false;
 
-	rifleman.isActive = true;
+	rifleman.isActive = false;
 }
 
 
@@ -62,7 +62,7 @@ bool zHunt::OnUserCreate()
 	snd_heinrich = olc::SOUND::LoadAudioSample("sounds\\dialogue\\heinrich.wav");
 	snd_halt = olc::SOUND::LoadAudioSample("sounds\\dialogue\\halt.wav");
 	snd_hmm = olc::SOUND::LoadAudioSample("sounds\\dialogue\\hmm.wav");
-	snd_wasist = olc::SOUND::LoadAudioSample("sounds\\dialogue\\wasist.wav");
+	snd_wasist = olc::SOUND::LoadAudioSample("sounds\\dialogue\\wasistdas.wav");
 	snd_tiere = olc::SOUND::LoadAudioSample("sounds\\dialogue\\tiere.wav");
 
 	loadResources();
@@ -88,8 +88,8 @@ bool zHunt::OnUserCreate()
 		Portal* prt = new Portal{ Vec2{ 5,0 }, this, &vPortals };
 		prt->load_assets(&vPrtSprites);
 
-		//if (i < 4)
-		//	prt->becomeSpawner(Vec2{ float(rand() % 14), float(rand() % 7) });
+		if (i < 4)
+			prt->becomeSpawner(Vec2{ float(rand() % 14), float(rand() % 7) });
 
 		prt->setIndex(i);
 		vPortals.push_back(prt);
@@ -151,13 +151,16 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 
 	//(toggle_camera) ? camera.update(cameraSight.get_location()) : camera.update(vZombies[0]->get_location());
-	(toggle_camera) ? camera.update(rifleman.get_location()) : camera.update(vZombies[0]->get_location());
+	//(toggle_camera) ? camera.update(rifleman.get_location()) : camera.update(vZombies[0]->get_location());
 	
 		
-	//if (script.playScript(fElapsedTime))
-	//	cinematicEffect.framing(true);
+	if (script.playScript(fElapsedTime)) {
+		cinematicEffect.framing(true);
+		camera.update(cameraSight.get_location());
+	}
+	else
+		camera.update(vRifles[1]->get_location());
 
-	
 
 	{
 		Clear(olc::VERY_DARK_GREEN);
@@ -173,14 +176,9 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 
 		
 		
-	
 		for (Portal* prt : vPortals) {
-			if (GetKey(olc::P).bHeld)
-				prt->visible = true;
-			else
-				prt->visible = false;
-
-			prt->update(fElapsedTime, camera.get_offset(), 1);
+			if(prt->visible)
+				prt->update(fElapsedTime, camera.get_offset(), 1);	
 		}
 	
 

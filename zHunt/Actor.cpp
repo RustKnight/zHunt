@@ -6,10 +6,6 @@ enum facings;
 
 
 
-void Actor::changeFacing(facings face)
-{
-	facing = face;
-}
 
 bool Actor::walking_backwards()
 {
@@ -161,7 +157,7 @@ bool Actor::moveTowardsGoal(float speed_in)
 
 		Vec2 vec = goal - location;
 
-		location += vec.GetNormalized() * eTime * speed;
+		location += vec.GetNormalized() * eTime * speed_in;
 	}
 
 	else
@@ -169,6 +165,26 @@ bool Actor::moveTowardsGoal(float speed_in)
 
 	return false;
 }
+
+// original moveToGoal for Camera Sight
+
+//bool Actor::moveTowardsGoal(float speed_in)
+//{
+//
+//	if (!withinDistance(goal, 20)) {
+//
+//		cout << location.x << endl;
+//
+//		Vec2 vec = goal - location;
+//
+//		location += vec.GetNormalized() * eTime * speed;
+//	}
+//
+//	else
+//		speed = speed_in;
+//
+//	return false;
+//}
 
 
 

@@ -34,7 +34,7 @@ public:
 	void aim();
 	void fire(bool fire, Vec2 fireAt);
 	void moveTowardsGoal();
-	void standGround();
+	void standGround(bool agr);
 	void shootAtTarget(Zombie* target);
 	void follow();
 	Vec2 getFireAngle();

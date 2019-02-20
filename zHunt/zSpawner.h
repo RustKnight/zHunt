@@ -10,6 +10,7 @@ public:
 	void load(vector <Zombie*>* vZ, vector <Portal*>* vP, vector <Actor*>* vA, olc::PixelGameEngine* pge_in, vector <olc::Sprite*>* vZomSprites_in);
 	void update(float eTime);
 	void spawnZ();
+	void spawnZat(int portalIndex);
 
 
 private:
