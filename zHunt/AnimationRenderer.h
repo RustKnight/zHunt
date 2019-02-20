@@ -44,6 +44,7 @@ public:
 	void passMappingData(vector <string> in_map);
 
 	int animationCount;
+	bool end_lock;
 
 private:
 	void draw_centered(float x, float y, olc::Sprite* spr, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale, bool mirrored_x);	
@@ -65,7 +66,7 @@ private:
 	bool loop;
 	bool increasing;
 	bool reversed;
-	bool end_lock;
+
 
 
 	olc::PixelGameEngine* pge;

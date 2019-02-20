@@ -82,7 +82,7 @@ public:
 		location{loc},
 		pge		{in_pge},
 		speed	{1.3f},
-		facing	{S},
+		facing	{N},
 		renderer{ in_pge},
 		isActive {true}		
 	{}

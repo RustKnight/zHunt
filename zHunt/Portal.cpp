@@ -23,7 +23,7 @@ void Portal::load_assets(vector <olc::Sprite*>* vpPrt)
 
 
 
-
+//bool interruptable, bool reversed_in, bool loop_in, bool back_and_forth, bool end_lock_in, float speed
 
 void Portal::update(float eTime_in, const Vec2 & cam_off, bool triggered)
 {
@@ -31,6 +31,7 @@ void Portal::update(float eTime_in, const Vec2 & cam_off, bool triggered)
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
 
+	cout << renderer.animationCount << endl;
 
 	if (actorsTeleported > 4)
 		readyTimer += eTime * 1.0f;
@@ -42,8 +43,9 @@ void Portal::update(float eTime_in, const Vec2 & cam_off, bool triggered)
 			teleAway();
 		}
 
-		else
+		else 
 			openPortal();
+		
 	
 		timeOpened += eTime * 1.0f;
 	}
@@ -53,25 +55,13 @@ void Portal::update(float eTime_in, const Vec2 & cam_off, bool triggered)
 }
 
 
-void Portal::teleAway()
-{
-	if (closePortal()) {
-
-		location.x = 1 + rand() % 14;
-		location.y = 1 + rand() % 8;
-		timeOpened = 0;
-	}
-
-}
-
-
-
 
 void Portal::openPortal()
 {
 	if (!opened) {
 
 		isActive = true;				//flag that it's safe to draw portal
+		visible = true;
 
 		transitionDone = renderer.animationCount;
 
@@ -86,26 +76,45 @@ void Portal::openPortal()
 
 	}
 }
-//bool interruptable, bool reversed_in, bool loop_in, bool back_and_forth, bool end_lock_in, float speed
+
+
 
 bool Portal::closePortal()
 {
-		
-		transitionDone = renderer.animationCount;
+
+	transitionDone = renderer.animationCount;
 
 
-		if (transitionDone) {
-			isActive = false;
-			opened = false;
-			renderer.animationCount = 0;
-			return true;
-		}
+	if (transitionDone) {
+		isActive = false;
+		opened = false;
+		renderer.animationCount = 0;
+		renderer.end_lock = 0;	 // these 2 lines are needed so that we get rid of the deadlock state - making sure the renderer's deadlock is 0 before we 
+		visible = false;		 // request new animations
+		return true;
+	}
 
-		renderer.override(color_open, (*vSpriteSheetPointers)[color_open], 1, 1, 0, 0, 1, speed * 15.0f);
+	renderer.request_animation(color_open, (*vSpriteSheetPointers)[color_open], 1, 1, 0, 0, 1, speed * 15.0f);
 
-		return false;
-		
+	return false;
+
 }
+
+
+void Portal::teleAway()
+{
+	if (closePortal()) {
+
+		location.x = 1 + rand() % 14;
+		location.y = 1 + rand() % 8;
+		timeOpened = 0;
+		renderer.animationCount = 0;
+	}
+
+}
+
+
+
 
 bool Portal::getStatus() const
 {

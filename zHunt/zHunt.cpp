@@ -37,6 +37,8 @@ zHunt::zHunt() :
 	cameraSight.alive = true;
 	sAppName = "zHunt";
 	cameraSight.visible = false;
+
+	rifleman.isActive = true;
 }
 
 
@@ -82,28 +84,28 @@ bool zHunt::OnUserCreate()
 	}
 
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 1; i++) {
 		Portal* prt = new Portal{ Vec2{ 5,0 }, this, &vPortals };
 		prt->load_assets(&vPrtSprites);
 
-		if (i < 4)
-			prt->becomeSpawner(Vec2{ float(rand() % 14), float(rand() % 7) });
+		//if (i < 4)
+		//	prt->becomeSpawner(Vec2{ float(rand() % 14), float(rand() % 7) });
 
 		prt->setIndex(i);
 		vPortals.push_back(prt);
 		vActors.push_back(prt);
 	}
 
-	vPortals[0]->set_location(Vec2{ map.get_width() / 2.0f, 1.0f });
-	vPortals[1]->set_location(Vec2{ map.get_width() / 2.0f, map.get_height() - 1.0f });
-	vPortals[2]->set_location(Vec2{ 1, map.get_height() / 2.0f });
-	vPortals[3]->set_location(Vec2{ map.get_width() - 1.0f, map.get_height() / 2.0f });
-
-	vPortals[5]->set_location(Vec2{ 1, 3 });
-	vPortals[6]->set_location(Vec2{ 4, 3 });
-
-	vPortals[7]->set_location(Vec2{ 1, 6 });
-	vPortals[8]->set_location(Vec2{ 4, 6 });
+	//vPortals[0]->set_location(Vec2{ map.get_width() / 2.0f, 1.0f });
+	//vPortals[1]->set_location(Vec2{ map.get_width() / 2.0f, map.get_height() - 1.0f });
+	//vPortals[2]->set_location(Vec2{ 1, map.get_height() / 2.0f });
+	//vPortals[3]->set_location(Vec2{ map.get_width() - 1.0f, map.get_height() / 2.0f });
+	//
+	vPortals[0]->set_location(Vec2{ 7.5f, map.get_height() / 2.0f });
+	//vPortals[6]->set_location(Vec2{ 4, 3 });
+	//
+	//vPortals[7]->set_location(Vec2{ 1, 6 });
+	//vPortals[8]->set_location(Vec2{ 4, 6 });
 
 
 	rifleman.load_assets(&vRflSprites);
@@ -148,12 +150,14 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	
 
 
-	(toggle_camera) ? camera.update(cameraSight.get_location()) : camera.update(vZombies[0]->get_location());
-
+	//(toggle_camera) ? camera.update(cameraSight.get_location()) : camera.update(vZombies[0]->get_location());
+	(toggle_camera) ? camera.update(rifleman.get_location()) : camera.update(vZombies[0]->get_location());
 	
 		
-	if (script.playScript(fElapsedTime))
-		cinematicEffect.framing(true);
+	//if (script.playScript(fElapsedTime))
+	//	cinematicEffect.framing(true);
+
+	
 
 	{
 		Clear(olc::VERY_DARK_GREEN);
@@ -171,10 +175,11 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 		
 	
 		for (Portal* prt : vPortals) {
-			if (GetKey(olc::P).bHeld)
+			//if (GetKey(olc::P).bHeld)
 				prt->visible = true;
-			else
-				prt->visible = false;
+			//else
+			//	prt->visible = false;
+
 			prt->update(fElapsedTime, camera.get_offset(), 1);
 		}
 	
