@@ -15,7 +15,7 @@ public:
 	void setCurrent(int current) {
 		lastTarget = currentTarget;
 		currentTarget = current;
-		facing = lastTarget;
+		facing = float (lastTarget);
 	}
 
 	bool complete() {
@@ -66,7 +66,7 @@ public:
 	}
 
 	int getFacing() {
-		return facing;
+		return int (facing);
 	}
 
 private:

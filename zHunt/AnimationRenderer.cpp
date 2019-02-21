@@ -229,7 +229,6 @@ int AnimationRenderer::get_current_anim() const
 void AnimationRenderer::get_spr_ptr(olc::Sprite* spr_in)
 {
 	spr = spr_in;
-	//cout << spr << endl;
 }
 
 void AnimationRenderer::update_offset(const Vec2& offset)

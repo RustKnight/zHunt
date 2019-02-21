@@ -64,6 +64,8 @@ bool zHunt::OnUserCreate()
 	snd_hmm = olc::SOUND::LoadAudioSample("sounds\\dialogue\\hmm.wav");
 	snd_wasist = olc::SOUND::LoadAudioSample("sounds\\dialogue\\wasistdas.wav");
 	snd_tiere = olc::SOUND::LoadAudioSample("sounds\\dialogue\\tiere.wav");
+	snd_wounded = olc::SOUND::LoadAudioSample("sounds\\dialogue\\wounded.wav");
+	snd_wounded_alt = olc::SOUND::LoadAudioSample("sounds\\dialogue\\wounded_alt.wav");
 
 	loadResources();
 
@@ -96,10 +98,10 @@ bool zHunt::OnUserCreate()
 		vActors.push_back(prt);
 	}
 
-	vPortals[0]->set_location(Vec2{ map.get_width() / 2.0f, 1.0f });
-	vPortals[1]->set_location(Vec2{ map.get_width() / 2.0f, map.get_height() - 1.0f });
-	vPortals[2]->set_location(Vec2{ 1, map.get_height() / 2.0f });
-	vPortals[3]->set_location(Vec2{ map.get_width() - 1.0f, map.get_height() / 2.0f });
+	/*N*/vPortals[0]->set_location(Vec2{ map.get_width() / 2.0f, 1.0f });
+	/*S*/vPortals[1]->set_location(Vec2{ map.get_width() / 2.0f, map.get_height() - 1.0f });
+	/*E*/vPortals[2]->set_location(Vec2{ 1, map.get_height() / 2.0f });
+	/*W*/vPortals[3]->set_location(Vec2{ map.get_width() - 1.0f, map.get_height() / 2.0f });
 	
 	vPortals[5]->set_location(Vec2{ 7.5f, map.get_height() / 2.0f });
 	vPortals[6]->set_location(Vec2{ 4, 3 });
@@ -171,7 +173,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 		ai.update(rifleman.get_location());
 		ai.think();
 		control.control(rifleman);
-		zSpawn.update(fElapsedTime);
+		zSpawn.update(fElapsedTime, zombieCount);
 	}
 
 		
@@ -264,14 +266,17 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 			a->draw();
 	}
 
-	int count = 0;
 
-	for (Zombie* z : vZombies)
+	zombieCount = 0;
+
+	for (Zombie* z : vZombies) {
+		
 		if (z->alive)
-			count++;
+			zombieCount++;
+	}
 
-	if (VC.value_changed(count))
-		cout << count << endl;
+	if (VC.value_changed(zombieCount))
+		cout << "Total: " << zombieCount << endl;
 
 	// renders candidates for splat effect
 	//effect.render_effect(this, fElapsedTime, camera.get_offset());

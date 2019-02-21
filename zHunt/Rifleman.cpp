@@ -102,10 +102,6 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off, vector<Zombie*> vpZom
 
 	
 	
-	for (Portal* p : *vpPrt) {
-		if (p->visible)
-			p->tryTeleport(*this);
-	}
 
 	if (!isPlayer) {
 		int a = renderer.get_current_anim() != FIRE; // compress after check

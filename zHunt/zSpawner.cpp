@@ -9,9 +9,10 @@ void zSpawner::load(vector<Zombie*>* vZ, vector<Portal*>* vP, vector <Actor*>* v
 	pge = pge_in;
 }
 
-void zSpawner::update(float eTime)
+void zSpawner::update(float eTime, int zombiesAlive)
 {
 	fElapsedTime = eTime;
+	zombiesAliveTotal = zombiesAlive;
 	spawnTimer += eTime * 1.0f;
 
 	if (spawnTimer > spawnReady) {
@@ -32,7 +33,7 @@ void zSpawner::spawnZ()
 	for (Portal* prt: *vPrt) {
 
 		bool canSpawn = rand() % 2;
-		if (canSpawn && prt->getStatus() && prt->isSpawner && prt->visible && prt->isActive) {
+		if (canSpawn && prt->getStatus() && prt->isSpawner && prt->visible && prt->isActive && zombiesAliveTotal < zombieMax) {
 
 			Zombie* zom = new Zombie(prt->get_location(), pge, vPrt);			// we should handle proper destruction of zombie
 			zom->load_assets(vZomSprites);
@@ -45,6 +46,7 @@ void zSpawner::spawnZ()
 
 	}
 	
+	cout << "Spawned this round: " << spawnCount << endl;
 }
 
 void zSpawner::spawnZat(int portalIndex)
@@ -54,9 +56,10 @@ void zSpawner::spawnZat(int portalIndex)
 	std::uniform_real_distribution <float> distR(0.1f, 0.30f);
 
 
-	Zombie* zom = new Zombie((*vPrt)[portalIndex]->get_location() + Vec2{0, -0.5f}, pge, vPrt);			// we should handle proper destruction of zombie
+	Zombie* zom = new Zombie((*vPrt)[portalIndex]->get_location(), pge, vPrt);			// we should handle proper destruction of zombie
 	zom->load_assets(vZomSprites);
 	zom->randomize_stats(distR(e));
+	zom->changeSpeed(0.18f);
 	vZom->push_back(zom);
 	(*vAct).push_back(zom);
 }

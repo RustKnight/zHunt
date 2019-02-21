@@ -31,8 +31,6 @@ void Portal::update(float eTime_in, const Vec2 & cam_off, bool triggered)
 	camera_offset = cam_off;
 	renderer.update_offset(camera_offset);
 
-	cout << renderer.animationCount << endl;
-
 	if (actorsTeleported > 4)
 		readyTimer += eTime * 1.0f;
 
@@ -43,7 +41,7 @@ void Portal::update(float eTime_in, const Vec2 & cam_off, bool triggered)
 			teleAway();
 		}
 
-		else 
+		else 			
 			openPortal();
 		
 	
@@ -122,7 +120,7 @@ bool Portal::getStatus() const
 
 bool Portal::isReady()
 {
-	static constexpr int resetReady = 5;
+	static constexpr int resetReady = 3;
 
 	// if we teleported more than five start counting
 	

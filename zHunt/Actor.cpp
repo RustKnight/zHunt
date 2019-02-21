@@ -153,8 +153,6 @@ bool Actor::moveTowardsGoal(float speed_in)
 
 	if (!withinDistance(goal, 20)) {
 
-		cout << location.x << endl;
-
 		Vec2 vec = goal - location;
 
 		location += vec.GetNormalized() * eTime * speed_in;

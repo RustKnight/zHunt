@@ -43,6 +43,7 @@ class zHunt : public olc::PixelGameEngine
 	// maybe AI can look at the same point (mouse loc) as player if no target present
 	// if you run to portal - Hans doesn't face properly
 	// maybe Heinrich says "Ein Verletzter!" then Halt
+ 
 
 	class Scripter {
 	public:
@@ -50,7 +51,7 @@ class zHunt : public olc::PixelGameEngine
 		{}
 
 		enum scriptStates {WALK_TO_HEINRICH, SND_HANS, SND_HEINRICH, LOOK_WEST, PAN_WEST_PORTAL, OPEN_WEST_PORTAL,
-							PAN_BACK_FAST, GET_CLOSE, ASK_GET_ANSWER, HANS_ALLIGN, Z_APPROACH		};
+							PAN_BACK_FAST, GET_CLOSE, ASK_GET_ANSWER, HANS_ALLIGN, Z_APPROACH, OPEN_REST_PORTALS, TRIGGER_ALL, TIERE, END	};
 
 		bool playScript(float eTime) {
 
@@ -97,10 +98,10 @@ class zHunt : public olc::PixelGameEngine
 					scriptState++;
 				}
 
-				
+
 				break;
 
-			case LOOK_WEST:				
+			case LOOK_WEST:
 
 				if (tick < -3) {
 					resetSpecialStates();
@@ -110,14 +111,14 @@ class zHunt : public olc::PixelGameEngine
 				}
 
 				//quick hack for turning beyond 0
-						
+
 
 				if (tick < -1)
 					z->vRifles[1]->set_facing(7);
 				if (tick < -2)
 					z->vRifles[1]->set_facing(6);
 
-				
+
 				if (tick >= 0)
 					z->vRifles[1]->set_facing(tick);
 
@@ -161,7 +162,7 @@ class zHunt : public olc::PixelGameEngine
 
 					z->cameraSight.update(eTime, z->camera.get_offset());
 					z->cameraSight.setGoal(z->vRifles[1]->get_location());
-					z->cameraSight.moveTowardsGoal(2.5f); 
+					z->cameraSight.moveTowardsGoal(2.5f);
 				}
 
 				else {
@@ -171,18 +172,18 @@ class zHunt : public olc::PixelGameEngine
 				}
 
 				break;
-				
+
 			case GET_CLOSE:
 
 				if (z->vRifles[1]->withinDistance(z->vPortals[2]->get_location(), 105000)) {
 
-						z->cameraSight.set_location(z->vRifles[1]->get_location());
-						z->vRifles[1]->idle();
-						isOn = true;
-						z->vRifles[1]->isActive = false;
+					z->cameraSight.set_location(z->vRifles[1]->get_location());
+					z->vRifles[1]->idle();
+					isOn = true;
+					z->vRifles[1]->isActive = false;
 
-						scriptState++;
-					
+					scriptState++;
+
 				}
 				break;
 
@@ -190,54 +191,180 @@ class zHunt : public olc::PixelGameEngine
 
 
 				if (playSound(eTime, z->snd_wasist)) {
-					z->zSpawn.spawnZat(2); // 2 is our east spawn portal
 					resetSpecialStates();
 					z->ai.moveTo((z->vRifles[0]->get_location() + Vec2{ -0.6f, -0.4 }));
 					scriptState++;
 				}
-				
+
 				break;
 
 			case HANS_ALLIGN:
-							
+
 				if (z->ai.noMoveOrders()) {
-					z->vRifles[0]->setGoal(z->vZombies[0]->get_location());	// needed to make him face correctly
-					z->vRifles[0]->set_facing(6);
-					scriptState++;
-				}
-				break;
 
-			case Z_APPROACH: 
-
-				z->toggle_hunger = true; 
-
-				if (z->vZombies[0]->withinDistance(z->vRifles[1]->get_location(), 85000)) {
-					playSound(eTime, z->snd_halt);
-					z->vRifles[0]->aim();				
-				}
-
-				if (z->vZombies[0]->withinDistance(z->vRifles[1]->get_location(), 40000)) {
-					z->ai.toggleAggro();
+					z->zSpawn.spawnZat(2); // 2 is our east spawn portal
+					playSound(eTime, z->snd_wounded);
 					resetSpecialStates();
 					scriptState++;
 				}
+				break;
+
+			case Z_APPROACH:
+				z->vRifles[0]->setGoal(z->vZombies[0]->get_location());	// needed to make him face correctly
+				z->vRifles[0]->set_facing(6);
+				z->toggle_hunger = true;
+
+
+				if (!z->vZombies[0]->alive)
+					scriptState++;
+
+				else if (z->vZombies[0]->withinDistance(z->vRifles[1]->get_location(), 55000)) {
+					z->ai.setAggro(true);
+					resetSpecialStates();
+				}
+
+				else if (z->vZombies[0]->withinDistance(z->vRifles[1]->get_location(), 75000)) {
+					playSound(eTime, z->snd_halt);
+					z->vRifles[0]->aim();
+				}
+
+				
+
+				break;
+
+			case OPEN_REST_PORTALS:// must brake after this switch
+
+
+				switch (int(tick)) {
+
+				case 0:
+
+					if (!z->cameraSight.withinDistance(z->vPortals[0]->get_location(), 3500)) {
+
+						z->cameraSight.update(eTime, z->camera.get_offset());
+						z->cameraSight.setGoal(z->vPortals[0]->get_location());
+						z->cameraSight.moveTowardsGoal(3.0f); // 0.8 is the normal walking speed
+					}
+
+					else {
+						z->vPortals[0]->visible = true;
+
+						if (z->vPortals[0]->getStatus()) {
+							z->vPortals[0]->isActive = false;
+							tick++;
+						}
+					}
+
+					break;
+
+
+				case 1:
+
+					if (!z->cameraSight.withinDistance(z->vPortals[3]->get_location(), 3500)) {
+
+						z->cameraSight.update(eTime, z->camera.get_offset());
+						z->cameraSight.setGoal(z->vPortals[3]->get_location());
+						z->cameraSight.moveTowardsGoal(3.0f); // 0.8 is the normal walking speed
+					}
+
+					else {
+						z->vPortals[3]->visible = true;
+
+						if (z->vPortals[3]->getStatus()) {
+							z->vPortals[3]->isActive = false;
+							tick++;
+						}
+					}
+
+					break;
+
+
+				case 2:
+
+					if (!z->cameraSight.withinDistance(z->vPortals[1]->get_location(), 3500)) {
+
+						z->cameraSight.update(eTime, z->camera.get_offset());
+						z->cameraSight.setGoal(z->vPortals[1]->get_location());
+						z->cameraSight.moveTowardsGoal(3.0f); // 0.8 is the normal walking speed
+					}
+
+					else {
+						z->vPortals[1]->visible = true;
+
+						if (z->vPortals[1]->getStatus()) {
+							z->vPortals[1]->isActive = false;
+							tick++;
+						}
+					}
+
+					break;
+
+
+				case 3:
+
+					if (!z->cameraSight.withinDistance(z->vRifles[1]->get_location(), 1050)) {
+
+						z->cameraSight.update(eTime, z->camera.get_offset());
+						z->cameraSight.setGoal(z->vRifles[1]->get_location());
+						z->cameraSight.moveTowardsGoal(3.0f);
+					}
+
+					else {
+						scriptState++;
+						resetSpecialStates();
+					}
+
+					break;
+
+
+				}
+
+				break;
+
+				case TRIGGER_ALL:
+			
+					z->vRifles[1]->isActive = true;
+					isOn = false;
+
+					for (Portal* p : z->vPortals) {
+						if (p->isSpawner) {
+							p->isActive = true;
+							p->visible = true;
+						}
+					}
+					
+					scriptState++;
+
+				break;
+
+				case TIERE:
+
+
+					if (z->zombieCount > 30) {
+						for (Portal* p : z->vPortals) {
+							p->isActive = true;
+							p->visible = true;
+						}
+						resetSpecialStates();
+						scriptState++;
+					}
+
+					else if (z->zombieCount > 20)
+						playSound(eTime, z->snd_tiere);
+
 
 
 				break;
 
+				case END:
 
+					// needed because of misfortunate coupling
+					for (Portal* p : z->vPortals) 
+						p->visible = true;
+					
 
+					break;
 
-
-
-
-
-
-
-			default:
-				z->vRifles[1]->isActive = true;
-				isOn = false;
-				break;
 			}
 
 
@@ -322,6 +449,7 @@ private:
 	Controller control;
 	Ai ai;
 	zSpawner zSpawn;
+	int zombieCount;
 	
 	vector<Projectile> vBullets;
 	Value_checker VC;
@@ -343,4 +471,6 @@ private:
 	int snd_hmm;
 	int snd_wasist;
 	int snd_tiere;
+	int snd_wounded;
+	int snd_wounded_alt;
 };

@@ -11,8 +11,8 @@ void Zombie::randomize_stats(float speed_in)
 
 void Zombie::randomizeStartLocation()
 {
-	location.x = rand() % 16;
-	location.y = rand() % 10;
+	location.x = float (rand() % 16);
+	location.y = float (rand() % 10);
 }
 
 
@@ -200,7 +200,7 @@ float Zombie::closestToActor(const Vec2& Actor, int& portalIndex) const
 
 				if (closest > distToPortal_i) {
 					closest = distToPortal_i;
-					portalIndex = i;
+					portalIndex = int (i);
 				}
 
 			}
@@ -211,6 +211,11 @@ float Zombie::closestToActor(const Vec2& Actor, int& portalIndex) const
 
 
 	return 0.0f;
+}
+
+void Zombie::changeSpeed(float speed_in)
+{
+	speed = speed_in;
 }
 
 bool Zombie::update(float fElapTm, const Vec2 & cam_off)

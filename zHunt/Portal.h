@@ -39,7 +39,7 @@ private:
 	
 	
 private:
-	static constexpr int openTimeMax = 5;//10;
+	static constexpr int openTimeMax = 9;
 	static constexpr int teleCooldownOfActor = 3;
 	float timeOpened = 0;
 	float readyTimer;

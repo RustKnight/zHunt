@@ -51,5 +51,5 @@ Vec2 Camera::get_offset()
 
 void Camera::load_fields(std::string adrs)
 {
-//	fields = new olc::Sprite{ adrs };
+	fields = new olc::Sprite{ adrs };
 }

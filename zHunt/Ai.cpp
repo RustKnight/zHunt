@@ -49,15 +49,15 @@ void Ai::update(Vec2 playerLoc)
 	playerLocation = playerLoc;
 }
 
-void Ai::toggleAggro()
+void Ai::setAggro(bool agro_set)
 {
-	aggresive = !aggresive;
+	aggresive = agro_set;
 }
 
 void Ai::goToMoveOrder()
 {
 	for (Rifleman* rf : vAllies) 
-		if (rf->withinDistance(moveOrder, 300))
+		if (rf->withinDistance (moveOrder, 300) )
 			noMoveToOrder = true;
 
 		else {
@@ -79,9 +79,3 @@ bool Ai::noMoveOrders() const
 }
 
 
-
-//
-//
-//
-//
-//

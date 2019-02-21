@@ -13,7 +13,7 @@ public:
 	void think();
 	void loadRiflemen(Rifleman* rf);
 	void update(Vec2 playerLoc);
-	void toggleAggro();
+	void setAggro(bool agro_set);
 	void goToMoveOrder();
 	void moveTo(Vec2 loc);
 	bool noMoveOrders() const;

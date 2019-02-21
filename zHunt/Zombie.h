@@ -33,6 +33,7 @@ public:
 	int closestFlesh(vector<Vec2>* locs, bool rfA, bool rfB);
 	float calculatePath(const Vec2& PathRifle, bool& teleporting, int& InIndexPortal, int& OutIndexPortal) const;
 	float closestToActor(const Vec2& Actor, int& portalIndex) const;
+	void changeSpeed(float speed_in);
 
 	
 	void load_assets(vector <olc::Sprite*>* vpZomSpr);
