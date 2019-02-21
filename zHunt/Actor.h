@@ -105,7 +105,7 @@ public:
 	bool withinOwnRect(Vec2 location) const;
 	bool withinDistance(Vec2 location, int dist_radius);
 	float LengthSq2Vec(Vec2* a, Vec2* b);
-
+	bool keepOnMap();
 
 	bool shot = false;
 	bool moving = false;

@@ -12,7 +12,7 @@ class CinematicEffect {
 
 		void grow();
 		void retract();
-
+		float getProgress() const;
 
 	private:
 		float progress_;
@@ -23,18 +23,21 @@ class CinematicEffect {
 
 
 
-public:
-	CinematicEffect(int winWidth, int winHeight, float speed, olc::PixelGameEngine* pge) :
-		scrWidth_{ winWidth }, scrHeight_{ winHeight }, focusSize_{ int(winHeight * 0.07f) }, speed_{ speed }, pge_{ pge },
+public:																					
+	CinematicEffect(int winWidth, int winHeight, float speed, olc::PixelGameEngine* pge) :	//0.07f
+		scrWidth_{ winWidth }, scrHeight_{ winHeight }, focusSize_{ int(winHeight * 0.10f) }, speed_{ speed }, pge_{ pge },
 		top{ this, 0.0f, true }, 
 		bottom{ this, float(scrHeight_), false }
 	{}
 
 	void update(float eTime);
 	void framing(bool active);
-
+	bool closeView();
 
 private:
+
+	static constexpr float sidesLengthCinematic = 0.07f;
+	static constexpr float sidesClose = 0.50f;
 
 	float eTime_;
 	float speed_;

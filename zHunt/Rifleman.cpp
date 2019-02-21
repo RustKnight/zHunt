@@ -163,7 +163,7 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off, vector<Zombie*> vpZom
 	Actor::running = false;
 	aiming = false;
 
-	
+	keepOnMap();
 
 	return fired;
 }

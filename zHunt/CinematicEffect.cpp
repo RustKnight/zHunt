@@ -26,6 +26,18 @@ void CinematicEffect::framing(bool start) {
 	active_ = start;
 }
 
+bool CinematicEffect::closeView()
+{
+	active_ = true;
+	focusSize_ = scrHeight_ * sidesClose;
+	speed_ = 70.0f;
+
+	if (top.getProgress() > focusSize_ - 1.0f)
+		return true;
+
+	return false;
+}
+
 void CinematicEffect::Side::grow()
 {
 
@@ -34,7 +46,6 @@ void CinematicEffect::Side::grow()
 
 	if (growDown_)
 		pCE_->pge_->FillRect(0, 0, pCE_->scrWidth_, progress_, olc::BLACK);
-
 
 	else
 		pCE_->pge_->FillRect(0, pCE_->scrHeight_ - progress_, pCE_->scrWidth_, pCE_->scrHeight_, olc::BLACK);
@@ -54,4 +65,9 @@ void CinematicEffect::Side::retract()
 	else
 		pCE_->pge_->FillRect(0, pCE_->scrHeight_ - progress_, pCE_->scrWidth_, pCE_->scrHeight_, olc::BLACK);
 
+}
+
+float CinematicEffect::Side::getProgress() const
+{
+	return progress_;
 }

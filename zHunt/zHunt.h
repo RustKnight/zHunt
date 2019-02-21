@@ -362,6 +362,11 @@ class zHunt : public olc::PixelGameEngine
 					for (Portal* p : z->vPortals) 
 						p->visible = true;
 					
+					
+					if (!z->vRifles[0]->alive && !z->vRifles[1]->alive)
+						if (z->cinematicEffect.closeView())
+							z->playing = false;
+					
 
 					break;
 
@@ -437,6 +442,7 @@ private:
 	Actor cameraSight;
 	bool toggle_camera = true;
 	bool toggle_hunger = false;
+	bool playing = true;
 
 	vector <olc::Sprite*> vZomSprites;
 	vector <olc::Sprite*> vRflSprites;

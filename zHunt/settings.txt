@@ -1,0 +1,2 @@
+max zombies = 300;
+spawn_request_interval = 1.3;

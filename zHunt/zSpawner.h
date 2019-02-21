@@ -1,6 +1,9 @@
 #pragma once
 #include "Zombie.h"
 #include "Portal.h"
+#include <iostream>
+#include <string>
+#include <fstream>
 #include <random>
 
 class zSpawner {
@@ -12,10 +15,11 @@ public:
 	void spawnZ();
 	void spawnZat(int portalIndex);
 
+	bool hasDott(string s);
 
 private:
-	static constexpr int zombieMax = 170;
-	int spawnReady = 1;
+	int zombieMax = 170;
+	float spawnReady = 1;
 	int zombiesAliveTotal;
 	float spawnTimer = 0.0f;
 

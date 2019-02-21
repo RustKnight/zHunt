@@ -30,7 +30,7 @@ zHunt::zHunt() :
 	rifleman{ Vec2 {8.5f, map.get_height() / 2.0f}, this },
 	camera{ this, &map, getWinWidth(), getWinHeight(), rifleman.get_location() },
 	control{ this },
-	cinematicEffect{ getWinWidth() , getWinHeight(), 30.0f, this },
+	cinematicEffect{ getWinWidth() , getWinHeight(), 43.0f, this },
 	cameraSight {Vec2 {8.5f, map.get_height() / 2.0f}, this},
 	script (this)
 {
@@ -47,6 +47,7 @@ bool zHunt::OnUserCreate()
 {
 	//effect.splat_effects = new olc::Sprite("sprites\\effects\\splat_darker.png");
 	//effect.effect_handler.load_mapping_info_string("sprites\\effects\\splat.txt");
+	srand(time(NULL));
 
 	olc::SOUND::InitialiseAudio(44100, 1, 8, 512);
 
@@ -150,7 +151,6 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	if (GetKey(olc::Q).bPressed)
 		toggle_camera = !toggle_camera;
 	
-
 
 	//(toggle_camera) ? camera.update(cameraSight.get_location()) : camera.update(vZombies[0]->get_location());
 	//(toggle_camera) ? camera.update(rifleman.get_location()) : camera.update(vZombies[0]->get_location());
@@ -290,9 +290,7 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	cinematicEffect.update(fElapsedTime);
 
 
-
-
-	return true;
+	return playing;
 }
 
 void zHunt::loadResources()

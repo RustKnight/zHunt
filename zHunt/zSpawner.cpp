@@ -1,7 +1,65 @@
 #include "zSpawner.h"
 
+
+bool zSpawner::hasDott(string s)
+{
+	int dotCount = 0;
+
+	for (size_t i = 0; i < s.size(); i++)
+	{
+		if (s[i] == '.')
+			dotCount++;
+	}
+
+	if (dotCount >= 1)
+		return true;
+
+	return false;
+}
+
+
 void zSpawner::load(vector<Zombie*>* vZ, vector<Portal*>* vP, vector <Actor*>* vA, olc::PixelGameEngine* pge_in, vector <olc::Sprite*>* vZomSprites_in)
 {
+	std::ifstream file{ "settings.txt" };
+	if (!file.is_open()) {
+		cout << "Settings not open. Default values loaded";
+	}
+
+	else {
+
+		enum variables {MAX_ZOMBIES, SPAWN_INTERVAL};
+		string candidate;
+		float number = -1;
+		int alocator = 0;
+
+		for (char ch; file.get(ch);) {
+
+			bool hasAlreadyDott = hasDott(candidate);
+
+			if (isdigit(ch) || (ch == '.' && !candidate.empty() && !hasAlreadyDott))
+				candidate += ch;
+
+			else if (ch == ';')
+				number = ::atof(candidate.c_str());
+
+
+			if (number != -1) {
+
+				if (alocator == MAX_ZOMBIES) {
+					zombieMax = number;
+					number = -1;
+					candidate.clear();
+					alocator++;
+				}
+
+				else if (alocator == SPAWN_INTERVAL)
+					spawnReady = number;
+			}
+		}
+
+	}
+
+
 	vZomSprites = vZomSprites_in;
 	vZom = vZ;
 	vPrt = vP;
@@ -63,3 +121,4 @@ void zSpawner::spawnZat(int portalIndex)
 	vZom->push_back(zom);
 	(*vAct).push_back(zom);
 }
+

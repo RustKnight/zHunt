@@ -209,6 +209,33 @@ float Actor::LengthSq2Vec(Vec2* a, Vec2* b)
 	return (*a - *b).GetLengthSq();
 }
 
+bool Actor::keepOnMap()
+{
+	if (location.x > 15.8f) {
+		location.x = 15.8f;
+		return true;
+	}
+
+	else if (location.x < 0.2f) {
+		location.x = 0.2f;
+		return true;
+	}
+
+	else if (location.y > 9.75f) {
+		location.y = 9.75f;
+		return true;
+	}
+
+	else if (location.y < 0.05f) {
+		location.y = 0.05f;
+		return true;
+	}
+
+
+
+	return false;
+}
+
 
 
 void Actor::load_assets(vector<string> in_mappings)
