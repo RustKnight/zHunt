@@ -110,8 +110,6 @@ int Zombie::closestFlesh(vector<Vec2>* vRflPosition, bool rf0, bool rf1)
 	Vec2 rifle0 = (*vRflPosition)[0];
 	Vec2 rifle1 = (*vRflPosition)[1];
 	
-	bool teleporting0;
-	bool teleporting1;
 
 	int portalEntryIndex0;
 	int portalExitIndex0;
@@ -121,18 +119,23 @@ int Zombie::closestFlesh(vector<Vec2>* vRflPosition, bool rf0, bool rf1)
 	float distToRifle0 = calculatePath(rifle0, teleporting0, portalEntryIndex0, portalExitIndex0);
 	float distToRifle1 = calculatePath(rifle1, teleporting1, portalEntryIndex1, portalExitIndex1);
 
-
+	// we first decide which one is closer of the 2 riflemen
 	if (distToRifle0 < distToRifle1) {
 
+		// after that, we just check if we should walk or teleport
 		if (teleporting0) {
 			desiredPrtIndex = portalExitIndex0;
 			setGoal((*vpPrt)[portalEntryIndex0]->get_location());
 			closestFleshIndex = 0;
+			teleporting1 = false; // not to confuse the showDebug
 		}
+		// set desiredPrtIndex to -1 if we'd like to ignore portals
 		else {
 			setGoal(rifle0);
 			closestFleshIndex = 0;
 			desiredPrtIndex = -1;
+			teleporting0	= false;
+			teleporting1	= false;
 		}
 	}
 
@@ -141,11 +144,14 @@ int Zombie::closestFlesh(vector<Vec2>* vRflPosition, bool rf0, bool rf1)
 			desiredPrtIndex = portalExitIndex1;
 			setGoal((*vpPrt)[portalEntryIndex1]->get_location());
 			closestFleshIndex = 1;
+			teleporting0 = false;
 		}
 		else {
 			setGoal(rifle1);
 			closestFleshIndex = 1;
 			desiredPrtIndex = -1;
+			teleporting0 = false;
+			teleporting1 = false;
 		}
 	}
 
@@ -218,6 +224,11 @@ void Zombie::changeSpeed(float speed_in)
 	speed = speed_in;
 }
 
+void Zombie::showGoal(bool show)
+{
+	debugShow = show;		
+}
+
 bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 {
 	eTime = fElapTm;
@@ -246,6 +257,15 @@ bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 
 
 		look_at_vec(goal);
+
+		if (debugShow) {
+			if (teleporting0 || teleporting1)
+				pge->DrawLine((location.x - camera_offset.x) * 128, (location.y - camera_offset.y) * 128, (goal.x - camera_offset.x) * 128, (goal.y - camera_offset.y) * 128, olc::RED);
+			else
+				pge->DrawLine((location.x - camera_offset.x) * 128, (location.y - camera_offset.y) * 128, (goal.x - camera_offset.x) * 128, (goal.y - camera_offset.y) * 128, olc::BLUE);
+		}
+
+
 
 		if (att_cooldown < 200.0f)
 			att_cooldown += eTime * 4.0f;

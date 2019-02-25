@@ -164,6 +164,8 @@ bool Rifleman::update(float fElapTm, const Vec2 & cam_off, vector<Zombie*> vpZom
 	aiming = false;
 
 	keepOnMap();
+	if (!alive || renderer.get_current_anim() == HURT || renderer.get_current_anim() == DIE)
+		fired = false; /// safe check to avoid a between state of dead and firing
 
 	return fired;
 }

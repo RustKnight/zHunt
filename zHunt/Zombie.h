@@ -34,6 +34,7 @@ public:
 	float calculatePath(const Vec2& PathRifle, bool& teleporting, int& InIndexPortal, int& OutIndexPortal) const;
 	float closestToActor(const Vec2& Actor, int& portalIndex) const;
 	void changeSpeed(float speed_in);
+	void showGoal(bool show);
 
 	
 	void load_assets(vector <olc::Sprite*>* vpZomSpr);
@@ -43,5 +44,7 @@ private:
 	float att_cooldown = 100.0f;
 	vector<Portal*>* vpPrt;
 	int* ZomFeedOnDead;
-	
+	bool teleporting0;
+	bool teleporting1;
+	bool debugShow = false;
 };

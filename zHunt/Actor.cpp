@@ -81,6 +81,8 @@ int Actor::get_facing(Vec2 pos)
 	return int(angle);
 }
 
+
+
 void Actor::set_facing(int face)
 {
 	facing = facings(face);
@@ -89,15 +91,19 @@ void Actor::set_facing(int face)
 void Actor::look_at_vec(Vec2 pos)
 {
 
-	// for debug, line can be drawn
+	
 
 	float dx = (pos.x - location.x) * 128;
 	float dy = (pos.y - location.y) * 128;
-	
-	
+		
+
+
 	if (isPlayer) {
+		
 		dx = pge->GetMouseX() - ((location.x - camera_offset.x) * 128);
 		dy = pge->GetMouseY() - ((location.y - camera_offset.y) * 128);
+
+		
 	}
 
 	float angle = atan2(dy, dx);

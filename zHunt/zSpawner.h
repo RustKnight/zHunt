@@ -16,12 +16,14 @@ public:
 	void spawnZat(int portalIndex);
 
 	bool hasDott(string s);
+	bool intro;
 
 private:
 	int zombieMax = 170;
 	float spawnReady = 1;
 	int zombiesAliveTotal;
 	float spawnTimer = 0.0f;
+	
 
 	vector <olc::Sprite*>* vZomSprites;
 	vector <Zombie*>* vZom;

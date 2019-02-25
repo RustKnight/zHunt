@@ -37,8 +37,6 @@ zHunt::zHunt() :
 	cameraSight.alive = true;
 	sAppName = "zHunt";
 	cameraSight.visible = false;
-
-	rifleman.isActive = false;
 }
 
 
@@ -67,6 +65,8 @@ bool zHunt::OnUserCreate()
 	snd_tiere = olc::SOUND::LoadAudioSample("sounds\\dialogue\\tiere.wav");
 	snd_wounded = olc::SOUND::LoadAudioSample("sounds\\dialogue\\wounded.wav");
 	snd_wounded_alt = olc::SOUND::LoadAudioSample("sounds\\dialogue\\wounded_alt.wav");
+	snd_gameOver = olc::SOUND::LoadAudioSample("sounds\\gameover.wav");
+
 
 	loadResources();
 
@@ -74,7 +74,6 @@ bool zHunt::OnUserCreate()
 	unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
 	std::default_random_engine e(seed);
 	std::uniform_real_distribution <float> distR(0.1f, 0.30f);  // (0.1f, 0.25f);
-
 
 
 	for (int i = 0; i < 1; i++) {
@@ -86,6 +85,7 @@ bool zHunt::OnUserCreate()
 		ai.loadRiflemen(rf);
 	}
 
+	
 
 	for (int i = 0; i < 10; i++) {
 		Portal* prt = new Portal{ Vec2{ 5,0 }, this, &vPortals };
@@ -95,9 +95,14 @@ bool zHunt::OnUserCreate()
 			prt->becomeSpawner(Vec2{ float(rand() % 14), float(rand() % 7) });
 
 		prt->setIndex(i);
+
+
+
 		vPortals.push_back(prt);
 		vActors.push_back(prt);
 	}
+
+	
 
 	/*N*/vPortals[0]->set_location(Vec2{ map.get_width() / 2.0f, 1.0f });
 	/*S*/vPortals[1]->set_location(Vec2{ map.get_width() / 2.0f, map.get_height() - 1.0f });
@@ -137,7 +142,14 @@ bool zHunt::OnUserCreate()
 	vActors.push_back(&rifleman);
 
 	zSpawn.load(&vZombies, &vPortals, &vActors, this, &vZomSprites);
+	withoutIntro = zSpawn.intro;
 
+	if (withoutIntro)
+		script.setScriptAt(script.TRIGGER_ALL);
+
+	
+	
+	
 	return true;
 }
 
@@ -151,9 +163,12 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 	if (GetKey(olc::Q).bPressed)
 		toggle_camera = !toggle_camera;
 	
+	if (GetKey(olc::P).bPressed)
+		debugPath = !debugPath;
 
 	//(toggle_camera) ? camera.update(cameraSight.get_location()) : camera.update(vZombies[0]->get_location());
 	//(toggle_camera) ? camera.update(rifleman.get_location()) : camera.update(vZombies[0]->get_location());
+	
 	
 		
 	if (script.playScript(fElapsedTime)) {
@@ -273,6 +288,8 @@ bool zHunt::OnUserUpdate(float fElapsedTime)
 		
 		if (z->alive)
 			zombieCount++;
+
+		z->showGoal(debugPath);
 	}
 
 	if (VC.value_changed(zombieCount))

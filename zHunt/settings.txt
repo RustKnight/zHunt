@@ -1,2 +1,3 @@
-max zombies = 300;
-spawn_request_interval = 1.3;
+max zombies = 40;
+spawn_request_interval = 2; standard is nullPointEight
+play intro = 0;

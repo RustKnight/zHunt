@@ -22,12 +22,12 @@ void zSpawner::load(vector<Zombie*>* vZ, vector<Portal*>* vP, vector <Actor*>* v
 {
 	std::ifstream file{ "settings.txt" };
 	if (!file.is_open()) {
-		cout << "Settings not open. Default values loaded";
+		cout << "Settings could not be opened. Default values loaded";
 	}
 
 	else {
 
-		enum variables {MAX_ZOMBIES, SPAWN_INTERVAL};
+		enum variables {MAX_ZOMBIES, SPAWN_INTERVAL, INTRO};
 		string candidate;
 		float number = -1;
 		int alocator = 0;
@@ -52,8 +52,15 @@ void zSpawner::load(vector<Zombie*>* vZ, vector<Portal*>* vP, vector <Actor*>* v
 					alocator++;
 				}
 
-				else if (alocator == SPAWN_INTERVAL)
+				else if (alocator == SPAWN_INTERVAL) {
 					spawnReady = number;
+					number = -1;
+					candidate.clear();
+					alocator++;
+				}
+
+				else if (alocator == INTRO)
+					intro = !number;
 			}
 		}
 

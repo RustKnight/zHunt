@@ -22,7 +22,8 @@ public:
 	{
 		hp = 25;
 		alive = true;
-		isActive = false;
+		isActive = true;
+		
 	}
 
 	bool update(float fElapTm, const Vec2 & cam_off, std::vector<Zombie*> vpZom);
@@ -41,6 +42,7 @@ public:
 	void getSounds(int f1, int f2, int r);
 	void die();
 	void loadPortalsPointer(vector<Portal*>* vpP);
+	
 
 	void moveUp();
 	void moveDown();
@@ -60,8 +62,10 @@ private:
 	Vec2 fireAngle;
 	bool fired = false;
 	bool aiming = false;
+
 	vector<Zombie*> vpZom;
 	vector<Portal*>* vpPrt;
+
 
 	int snd_empty;
 	int snd_fire1;

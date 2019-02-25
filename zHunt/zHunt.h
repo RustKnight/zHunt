@@ -39,15 +39,15 @@ class zHunt : public olc::PixelGameEngine
 	// 
 	
 	
-	// stop randomizing zombie spawn
-	// maybe AI can look at the same point (mouse loc) as player if no target present
-	// if you run to portal - Hans doesn't face properly
-	// maybe Heinrich says "Ein Verletzter!" then Halt
+	
+	// last tests
+	// add cinematic on/off option in txt
+	// add music when dead?
  
 
 	class Scripter {
 	public:
-		Scripter (zHunt* pZ): z{pZ}, scriptState { 0 }
+		Scripter (zHunt* pZ): z{pZ}, scriptState { WALK_TO_HEINRICH }
 		{}
 
 		enum scriptStates {WALK_TO_HEINRICH, SND_HANS, SND_HEINRICH, LOOK_WEST, PAN_WEST_PORTAL, OPEN_WEST_PORTAL,
@@ -58,7 +58,7 @@ class zHunt : public olc::PixelGameEngine
 			switch (scriptState) {
 
 			case WALK_TO_HEINRICH:
-
+				z->vRifles[1]->isActive = false;
 
 				if (z->vRifles[0]->withinDistance(z->vRifles[1]->get_location(), 25000)) {
 					tick -= eTime * 6.5f;
@@ -325,6 +325,8 @@ class zHunt : public olc::PixelGameEngine
 			
 					z->vRifles[1]->isActive = true;
 					isOn = false;
+					z->ai.setAggro(true);
+					z->toggle_hunger = true;
 
 					for (Portal* p : z->vPortals) {
 						if (p->isSpawner) {
@@ -363,10 +365,11 @@ class zHunt : public olc::PixelGameEngine
 						p->visible = true;
 					
 					
-					if (!z->vRifles[0]->alive && !z->vRifles[1]->alive)
-						if (z->cinematicEffect.closeView())
+					if (!z->vRifles[0]->alive && !z->vRifles[1]->alive) {
+						playSound(eTime, z->snd_gameOver);
+						if (z->cinematicEffect.closeView() )
 							z->playing = false;
-					
+					}
 
 					break;
 
@@ -400,6 +403,11 @@ class zHunt : public olc::PixelGameEngine
 			soundPlaying = false;
 		}
 
+		void setScriptAt(int stage) {
+
+			scriptState = stage;
+
+		}
 
 
 	private:
@@ -443,6 +451,8 @@ private:
 	bool toggle_camera = true;
 	bool toggle_hunger = false;
 	bool playing = true;
+	bool withoutIntro = true;
+	bool debugPath = false;
 
 	vector <olc::Sprite*> vZomSprites;
 	vector <olc::Sprite*> vRflSprites;
@@ -479,4 +489,5 @@ private:
 	int snd_tiere;
 	int snd_wounded;
 	int snd_wounded_alt;
+	int snd_gameOver;
 };
