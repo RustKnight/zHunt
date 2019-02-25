@@ -127,15 +127,18 @@ int Zombie::closestFlesh(vector<Vec2>* vRflPosition, bool rf0, bool rf1)
 			desiredPrtIndex = portalExitIndex0;
 			setGoal((*vpPrt)[portalEntryIndex0]->get_location());
 			closestFleshIndex = 0;
-			teleporting1 = false; // not to confuse the showDebug
+
+			if (debugShow) 
+				pge->DrawLine((location.x - camera_offset.x) * 128, (location.y - camera_offset.y) * 128, (goal.x - camera_offset.x) * 128, (goal.y - camera_offset.y) * 128, olc::RED);
 		}
 		// set desiredPrtIndex to -1 if we'd like to ignore portals
 		else {
 			setGoal(rifle0);
 			closestFleshIndex = 0;
 			desiredPrtIndex = -1;
-			teleporting0	= false;
-			teleporting1	= false;
+
+			if (debugShow)
+				pge->DrawLine((location.x - camera_offset.x) * 128, (location.y - camera_offset.y) * 128, (goal.x - camera_offset.x) * 128, (goal.y - camera_offset.y) * 128, olc::BLUE);
 		}
 	}
 
@@ -144,14 +147,17 @@ int Zombie::closestFlesh(vector<Vec2>* vRflPosition, bool rf0, bool rf1)
 			desiredPrtIndex = portalExitIndex1;
 			setGoal((*vpPrt)[portalEntryIndex1]->get_location());
 			closestFleshIndex = 1;
-			teleporting0 = false;
+
+			if (debugShow)
+				pge->DrawLine((location.x - camera_offset.x) * 128, (location.y - camera_offset.y) * 128, (goal.x - camera_offset.x) * 128, (goal.y - camera_offset.y) * 128, olc::RED);
 		}
 		else {
 			setGoal(rifle1);
 			closestFleshIndex = 1;
 			desiredPrtIndex = -1;
-			teleporting0 = false;
-			teleporting1 = false;
+
+			if (debugShow)
+				pge->DrawLine((location.x - camera_offset.x) * 128, (location.y - camera_offset.y) * 128, (goal.x - camera_offset.x) * 128, (goal.y - camera_offset.y) * 128, olc::BLUE);
 		}
 	}
 
@@ -258,14 +264,7 @@ bool Zombie::update(float fElapTm, const Vec2 & cam_off)
 
 		look_at_vec(goal);
 
-		if (debugShow) {
-			if (teleporting0 || teleporting1)
-				pge->DrawLine((location.x - camera_offset.x) * 128, (location.y - camera_offset.y) * 128, (goal.x - camera_offset.x) * 128, (goal.y - camera_offset.y) * 128, olc::RED);
-			else
-				pge->DrawLine((location.x - camera_offset.x) * 128, (location.y - camera_offset.y) * 128, (goal.x - camera_offset.x) * 128, (goal.y - camera_offset.y) * 128, olc::BLUE);
-		}
-
-
+		
 
 		if (att_cooldown < 200.0f)
 			att_cooldown += eTime * 4.0f;
