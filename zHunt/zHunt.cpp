@@ -47,26 +47,6 @@ bool zHunt::OnUserCreate()
 	//effect.effect_handler.load_mapping_info_string("sprites\\effects\\splat.txt");
 	srand(time(NULL));
 
-	olc::SOUND::InitialiseAudio(44100, 1, 8, 512);
-
-	snd_fire1 = olc::SOUND::LoadAudioSample("sounds\\f-r.wav");
-	snd_fire2 = olc::SOUND::LoadAudioSample("sounds\\fire2.wav");
-	snd_reload = olc::SOUND::LoadAudioSample("sounds\\reload.wav");
-	snd_zom1_hit = olc::SOUND::LoadAudioSample("sounds\\zombie_hit1.wav");
-	snd_zom2_hit = olc::SOUND::LoadAudioSample("sounds\\zombie_hit2.wav");
-	snd_zom3_hit = olc::SOUND::LoadAudioSample("sounds\\zombie_hit3.wav");
-	snd_empty = olc::SOUND::LoadAudioSample("sounds\\empty.wav");
-
-	snd_hans = olc::SOUND::LoadAudioSample("sounds\\dialogue\\hans.wav");
-	snd_heinrich = olc::SOUND::LoadAudioSample("sounds\\dialogue\\heinrich.wav");
-	snd_halt = olc::SOUND::LoadAudioSample("sounds\\dialogue\\halt.wav");
-	snd_hmm = olc::SOUND::LoadAudioSample("sounds\\dialogue\\hmm.wav");
-	snd_wasist = olc::SOUND::LoadAudioSample("sounds\\dialogue\\wasistdas.wav");
-	snd_tiere = olc::SOUND::LoadAudioSample("sounds\\dialogue\\tiere.wav");
-	snd_wounded = olc::SOUND::LoadAudioSample("sounds\\dialogue\\wounded.wav");
-	snd_wounded_alt = olc::SOUND::LoadAudioSample("sounds\\dialogue\\wounded_alt.wav");
-	snd_gameOver = olc::SOUND::LoadAudioSample("sounds\\gameover.wav");
-
 
 	loadResources();
 
@@ -363,6 +343,27 @@ void zHunt::loadResources()
 	spr = new olc::Sprite{ "sprites\\portals\\blue_open\\open.png" };
 	vPrtSprites.push_back(spr);
 
+
+
+	olc::SOUND::InitialiseAudio(44100, 1, 8, 512);
+
+	snd_fire1 = olc::SOUND::LoadAudioSample("sounds\\f-r.wav");
+	snd_fire2 = olc::SOUND::LoadAudioSample("sounds\\fire2.wav");
+	snd_reload = olc::SOUND::LoadAudioSample("sounds\\reload.wav");
+	snd_zom1_hit = olc::SOUND::LoadAudioSample("sounds\\zombie_hit1.wav");
+	snd_zom2_hit = olc::SOUND::LoadAudioSample("sounds\\zombie_hit2.wav");
+	snd_zom3_hit = olc::SOUND::LoadAudioSample("sounds\\zombie_hit3.wav");
+	snd_empty = olc::SOUND::LoadAudioSample("sounds\\empty.wav");
+
+	snd_hans = olc::SOUND::LoadAudioSample("sounds\\dialogue\\hans.wav");
+	snd_heinrich = olc::SOUND::LoadAudioSample("sounds\\dialogue\\heinrich.wav");
+	snd_halt = olc::SOUND::LoadAudioSample("sounds\\dialogue\\halt.wav");
+	snd_hmm = olc::SOUND::LoadAudioSample("sounds\\dialogue\\hmm.wav");
+	snd_wasist = olc::SOUND::LoadAudioSample("sounds\\dialogue\\wasistdas.wav");
+	snd_tiere = olc::SOUND::LoadAudioSample("sounds\\dialogue\\tiere.wav");
+	snd_wounded = olc::SOUND::LoadAudioSample("sounds\\dialogue\\wounded.wav");
+	snd_wounded_alt = olc::SOUND::LoadAudioSample("sounds\\dialogue\\wounded_alt.wav");
+	snd_gameOver = olc::SOUND::LoadAudioSample("sounds\\gameover.wav");
 }
 
 
