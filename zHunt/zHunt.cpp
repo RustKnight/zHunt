@@ -77,7 +77,6 @@ bool zHunt::OnUserCreate()
 		prt->setIndex(i);
 
 
-
 		vPortals.push_back(prt);
 		vActors.push_back(prt);
 	}
